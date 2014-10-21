@@ -1,0 +1,11 @@
+a {
+    text-decoration: none
+    link: #0077DD;
+};
+
+body {
+    background-attachment: fixed
+    margin-top:0 !important;
+    padding-top:0 !important;
+    min-width:800px !important;
+}
