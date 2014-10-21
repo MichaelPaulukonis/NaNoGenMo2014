@@ -1,109 +1,116 @@
 <html>
   <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 
-      <title>
-	Proppian Fairy Tale Generator v1.0
-      </title>
+    <title>
+      Proppian Fairy Tale Generator v1.0
+    </title>
 
-      <link href="propp.css" rel="stylesheet"></link>
+    <link href="propp.css" rel="stylesheet"></link>
 
-      <script type="text/javascript" src="propp.js"></script>
+    <script type="text/javascript" src="propp.js"></script>
 
-    </head>
+  </head>
 
-    <body>
+  <body>
 
-      <form name="myform" onsubmit="return false">
-	<center>
-          <br />
-          <br />
-          <table col="3">
-            <tbody><tr>
-	      <td colspan="2">
+    <form name="myform" onsubmit="return false">
+      <center>
+        <br />
+        <br />
+        <table col="3">
+          <tbody><tr>
+	    <td colspan="3">
 
-		<h4>proppian fairy tale generator</h4>
-		select your functions:
-		<p></p>
-              </td>
+	      <h2>proppian fairy tale generator</h2>
+	      <p>select your functions:</p>
+            </td>
 
-	      <td rowspan="3" align="right" valign="left">
-		<a href="javascript:popup2("instruction")">instructions</a><br />
-		<a href="https://web.archive.org/web/20061112014356/http://www.brown.edu/Courses/FR0133/Fairytale_Generator/func.html">functions</a><br />
-		<a href="javascript:popup2(how,win)">how</a><br />
-		<a href="https://web.archive.org/web/20061112014356/http://www.brown.edu/Courses/FR0133/Fairytale_Generator/home.html">home</a><br />
-		<br />
-		preset:<br />
-		<br />
-		<a href="javascript:cinderella()">cinderella</a><br />
-		<br />
-		grimm:<br />
-		<a href="javascript:hansel()">hansel &amp; gretel</a><br />
-		<a href="javascript:swhite()">snow white</a><br />
-		<a href="javascript:juniper()">juniper tree</a><br />
-		<br />
-		perrault:<br />
-		<a href="javascript:lrrh()">lrrh</a><br />
-              </td>
+	    <td rowspan="3" align="right" valign="left">
+	      <a href="javascript:gui.popup2("instruction")">instructions</a><br />
+	      <a href="https://web.archive.org/web/20061112014356/http://www.brown.edu/Courses/FR0133/Fairytale_Generator/func.html">functions</a><br />
+	      <a href="javascript:gui.popup2(how,win)">how</a><br />
+	      <a href="https://web.archive.org/web/20061112014356/http://www.brown.edu/Courses/FR0133/Fairytale_Generator/home.html">home</a><br />
+	      <br />
+	      preset:<br />
+	      <br />
+	      <a href="javascript:cinderella()">cinderella</a><br />
+	      <br />
+	      grimm:<br />
+	      <a href="javascript:hansel()">hansel &amp; gretel</a><br />
+	      <a href="javascript:swhite()">snow white</a><br />
+	      <a href="javascript:juniper()">juniper tree</a><br />
+	      <br />
+	      perrault:<br />
+	      <a href="javascript:lrrh()">lrrh</a><br />
 
-            </tr>
-            <tr>
-	      <td>
-		<input name="func1" type="checkbox" /><a href="javascript:popup('func1')">absention</a><br />
-		<input name="func2" type="checkbox" /><a href="javascript:popup('func2')">interdiction</a><br />
-		<input name="func3" type="checkbox" /><a href="javascript:popup('func3')">violation</a><br />
-		<input name="func4" type="checkbox" /><a href="javascript:popup('func4')">reconnaissance</a><br />
-		<input name="func5" type="checkbox" /><a href="javascript:popup('func5')">delivery</a><br />
-		<input name="func6" type="checkbox" /><a href="javascript:popup('func6')">trickery</a><br />
-		<input name="func7" type="checkbox" /><a href="javascript:popup('func7')">complicity</a><br />
-		<input name="func8" type="checkbox" /><a href="javascript:popup('func8')">villainy</a><br />
-		<input name="func9" type="checkbox" /><a href="javascript:popup('func9')">lack</a><br />
-		<input name="func10" type="checkbox" /><a href="javascript:popup('func10')">mediation</a><br />
-		<input name="func11" type="checkbox" /><a href="javascript:popup('func11')">beginning counteraction</a><br />
-		<input name="func12" type="checkbox" /><a href="javascript:popup('func12')">departure</a><br />
-		<input name="func13" type="checkbox" /><a href="javascript:popup('func13')">first function of the donor</a><br />
-		<input name="func14" type="checkbox" /><a href="javascript:popup('func14')">hero's reaction</a><br />
-		<input name="func15" type="checkbox" /><a href="javascript:popup('func15')">receipt of a magical agent</a><br />
-		<input name="func16" type="checkbox" /><a href="javascript:popup('func16')">guidance</a><br />
-	      </td>
-	      <td>
-		<input name="func17" type="checkbox" /><a href="javascript:popup('func17')">struggle</a><br />
-		<input name="func18" type="checkbox" /><a href="javascript:popup('func18')">branding</a><br />
-		<input name="func19" type="checkbox" /><a href="javascript:popup('func19')">victory</a><br />
-		<input name="func20" type="checkbox" /><a href="javascript:popup('func20')">liquidation</a><br />
-		<input name="func21" type="checkbox" /><a href="javascript:popup('func21')">return</a><br />
-		<input name="func22" type="checkbox" /><a href="javascript:popup('func22')">pursuit</a><br />
-		<input name="func23" type="checkbox" /><a href="javascript:popup('func23')">rescue</a><br />
-		<input name="func24" type="checkbox" /><a href="javascript:popup('func24')">unrecognized arrival</a><br />
-		<input name="func25" type="checkbox" /><a href="javascript:popup('func25')">unfounded claims</a><br />
-		<input name="func26" type="checkbox" /><a href="javascript:popup('func26')">difficult task</a><br />
-		<input name="func27" type="checkbox" /><a href="javascript:popup('func27')">solution</a><br />
-		<input name="func28" type="checkbox" /><a href="javascript:popup('func28')">recognition</a><br />
-		<input name="func29" type="checkbox" /><a href="javascript:popup('func29')">exposure</a><br />
-		<input name="func30" type="checkbox" /><a href="javascript:popup('func30')">transfiguration</a><br />
-		<input name="func31" type="checkbox" /><a href="javascript:popup('func31')">punishment</a><br />
-		<input name="func32" type="checkbox" /><a href="javascript:popup('func32')">wedding</a><br />
-              </td>
-            </tr>
+	      <p>
+		<a href="https://web.archive.org/web/20061112014356/http://www.brown.edu/Courses/FR0133/Fairytale_Generator/gen.html">original</a>
+	      </p>
+            </td>
 
-            <tr>
-	      <td colspan="2">
-		<br />
-		<br />
-		<textarea id="itsalltext_generated_id_fairytale_1" cols="35" rows="20" wrap="true" name="fairytale"> </textarea>
-		<br />
-		<br />
-		<input value="generate" onclick="javascript:generate()" align="middle" type="submit" />
-		<input value="clear" align="middle" type="reset" />
-              </td>
-	      <td>
-	      </td>
-	    </tr>
-          </tbody>
-        </table>
+          </tr>
+          <tr>
+	    <td>
+	      <ul>
+		<li><input name="func1" type="checkbox" /><a href="javascript:gui.popup('func1')">absention</a></li>
+		<li><input name="func2" type="checkbox" /><a href="javascript:gui.popup('func2')">interdiction</a></li>
+		<li><input name="func3" type="checkbox" /><a href="javascript:gui.popup('func3')">violation</a></li>
+		<li><input name="func4" type="checkbox" /><a href="javascript:gui.popup('func4')">reconnaissance</a></li>
+		<li><input name="func5" type="checkbox" /><a href="javascript:gui.popup('func5')">delivery</a></li>
+		<li><input name="func6" type="checkbox" /><a href="javascript:gui.popup('func6')">trickery</a></li>
+		<li><input name="func7" type="checkbox" /><a href="javascript:gui.popup('func7')">complicity</a></li>
+		<li><input name="func8" type="checkbox" /><a href="javascript:gui.popup('func8')">villainy</a></li>
+		<li><input name="func9" type="checkbox" /><a href="javascript:gui.popup('func9')">lack</a></li>
+		<li><input name="func10" type="checkbox" /><a href="javascript:gui.popup('func10')">mediation</a></li>
+		<li><input name="func11" type="checkbox" /><a href="javascript:gui.popup('func11')">beginning counteraction</a></li>
+		<li><input name="func12" type="checkbox" /><a href="javascript:gui.popup('func12')">departure</a></li>
+		<li><input name="func13" type="checkbox" /><a href="javascript:gui.popup('func13')">first function of the donor</a></li>
+		<li><input name="func14" type="checkbox" /><a href="javascript:gui.popup('func14')">hero's reaction</a></li>
+		<li><input name="func15" type="checkbox" /><a href="javascript:gui.popup('func15')">receipt of a magical agent</a></li>
+		<li><input name="func16" type="checkbox" /><a href="javascript:gui.popup('func16')">guidance</a></li>
+	      </ul>
+	    </td>
+	    <td>
+	      <ul>
+		<li><input name="func17" type="checkbox" /><a href="javascript:gui.popup('func17')">struggle</a></li>
+		<li><input name="func18" type="checkbox" /><a href="javascript:gui.popup('func18')">branding</a></li>
+		<li><input name="func19" type="checkbox" /><a href="javascript:gui.popup('func19')">victory</a></li>
+		<li><input name="func20" type="checkbox" /><a href="javascript:gui.popup('func20')">liquidation</a></li>
+		<li><input name="func21" type="checkbox" /><a href="javascript:gui.popup('func21')">return</a></li>
+		<li><input name="func22" type="checkbox" /><a href="javascript:gui.popup('func22')">pursuit</a></li>
+		<li><input name="func23" type="checkbox" /><a href="javascript:gui.popup('func23')">rescue</a></li>
+		<li><input name="func24" type="checkbox" /><a href="javascript:gui.popup('func24')">unrecognized arrival</a></li>
+		<li><input name="func25" type="checkbox" /><a href="javascript:gui.popup('func25')">unfounded claims</a></li>
+		<li><input name="func26" type="checkbox" /><a href="javascript:gui.popup('func26')">difficult task</a></li>
+		<li><input name="func27" type="checkbox" /><a href="javascript:gui.popup('func27')">solution</a></li>
+		<li><input name="func28" type="checkbox" /><a href="javascript:gui.popup('func28')">recognition</a></li>
+		<li><input name="func29" type="checkbox" /><a href="javascript:gui.popup('func29')">exposure</a></li>
+		<li><input name="func30" type="checkbox" /><a href="javascript:gui.popup('func30')">transfiguration</a></li>
+		<li><input name="func31" type="checkbox" /><a href="javascript:gui.popup('func31')">punishment</a></li>
+		<li><input name="func32" type="checkbox" /><a href="javascript:gui.popup('func32')">wedding</a></li>
+	      </ul>
+            </td>
+          </tr>
 
-      </center>
-    </form>
+          <tr>
+	    <td colspan="2">
+	      <br />
+	      <br />
+	      <textarea id="itsalltext_generated_id_fairytale_1" cols="35" rows="20" wrap="true" name="fairytale"> </textarea>
+	      <br />
+	      <br />
+	      <input value="generate" onclick="javascript:guiGet();" align="middle" type="submit" />
+	      <input value="clear" align="middle" type="reset" />
+            </td>
+	    <td>
+	    </td>
+	  </tr>
+        </tbody>
+      </table>
 
-  </body>
+    </center>
+  </form>
+
+</body>
 </html>
