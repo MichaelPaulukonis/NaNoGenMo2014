@@ -86,6 +86,10 @@ http://tvtropes.org/pmwiki/pmwiki.php/Main/ProppsFunctionsOfFolktales
 ## something else
 [NLG Generator list](http://www.fb10.uni-bremen.de/anglistik/langpro/NLG-table/NLG-table-date-sort.html)
 This should go somewhere; dumping it here so I see it again (found during Propp-searches)
+This doc mentions an application by [Sheldon Klein](http://pages.cs.wisc.edu/~sklein/sklein.html)  that is more completely described (including source) in [this pdf](http://minds.wisconsin.edu/handle/1793/57894?show=full). An [expanded edition](http://pages.cs.wisc.edu/~sklein/Simulation-Meta-Symbolique%20d%27Hypotheses-Propp%20&%20Levi-Strauss.pdf) [pdf] is available, in French, but with extended source code.
+See also [AUTOMATIC NOVEL WRITING,  UWCS Tech Report No. 186,109 pages.](http://www.cs.wisc.edu/%7Esklein/Automatic%20Novel%20Writing-1973-UWCS-TR183.pdf)
+
+Of sideways interest is [Meta-symbolic Simulation System (MESSY) user manual](http://pages.cs.wisc.edu/~sklein/Meta-symbolic%20Simulation%20System.pdf) by one of the same authors.
 
 
 ## Functions
