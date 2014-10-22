@@ -395,6 +395,17 @@ var guiGet = function() {
     shoveToGui(tale);
 };
 
+// TODO: need to actually supply these values somehow
+// proof-of-concept, for now
+var getSettings = function() {
+
+    var setts = {
+	gender: 'female'
+	};
+
+    return setts;
+
+};
 
 // generates a random number
 function random(limit){
@@ -402,17 +413,37 @@ function random(limit){
     return num;
 }
 
+
+// TODO: you know, this should probably be part of the templates
+// and not even in here
+var wordBank = function(settings) {
+
+    var hero = function() {
+	return ((settings.gender == 'male') ? 'hero' : 'heroine');
+    };
+
+    return {
+	hero: hero
+	};
+
+};
+
 var sentence = function(index) {
+
+    var helper = wordBank(getSettings());
 
     var f;
     var func = proppFunctions[index];
     if (func.active) {
 	f = func.templates[random(func.templates.length)];
+	var t = _.template(f);
+	f = t(helper);
     }
 
     return f;
 
 };
+
 
 // generate the fairy tale
 function generate(){
