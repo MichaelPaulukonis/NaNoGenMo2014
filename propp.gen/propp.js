@@ -35,6 +35,7 @@ var gui = function() {
 
 }();
 
+// should this be reduced back down to a 0..31 array?
 var proppFunctions = {
     "func1": { active: false, templates: [] },
     "func2": { active: false, templates: [] },

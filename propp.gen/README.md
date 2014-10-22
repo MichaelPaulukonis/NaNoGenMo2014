@@ -9,6 +9,22 @@ http://en.wikipedia.org/wiki/Vladimir_Propp
 
 http://tvtropes.org/pmwiki/pmwiki.php/Main/ProppsFunctionsOfFolktales
 
+## extant online generators
+[ProjectPropp](http://projectpropp.yolasite.com/text-generator.php) - the js source is very procedural, but works.
+* [some notes](http://sandileonard.com/projects.php) on the above
+
+
+[FairyTale Plot Generator](http://www.springhole.net/writing_roleplaying_randomators/fairytaleplot.htm) - non-Propp. simple patchwork JS. Short output, nice variance.
+
+[Fairy Tale Generator](http://www.jacobpedia.com/nhhl/FairyTaleGenerator/index.htm) - work done behind the scenes in PHP, souce not available (?). Interesting output. Good length. Users can contribute some items, which has resulted in a certain amount of word-salad. Not an unpleasant effect.
+
+[Funny Fairty Tale Generator](http://www.maiaappleby.com/funny-fairy-tale-generator/) - madlibs-style fill-in-blanks for an otherwise static output. Not a bad effect though, and the source indicates that the ur-text is roughly the Wizard of Oz.
+
+## something else
+[NLG Generator list](http://www.fb10.uni-bremen.de/anglistik/langpro/NLG-table/NLG-table-date-sort.html)
+This should go somewhere; dumping it here so I see it again (found during Propp-searches)
+
+
 ## Functions
 After the initial situation is depicted, the tale takes the following sequence of 31 functions:
 

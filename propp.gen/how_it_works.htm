@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+	<title>How the Generator Works</title>
+	<meta name="file_name" content="how_it_works.htm">
+	<meta name="author" content="BigTime Interactive">
+	<meta name="copyright" content="copyright 2004-2009 Stone Dragon Press">
+	<meta scheme="month-day-year" name="date" content="08-05-2009">
+	<link href="resources/propp.css" rel="stylesheet" type="text/css">
+</head>
+
+<body topmargin="20" leftmargin="20" bgcolor="#ffffff" marginheight="20" marginwidth="20">
+	<p class="txth2">How the Generator Works</p>
+	<p class="gry">top level:</p>
+	<p class="txt">At the most basic level, the generator receives input
+from the user — functions are selected — and based on that input,
+outputs an outline for a folktale.</p>
+	<p class="gry">geek level:</p>
+	<p class="txt">Each function has an array which stores one possible
+variation of that function per element. When the user hits submit, the
+computer checks to see which functions have been selected. Then based on
+ that, the computer — applying a set of rules based on Propp's work —
+randomly picks one element from those function arrays, for each function
+ selected, and concatenates its contents to the output string. It then
+sets the value of the textarea box to the output string.</p>
+	<p class="txti">Based on: "Morphology of the Folktale by Vladimir Propp" (University of Texas Press, Austin, Texas, 1968)</p>
+	<p class="txt" align="center"><a href="javascript:self.close()">close</a></p>
+
+
+</body></html>
