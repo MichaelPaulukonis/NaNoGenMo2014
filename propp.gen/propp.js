@@ -404,7 +404,7 @@ function random(limit){
 
 var sentence = function(index) {
 
-    var f = "";
+    var f;
     var func = proppFunctions[index];
     if (func.active) {
 	f = func.templates[random(func.templates.length)];
@@ -417,18 +417,21 @@ var sentence = function(index) {
 // generate the fairy tale
 function generate(){
 
-    proppFunctions = defaultTemplates(proppFunctions);
+    // proppFunctions = defaultTemplates(proppFunctions);
+    proppFunctions = nTemplates(proppFunctions);
 
     getFunctionsFromGui();
 
-    var tale = "";
+    var tale = [];
 
     for (var index in proppFunctions) {
-	tale += sentence(index);
+	var s = sentence(index);
+	if (s) {
+	    tale.push(s);
+	}
     }
 
-    // window.document.myform.fairytale.value = tale;
-    return tale;
+    return tale.join('\n\n');
 
 }
 

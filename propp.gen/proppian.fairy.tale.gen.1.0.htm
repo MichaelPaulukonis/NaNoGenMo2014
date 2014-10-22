@@ -9,6 +9,7 @@
     <link href="propp.css" rel="stylesheet"></link>
 
     <script type="text/javascript" src="propp.js"></script>
+    <script type="text/javascript" src="templates.js"></script>
 
   </head>
 
@@ -52,7 +53,7 @@
           </tr>
           <tr>
 	    <td>
-	      <ul>
+	      <ul class='sphere' id='introduction'>
 		<li><input name="func1" type="checkbox" /><a href="javascript:gui.popup('func1')">absention</a></li>
 		<li><input name="func2" type="checkbox" /><a href="javascript:gui.popup('func2')">interdiction</a></li>
 		<li><input name="func3" type="checkbox" /><a href="javascript:gui.popup('func3')">violation</a></li>
@@ -60,11 +61,16 @@
 		<li><input name="func5" type="checkbox" /><a href="javascript:gui.popup('func5')">delivery</a></li>
 		<li><input name="func6" type="checkbox" /><a href="javascript:gui.popup('func6')">trickery</a></li>
 		<li><input name="func7" type="checkbox" /><a href="javascript:gui.popup('func7')">complicity</a></li>
+	      </ul>
+	      <ul class='sphere' id='storybody'>
+		<!-- NOTE: in the original (?) framework 8&9 are combined; this explains 32 funcs in this version, as opposed to Propps 31 functions -->
 		<li><input name="func8" type="checkbox" /><a href="javascript:gui.popup('func8')">villainy</a></li>
 		<li><input name="func9" type="checkbox" /><a href="javascript:gui.popup('func9')">lack</a></li>
 		<li><input name="func10" type="checkbox" /><a href="javascript:gui.popup('func10')">mediation</a></li>
 		<li><input name="func11" type="checkbox" /><a href="javascript:gui.popup('func11')">beginning counteraction</a></li>
 		<li><input name="func12" type="checkbox" /><a href="javascript:gui.popup('func12')">departure</a></li>
+	      </ul>
+	      <ul class='sphere' id='donorsequence'>
 		<li><input name="func13" type="checkbox" /><a href="javascript:gui.popup('func13')">first function of the donor</a></li>
 		<li><input name="func14" type="checkbox" /><a href="javascript:gui.popup('func14')">hero's reaction</a></li>
 		<li><input name="func15" type="checkbox" /><a href="javascript:gui.popup('func15')">receipt of a magical agent</a></li>
@@ -72,11 +78,13 @@
 	      </ul>
 	    </td>
 	    <td>
-	      <ul>
+	      <ul class='sphere' id='donorsequence'>
 		<li><input name="func17" type="checkbox" /><a href="javascript:gui.popup('func17')">struggle</a></li>
 		<li><input name="func18" type="checkbox" /><a href="javascript:gui.popup('func18')">branding</a></li>
 		<li><input name="func19" type="checkbox" /><a href="javascript:gui.popup('func19')">victory</a></li>
 		<li><input name="func20" type="checkbox" /><a href="javascript:gui.popup('func20')">liquidation</a></li>
+	      </ul>
+	      <ul class='sphere' id='herosreturn'>
 		<li><input name="func21" type="checkbox" /><a href="javascript:gui.popup('func21')">return</a></li>
 		<li><input name="func22" type="checkbox" /><a href="javascript:gui.popup('func22')">pursuit</a></li>
 		<li><input name="func23" type="checkbox" /><a href="javascript:gui.popup('func23')">rescue</a></li>
