@@ -1,0 +1,556 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <!-- from http://www.springhole.net/writing_roleplaying_randomators/arabiannightsplotgen.htm -->
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="keywords" content="random generator, writing, creative writing, fiction, characters, characterization, fantasy, magic, genie, Arabian Nights, 1001 nights, the thousand and one nights" />
+	<title>
+	Arabian Nights Plot Generator
+	</title>
+	<link rel="stylesheet" type="text/css" href="../sh_style.css" media="screen" />
+
+</head>
+
+
+<body>
+
+
+<div id="main">
+
+
+<script language="JAVASCRIPT">
+<!--
+var aVocab = new Array();
+
+var intIncr
+var intCat
+
+intCat =0
+intIncr=0
+
+//The data stored is pretty simple.  It works like this:
+//
+// The aVocab array has sub arrays that are named lists of data.
+//
+//aVocab[intCat]= new Array(); - The aVocab Array actually holds other arrays.
+//aVocab[intCat][0]="FIRST" - This is the name of the list of data in this sub array.  The name helps the program find the data.
+//aVocab[intCat][1] = new Array() - Yep, ANOTHER array - this is the array that holds the actual data.
+//aVocab[intCat][1][intIncr++]="First thing <SECOND>" // See that <SECOND> tag?  Anything in brackets references another list.
+//aVocab[intCat][1][intIncr++]="First thing <THIRD>"
+//
+// Unless it's the last entry, don't forget to increment and reset the counters!
+//
+//intCat++
+//intIncr=0
+
+//	aVocab[intCat][1][intIncr++]=""
+
+
+aVocab[intCat]= new Array();
+aVocab[intCat][0]="FIRST"
+aVocab[intCat][1] = new Array()
+aVocab[intCat][1][intIncr++]="<Sit>, <character><Sit2> <Ac2A> <with>."
+aVocab[intCat][1][intIncr++]="<Sit>, <character><Sit2> <Ac1> <Ac2> <with>."
+aVocab[intCat][1][intIncr++]="<Sit>, <character><Sit2> dresses up in <clothes>, <clothes>, and <jewelry>."
+aVocab[intCat][1][intIncr++]="<Sit>, <character> and <character> <Ac2> <with>."
+aVocab[intCat][1][intIncr++]="<Sit>, <character> and <character> <Ac1A> <Ac2> <with>."
+aVocab[intCat][1][intIncr++]="<Sit>, <character>, <character>, and <character> <Ac2> <with>."
+aVocab[intCat][1][intIncr++]="<Sit>, <character>, <character>, and <character> <Ac1A> <Ac2> <with>."
+
+intCat++
+intIncr=0
+aVocab[intCat]= new Array();
+aVocab[intCat][0]="character"
+aVocab[intCat][1] = new Array()
+
+aVocab[intCat][1] = new Array()
+aVocab[intCat][1][intIncr++]="a baker"
+aVocab[intCat][1][intIncr++]="a carpenter"
+aVocab[intCat][1][intIncr++]="a corrupt official"
+aVocab[intCat][1][intIncr++]="a corsair"
+aVocab[intCat][1][intIncr++]="an expert archer"
+aVocab[intCat][1][intIncr++]="an expert swordsman"
+aVocab[intCat][1][intIncr++]="a farmer"
+aVocab[intCat][1][intIncr++]="a genie"
+aVocab[intCat][1][intIncr++]="a guard"
+aVocab[intCat][1][intIncr++]="a knight"
+aVocab[intCat][1][intIncr++]="a merchant"
+aVocab[intCat][1][intIncr++]="a peddler"
+aVocab[intCat][1][intIncr++]="a pet monkey"
+aVocab[intCat][1][intIncr++]="a prince"
+aVocab[intCat][1][intIncr++]="a princess"
+aVocab[intCat][1][intIncr++]="a sailor"
+aVocab[intCat][1][intIncr++]="a sultan"
+aVocab[intCat][1][intIncr++]="a tailor"
+aVocab[intCat][1][intIncr++]="a theif"
+aVocab[intCat][1][intIncr++]="a trained bird"
+aVocab[intCat][1][intIncr++]="a vizier"
+aVocab[intCat][1][intIncr++]="a witch"
+
+intCat++
+intIncr=0
+aVocab[intCat]= new Array();
+aVocab[intCat][0]="creature"
+aVocab[intCat][1] = new Array()
+aVocab[intCat][1][intIncr++]="a camel"
+aVocab[intCat][1][intIncr++]="a cobra"
+aVocab[intCat][1][intIncr++]="a cow"
+aVocab[intCat][1][intIncr++]="an efreet"
+aVocab[intCat][1][intIncr++]="an elemental"
+aVocab[intCat][1][intIncr++]="a frilled lizard"
+aVocab[intCat][1][intIncr++]="a genie"
+aVocab[intCat][1][intIncr++]="a ghoul"
+aVocab[intCat][1][intIncr++]="a griffin"
+aVocab[intCat][1][intIncr++]="a horse"
+aVocab[intCat][1][intIncr++]="an imp"
+aVocab[intCat][1][intIncr++]="a magical animal"
+aVocab[intCat][1][intIncr++]="a magical creature"
+aVocab[intCat][1][intIncr++]="a monster"
+aVocab[intCat][1][intIncr++]="a parrot"
+aVocab[intCat][1][intIncr++]="a rat"
+aVocab[intCat][1][intIncr++]="a roc"
+aVocab[intCat][1][intIncr++]="a sheep"
+aVocab[intCat][1][intIncr++]="a snake"
+aVocab[intCat][1][intIncr++]="a strange creature"
+
+intCat++
+intIncr=0
+aVocab[intCat]= new Array();
+aVocab[intCat][0]="dmchar"
+aVocab[intCat][1] = new Array()
+aVocab[intCat][1][intIncr++]="<dmcdesc>sorcerer"
+aVocab[intCat][1][intIncr++]="<dmcdesc>sorceress"
+aVocab[intCat][1][intIncr++]="<dmcdesc>stranger"
+aVocab[intCat][1][intIncr++]="<dmcdesc>vizier"
+aVocab[intCat][1][intIncr++]="<dmcdesc>king"
+aVocab[intCat][1][intIncr++]="<dmcdesc>queen"
+aVocab[intCat][1][intIncr++]="<dmcdesc>man"
+aVocab[intCat][1][intIncr++]="<dmcdesc>woman"
+aVocab[intCat][1][intIncr++]="a boy"
+aVocab[intCat][1][intIncr++]="a girl"
+aVocab[intCat][1][intIncr++]="a prince"
+aVocab[intCat][1][intIncr++]="a princess"
+
+
+intCat++
+intIncr=0
+aVocab[intCat]= new Array();
+aVocab[intCat][0]="dmcdesc"
+aVocab[intCat][1] = new Array()
+aVocab[intCat][1][intIncr++]="an evil "
+aVocab[intCat][1][intIncr++]="a mysterious "
+aVocab[intCat][1][intIncr++]="a young "
+aVocab[intCat][1][intIncr++]="an old "
+aVocab[intCat][1][intIncr++]="a crazed "
+aVocab[intCat][1][intIncr++]="an attractive "
+aVocab[intCat][1][intIncr++]="an ugly "
+aVocab[intCat][1][intIncr++]="an ordinary "
+
+intCat++
+intIncr=0
+aVocab[intCat]= new Array();
+aVocab[intCat][0]="Sit"
+aVocab[intCat][1] = new Array()
+aVocab[intCat][1][intIncr++]="After breakfast"
+aVocab[intCat][1][intIncr++]="After receiving a head injury"
+aVocab[intCat][1][intIncr++]="Around lunchtime"
+aVocab[intCat][1][intIncr++]="With nothing else to do"
+aVocab[intCat][1][intIncr++]="In the middle of the night"
+aVocab[intCat][1][intIncr++]="One day"
+aVocab[intCat][1][intIncr++]="One day in <place>"
+aVocab[intCat][1][intIncr++]="One evening"
+aVocab[intCat][1][intIncr++]="One evening in <place>"
+aVocab[intCat][1][intIncr++]="One morning"
+aVocab[intCat][1][intIncr++]="One morning in <place>"
+aVocab[intCat][1][intIncr++]="One night"
+aVocab[intCat][1][intIncr++]="One night in <place>"
+
+intCat++
+intIncr=0
+aVocab[intCat]= new Array();
+aVocab[intCat][0]="Sit2"
+aVocab[intCat][1] = new Array()
+aVocab[intCat][1][intIncr++]=" becomes amnesiac and"
+aVocab[intCat][1][intIncr++]=" gets bored and"
+aVocab[intCat][1][intIncr++]=" goes crazy and"
+aVocab[intCat][1][intIncr++]=" has a fit of insanity and"
+aVocab[intCat][1][intIncr++]=" has an epiphany and"
+aVocab[intCat][1][intIncr++]=" hatches a brilliant plan and"
+aVocab[intCat][1][intIncr++]=" is hypnotized and"
+aVocab[intCat][1][intIncr++]=""
+aVocab[intCat][1][intIncr++]=""
+aVocab[intCat][1][intIncr++]=""
+aVocab[intCat][1][intIncr++]=""
+aVocab[intCat][1][intIncr++]=""
+aVocab[intCat][1][intIncr++]=""
+aVocab[intCat][1][intIncr++]=""
+aVocab[intCat][1][intIncr++]=""
+aVocab[intCat][1][intIncr++]=""
+aVocab[intCat][1][intIncr++]=""
+aVocab[intCat][1][intIncr++]=""
+aVocab[intCat][1][intIncr++]=""
+aVocab[intCat][1][intIncr++]=""
+
+intCat++
+intIncr=0
+aVocab[intCat]= new Array();
+aVocab[intCat][0]="Ac1"
+aVocab[intCat][1] = new Array()
+aVocab[intCat][1][intIncr++]="attempts to"
+aVocab[intCat][1][intIncr++]="decides to"
+aVocab[intCat][1][intIncr++]="is forced to"
+aVocab[intCat][1][intIncr++]="happens to"
+aVocab[intCat][1][intIncr++]="tries to"
+aVocab[intCat][1][intIncr++]="wants to"
+
+intCat++
+intIncr=0
+aVocab[intCat]= new Array();
+aVocab[intCat][0]="Ac1A"
+aVocab[intCat][1] = new Array()
+aVocab[intCat][1][intIncr++]="accidentally"
+aVocab[intCat][1][intIncr++]="attempt to"
+aVocab[intCat][1][intIncr++]="decide to"
+aVocab[intCat][1][intIncr++]="are forced to"
+aVocab[intCat][1][intIncr++]="happen to"
+aVocab[intCat][1][intIncr++]="try to"
+aVocab[intCat][1][intIncr++]="want to"
+
+intCat++
+intIncr=0
+aVocab[intCat]= new Array();
+aVocab[intCat][0]="Ac2"
+aVocab[intCat][1] = new Array()
+aVocab[intCat][1][intIncr++]="buy <item>"
+aVocab[intCat][1][intIncr++]="create <creature>"
+aVocab[intCat][1][intIncr++]="create <item>"
+aVocab[intCat][1][intIncr++]="kidnap <character>"
+aVocab[intCat][1][intIncr++]="take over <place>"
+aVocab[intCat][1][intIncr++]="destroy <place>"
+aVocab[intCat][1][intIncr++]="find <character>"
+aVocab[intCat][1][intIncr++]="find <item>"
+aVocab[intCat][1][intIncr++]="find <place>"
+aVocab[intCat][1][intIncr++]="foil a plot to take over <place>"
+aVocab[intCat][1][intIncr++]="shop for <item>"
+aVocab[intCat][1][intIncr++]="spy on <place>"
+aVocab[intCat][1][intIncr++]="spy on <character>"
+aVocab[intCat][1][intIncr++]="steal <item>"
+aVocab[intCat][1][intIncr++]="take over <place>"
+aVocab[intCat][1][intIncr++]="visit <place>"
+aVocab[intCat][1][intIncr++]="transform <item> into <creature>"
+aVocab[intCat][1][intIncr++]="transform <creature> into <item>"
+aVocab[intCat][1][intIncr++]="transform <character> into <creature>"
+aVocab[intCat][1][intIncr++]="transform <character> into <item>"
+
+intCat++
+intIncr=0
+aVocab[intCat]= new Array();
+aVocab[intCat][0]="Ac2A"
+aVocab[intCat][1] = new Array()
+aVocab[intCat][1][intIncr++]="buys <item>"
+aVocab[intCat][1][intIncr++]="decides to visit <place>"
+aVocab[intCat][1][intIncr++]="decides to visit <character>"
+aVocab[intCat][1][intIncr++]="destroys <place>"
+aVocab[intCat][1][intIncr++]="destroys <item>"
+aVocab[intCat][1][intIncr++]="discovers a plot to take over <place>"
+aVocab[intCat][1][intIncr++]="disguises as <character>"
+aVocab[intCat][1][intIncr++]="disguises as <character> using <clothes>"
+aVocab[intCat][1][intIncr++]="dresses as <others>"
+aVocab[intCat][1][intIncr++]="becomes <person>"
+aVocab[intCat][1][intIncr++]="becomes <creature>"
+aVocab[intCat][1][intIncr++]="finds <character>"
+aVocab[intCat][1][intIncr++]="finds <place>"
+aVocab[intCat][1][intIncr++]="foils a plot to take over <place>"
+aVocab[intCat][1][intIncr++]="helps <character>"
+aVocab[intCat][1][intIncr++]="impersonates <hero>"
+aVocab[intCat][1][intIncr++]="impersonates <villain>"
+aVocab[intCat][1][intIncr++]="kidnaps <character>"
+aVocab[intCat][1][intIncr++]="sets out to conquer <place>"
+aVocab[intCat][1][intIncr++]="shops for <item>"
+aVocab[intCat][1][intIncr++]="spies on <place>"
+aVocab[intCat][1][intIncr++]="spies on <character>"
+aVocab[intCat][1][intIncr++]="steals <item>"
+aVocab[intCat][1][intIncr++]="switches bodies with <character>"
+aVocab[intCat][1][intIncr++]="visits <place>"
+aVocab[intCat][1][intIncr++]="is transformed into <creature>"
+aVocab[intCat][1][intIncr++]="is transformed into <item>"
+aVocab[intCat][1][intIncr++]="transforms <item> into <creature>"
+aVocab[intCat][1][intIncr++]="transforms <creature> into <item>"
+aVocab[intCat][1][intIncr++]="transforms <character> into <creature>"
+aVocab[intCat][1][intIncr++]="transforms <character> into <item>"
+
+intCat++
+intIncr=0
+aVocab[intCat]= new Array();
+aVocab[intCat][0]="place"
+aVocab[intCat][1] = new Array()
+aVocab[intCat][1][intIncr++]="the palace"
+aVocab[intCat][1][intIncr++]="another dimension"
+aVocab[intCat][1][intIncr++]="another land"
+aVocab[intCat][1][intIncr++]="a faraway city"
+aVocab[intCat][1][intIncr++]="a faraway land"
+aVocab[intCat][1][intIncr++]="a lost city"
+aVocab[intCat][1][intIncr++]="a lost kingdom"
+aVocab[intCat][1][intIncr++]="a magical realm"
+aVocab[intCat][1][intIncr++]="a mysterious realm"
+aVocab[intCat][1][intIncr++]="the Underworld"
+
+intCat++
+intIncr=0
+aVocab[intCat]= new Array();
+aVocab[intCat][0]="with"
+aVocab[intCat][1] = new Array()
+aVocab[intCat][1][intIncr++]="with the assistance of <character>"
+aVocab[intCat][1][intIncr++]="with the assistance of <dmchar> from <place>"
+aVocab[intCat][1][intIncr++]="with the help of <character>, <character>, and <character>"
+aVocab[intCat][1][intIncr++]="with the help of <character>, <character>, and <item>"
+aVocab[intCat][1][intIncr++]="with the help of <item>, <item>, and <character>"
+aVocab[intCat][1][intIncr++]="using only <item>"
+aVocab[intCat][1][intIncr++]="using <item>, <item>, and <item>"
+aVocab[intCat][1][intIncr++]="after consuming <food>"
+aVocab[intCat][1][intIncr++]="while consuming <food>"
+aVocab[intCat][1][intIncr++]="while shopping for <item>"
+aVocab[intCat][1][intIncr++]="while searching for <character>"
+aVocab[intCat][1][intIncr++]="while searching for <item>"
+aVocab[intCat][1][intIncr++]="while shopping for <item>"
+
+intCat++
+intIncr=0
+aVocab[intCat]= new Array();
+aVocab[intCat][0]="item"
+aVocab[intCat][1] = new Array()
+aVocab[intCat][1][intIncr++]="<food>"
+aVocab[intCat][1][intIncr++]="<general>"
+aVocab[intCat][1][intIncr++]="<clothes>"
+aVocab[intCat][1][intIncr++]="<jewelry>"
+
+intCat++
+intIncr=0
+aVocab[intCat]= new Array();
+aVocab[intCat][0]="general"
+aVocab[intCat][1] = new Array()
+aVocab[intCat][1][intIncr++]="blue glitter"
+aVocab[intCat][1][intIncr++]="a coffepot"
+aVocab[intCat][1][intIncr++]="a few dinars"
+aVocab[intCat][1][intIncr++]="a few dirhems"
+aVocab[intCat][1][intIncr++]="a few items lying about"
+aVocab[intCat][1][intIncr++]="a few kitchen tools"
+aVocab[intCat][1][intIncr++]="a genie lamp"
+aVocab[intCat][1][intIncr++]="a genie bottle"
+aVocab[intCat][1][intIncr++]="a gourd"
+aVocab[intCat][1][intIncr++]="a handful of sand"
+aVocab[intCat][1][intIncr++]="a magical artifact"
+aVocab[intCat][1][intIncr++]="a magical crystal"
+aVocab[intCat][1][intIncr++]="a magical device"
+aVocab[intCat][1][intIncr++]="magically-charged crystals"
+aVocab[intCat][1][intIncr++]="a Persian rug"
+aVocab[intCat][1][intIncr++]="some smithy tools"
+aVocab[intCat][1][intIncr++]="the Sultan's ring"
+aVocab[intCat][1][intIncr++]="<itemdesc>sword"
+aVocab[intCat][1][intIncr++]="a time-travel device"
+aVocab[intCat][1][intIncr++]="<itemdesc>vase"
+aVocab[intCat][1][intIncr++]="vase"
+aVocab[intCat][1][intIncr++]="an unusual flower"
+aVocab[intCat][1][intIncr++]="a sorcerer's staff"
+aVocab[intCat][1][intIncr++]="some old alchemy equipment"
+
+intCat++
+intIncr=0
+aVocab[intCat]= new Array();
+aVocab[intCat][0]="clothes"
+aVocab[intCat][1] = new Array()
+aVocab[intCat][1][intIncr++]="a blouse"
+aVocab[intCat][1][intIncr++]="a cummerbund"
+aVocab[intCat][1][intIncr++]="a fez"
+aVocab[intCat][1][intIncr++]="the princess's wardrobe"
+aVocab[intCat][1][intIncr++]="a pair of trousers"
+aVocab[intCat][1][intIncr++]="a robe"
+aVocab[intCat][1][intIncr++]="a scarf"
+aVocab[intCat][1][intIncr++]="a turban"
+aVocab[intCat][1][intIncr++]="a vest"
+
+intCat++
+intIncr=0
+aVocab[intCat]= new Array();
+aVocab[intCat][0]="jewelry"
+aVocab[intCat][1] = new Array()
+aVocab[intCat][1][intIncr++]="<itemdesc>amulet"
+aVocab[intCat][1][intIncr++]="a bracelet"
+aVocab[intCat][1][intIncr++]="<itemdesc>earring"
+aVocab[intCat][1][intIncr++]="an earring"
+aVocab[intCat][1][intIncr++]="an expensive piece of jewelry"
+aVocab[intCat][1][intIncr++]="a pair of earrings"
+aVocab[intCat][1][intIncr++]="<itemdesc>pendant"
+aVocab[intCat][1][intIncr++]="a necklace"
+aVocab[intCat][1][intIncr++]="a turban pin"
+
+
+intCat++
+intIncr=0
+aVocab[intCat]= new Array();
+aVocab[intCat][0]="food"
+aVocab[intCat][1] = new Array()
+aVocab[intCat][1][intIncr++]="an unsual fruit"
+aVocab[intCat][1][intIncr++]="a few <fooddesc>apples"
+aVocab[intCat][1][intIncr++]="some <fooddesc>bread"
+aVocab[intCat][1][intIncr++]="<fooddesc>coffee"
+aVocab[intCat][1][intIncr++]="<fooddesc>coffee beans"
+aVocab[intCat][1][intIncr++]="some <fooddesc>baklava"
+aVocab[intCat][1][intIncr++]="some curry"
+aVocab[intCat][1][intIncr++]="some <fooddesc>falafel"
+aVocab[intCat][1][intIncr++]="some <fooddesc>sugared dates"
+aVocab[intCat][1][intIncr++]="some <fooddesc>yogurt"
+
+intCat++
+intIncr=0
+aVocab[intCat]= new Array();
+aVocab[intCat][0]="fooddesc"
+aVocab[intCat][1] = new Array()
+aVocab[intCat][1][intIncr++]=""
+aVocab[intCat][1][intIncr++]=""
+aVocab[intCat][1][intIncr++]=""
+aVocab[intCat][1][intIncr++]=""
+aVocab[intCat][1][intIncr++]="fresh "
+aVocab[intCat][1][intIncr++]="old "
+aVocab[intCat][1][intIncr++]="stale "
+
+intCat++
+intIncr=0
+aVocab[intCat]= new Array();
+aVocab[intCat][0]="itemdesc"
+aVocab[intCat][1] = new Array()
+aVocab[intCat][1][intIncr++]="an unassuming "
+aVocab[intCat][1][intIncr++]="an enchanted "
+aVocab[intCat][1][intIncr++]="an expensive "
+aVocab[intCat][1][intIncr++]="an heirloom "
+aVocab[intCat][1][intIncr++]="an old "
+aVocab[intCat][1][intIncr++]="an ordinary "
+aVocab[intCat][1][intIncr++]="an unusual "
+
+
+//Leave to Copy!
+intCat++
+intIncr=0
+aVocab[intCat]= new Array();
+aVocab[intCat][0]="THIRD"
+aVocab[intCat][1] = new Array()
+aVocab[intCat][1][intIncr++]=""
+
+
+
+	function GenNumber(nRange)
+	{
+                var iNumGen
+		iNumGen = Math.round((Math.random() * nRange));
+
+                return iNumGen;
+	}
+
+        function GetFrom(aArray)
+	{
+		var undefined
+		var sReturn
+		sReturn = aArray[GenNumber(aArray.length)];
+		if (sReturn == undefined)
+		{
+			sReturn = GetFrom(aArray)
+		}
+		return sReturn
+	}
+
+
+	function GetArray(sArrayName)
+	{
+		for (var intLooper=0;intLooper <aVocab.length;intLooper++)
+		{
+			if (aVocab[intLooper][0]==sArrayName)
+			{
+				return aVocab[intLooper][1];
+				break;
+			}
+		}
+	}
+
+	function ScanLine(sLine)
+	{
+		var iTagStart, iTagEnd
+		var sKey
+
+		if (sLine.indexOf("<") > -1)
+		{
+			iTagStart = sLine.indexOf("<");
+			iTagEnd = sLine.indexOf(">");
+
+			sKey = sLine.substr(iTagStart+1, iTagEnd-(iTagStart+1));
+
+			sKey = GetFrom(GetArray(sKey))
+			sLine = sLine.substr(0, iTagStart) + sKey + sLine.substr(iTagEnd+1, (sLine.length - iTagEnd))
+
+		}
+
+
+		if (sLine.indexOf("<") > - 1)
+		{
+			sLine = ScanLine(sLine)
+		}
+
+		return sLine;
+	}
+
+
+	function GenPlot()
+	{
+		sLine = GetFrom(GetArray("FIRST"));
+
+		sLine = ScanLine(sLine)
+
+		document.GENFORM.STORY.value = sLine;
+	}
+//-->
+</script>
+
+<p />
+
+
+
+<p align="center">&nbsp;</p>
+<div align="center"><center>
+<form name="GENFORM">
+            <p><font size="4"><b>Arabian Nights Plot Generator</b></font>
+            </p>
+            <table border="0">
+                <tr>
+                    <td><textarea name="STORY" rows="8" cols="40"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center"><input type="button"
+                    name="BGENERATE" value="Rub the Button"
+                    onclick="GenPlot();"></td>
+                </tr>
+            </table>
+        </form>
+
+
+
+</center></div>
+
+
+</div>
+<br />
+
+
+<div id="footer" class="footerlink">
+<center>Original site design, graphics, and text (C) LRC.
+<br />
+Images or quotes from other people (C) their respective owners.
+<br />
+Do not copy or repost the contents of this page without permission.  (<a href="../contentrules.htm">More info</a>.)
+
+</center>
+</div>
+
+</body>
+</html>
