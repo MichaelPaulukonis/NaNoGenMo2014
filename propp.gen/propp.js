@@ -16,24 +16,20 @@
 
 var fairyTaleGen = {};
 
-var gui = function() {
+var gender = {
+    female: 'female',
+    male: 'male'
+};
 
-    // TODO: these are information popups
-    // grab the information from the original, or rewrite
-    var popup = function(url) {
-	window.open(url+".html", "win", "toolbar=0,location=0,directories=0,status=0,menubar=1,scrollbars=1,resizable=1,width=300,height=300");
-    };
 
-    var popup2 = function(url) {
-	window.open(url+".html", "win", "toolbar=0,location=0,directories=0,status=0,menubar=1,scrollbars=1,resizable=1,width=350,height=400");
-    };
 
-    return {
-	popup: popup,
-	popup2: popup2
-    };
 
-}();
+var settings = {
+
+    gender: gender.female,
+    functions: {}
+
+};
 
 // should this be reduced back down to a 0..31 array?
 var proppFunctions = {
@@ -71,7 +67,8 @@ var proppFunctions = {
     "func32": { active: false, templates: [] }
 };
 
-fairyTaleGen.functions = proppFunctions;
+settings.functions = proppFunctions;
+fairyTaleGen.settings = settings;
 
 //TEST CODE (non-functional)
 //sets villian to female witch, checks absention
@@ -376,37 +373,6 @@ function setGender(){
 }
 
 
-var getFunctionsFromGui = function() {
-
-    for (var index in proppFunctions) {
-	proppFunctions[index].active = window.document.myform[index].checked;
-    }
-
-};
-
-var shoveToGui = function(tale) {
-
-    window.document.myform.fairytale.value = tale;
-
-};
-
-var guiGet = function() {
-    var tale = generate();
-    shoveToGui(tale);
-};
-
-// TODO: need to actually supply these values somehow
-// proof-of-concept, for now
-var getSettings = function() {
-
-    var setts = {
-	gender: 'female'
-	};
-
-    return setts;
-
-};
-
 // generates a random number
 function random(limit){
     num = Math.floor(Math.random() * limit);
@@ -419,7 +385,7 @@ function random(limit){
 var wordBank = function(settings) {
 
     var hero = function() {
-	return ((settings.gender == 'male') ? 'hero' : 'heroine');
+	return ((fairyTaleGen.settings.gender == 'male') ? 'hero' : 'heroine');
     };
 
     return {
@@ -430,7 +396,7 @@ var wordBank = function(settings) {
 
 var sentence = function(index) {
 
-    var helper = wordBank(getSettings());
+    var helper = wordBank(fairyTaleGen.settings);
 
     var f;
     var func = proppFunctions[index];

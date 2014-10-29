@@ -16,6 +16,7 @@
       <center>
         <br />
         <br />
+        <div>
         <table col="3">
           <tbody><tr>
 	    <td colspan="3">
@@ -97,12 +98,20 @@
 	      </ul>
             </td>
           </tr>
+          <tr>
+            <td>
+              <ul id='settings'>
+                <li><input name='gender' type='radio' value='female' checked='checked'>female</input>
+                <input name='gender' type='radio' value='male'>male</input></li>
+              </ul>
+            </td>
+          </tr>
 
           <tr>
 	    <td colspan="2">
 	      <br />
 	      <br />
-	      <textarea id="itsalltext_generated_id_fairytale_1" cols="35" rows="20" wrap="true" name="fairytale"> </textarea>
+	      <textarea id="fairytale" cols="35" rows="20" wrap="true" name="fairytale"> </textarea>
 	      <br />
 	      <br />
 	      <input value="generate" onclick="javascript:guiGet();" align="middle" type="submit" />
@@ -113,13 +122,16 @@
 	  </tr>
         </tbody>
       </table>
-
+    </div>
+	      <!-- <textarea id="fairytale" cols="35" rows="20" wrap="true" name="fairytale"> </textarea> -->
     </center>
   </form>
 
 
   <!-- well, that was installed in the wrong location -->
   <script type="text/javascript" src="../node_modules/underscore/underscore.js"></script>
+  <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="gui.js"></script>
   <script type="text/javascript" src="propp.js"></script>
   <script type="text/javascript" src="templates.js"></script>
 

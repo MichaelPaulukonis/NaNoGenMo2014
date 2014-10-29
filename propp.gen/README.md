@@ -1,11 +1,24 @@
 ## What's going on in here?
-I'm playing with some _Proppian_ story/skeleton generators. My end goal is to have a generator than I can call `n` times, until 50,000 words have been created. Each output should be distinctly different enough to have a passing resemblance to interesting. One of the steps there will be a templating system (underscore, probably), and word-replacement in the templates (WordNik, probably). Some sort of automated title for each output will also be required. Using a different generator, though, but using the same word-bank. (Or I'll have to give up, and just use numbers. Waaaah! However, hrm.... GUIDs, some sort of weirdness with the wordbank, or everything -- not completely linear, computer garbled? A more munged version of Darius K's re-spellings that he did last year [TODO: link cite])
+I'm playing with some _Proppian_ story/skeleton generators. My end goal is to have a generator than I can call `n` times, until 50,000 words have been created. Each output should be distinctly different enough to have a passing resemblance to interesting. One of the steps there will be a templating system (underscore, probably), and word-replacement in the templates (WordNik, probably).
 
 Last year, I spent a bunch of time refactoring/building a template system -- and while it was a good exercise, I never used it for anything much, and it isn't nearly as flexible as `underscore`.
 
 As of today, 2014.10.22, I don't fully understand Propp's theories; while I doubt I will completely by the end of November, I hope to improve my knowledge, and get a better understanding of what I want to do by gradually reworking some other code that's pointing me in some directions.
 
 I suspect that, after technical issues, the hardest work will be in creating the templates.
+
+That may seem wrong-headed, but I am am not fully engaging the entire narrative-engine target at the deepest level. My attack is by nature _facile_ - I am interested in surface effects -- how it reads, how it feels, how it gets to 50,000 characters by the end of November 2014 -- not that the underlying model is theorhetically sound and academically rigorous.
+
+I am interested in short-cuts, in making it _seem_ better than it is.
+
+Klein notes that "[t]he most complex problems in automatic Propp and Levi-Strauss concern logical qunatifications of functions. That is, the coherent selection of compatible characters, objects and functions" (Klein 1974, p23).
+
+In contrast, a rather "dumb" selection of characters and objects will result in humorous or jarring discontinitues that will _distract_ from other technical faults in the underlying "narrative" construct.
+
+## Notes on the extant proppian generators
+The most-referenced version - [Fairy Tale Generator](https://web.archive.org/web/20061112014356/http://www.brown.edu/Courses/FR0133/Fairytale_Generator/gen.html) - was developed for a class (at Brown? in ????). It's not the most faithful Propp version -- it breaks the 31 functions into 34 pieces, and makes them all optional and independent -- nothings depends on anything else. The high level of citations is in no doubt due to the readily pleasing effects, which are primarily due to the source materials included. Each function, instead of actually referencing characters, objects or other functions, consists of the random selection of pre-written sentences, independent of previous selections. Due to the nature of the writing, there _may be_ inter-references, but this is all accidental.
+
+A perhaps better model is the [Proto-Proppian Generator](http://www.stonedragonpress.com/vladimir_propp/propp_generator_v1.htm) that has _awful_ output, in that its a listing of the selected functions, with some minor variations. however, the technical details are more correct (to my untrained eye), and the selection of functions is dependent on other selections (ie, not totally independent -- it follows rules). This is perhaps the better model for me to work with.
 
 
 ## Directions, and potential side-resources
@@ -17,6 +30,21 @@ I suspect that, after technical issues, the hardest work will be in creating the
 * [Bros Grimm](https://github.com/baldmountain/GrimmsFairyTales/blob/master/Grimms%20Fairy%20Tales%20-%20The%20Brothers%20Grimm.hatter/document.txt) on github (From Gutenberg)
 * [Indian Fairy Tales](https://github.com/GITenberg/Indian-Fairy-Tales_7128) on github, from Gutenberg.
 ** there are others in this vein from the same group
+
+### Semantic Networks
+from reading about the MESSy system used by Klein.
+
+* https://github.com/Planeshifter/node-concept-net
+* https://www.npmjs.org/package/expert
+* https://www.npmjs.org/package/file-concept-network
+* https://www.npmjs.org/package/concept-network
+
+This may be going too far.
+Some simple variables might be enough (common to all templates).
+Or even just the templates -- and go with the flow.
+The functions I developed before -- like noun[n] to reuse a particular noun might be enough.
+
+
 
 ### Titles
 There was something on the FairyTale Plot Generator (below) that looked like it might be a title generator.
@@ -33,6 +61,8 @@ Purple flowery synonyms for things in the story
 example idea
 
 [Fred defeats a dragon in the Valley] := The tale of Brave, Dauntless Fred and the giant undefeatable maurading Dragon of the beloved perfect emerald-green Valley
+
+Some sort of automated title for each output will also be required. Using a different generator, though, but using the same word-bank. (Or I'll have to give up, and just use numbers. Waaaah! However, hrm.... GUIDs, some sort of weirdness with the wordbank, or everything -- not completely linear, computer garbled? A more munged version of Darius K's re-spellings that he did last year [TODO: link cite])
 
 
 ### story object (code notes)

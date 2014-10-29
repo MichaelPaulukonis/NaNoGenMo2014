@@ -1,118 +1,122 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head>
-<meta http-equiv="content-type" content="text/html; charset=windows-1252">
-	<title>"Authentic" Russian Folktale, Outline Generator v1.0</title>
-	<meta name="file_name" content="propp_generator_v1.htm">
-	<meta name="author" content="BigTime Interactive">
-	<meta name="copyright" content="copyright 2004-2009 Stone Dragon Press">
-	<meta scheme="month-day-year" name="date" content="08-05-2009">
-	<script src="resources/propp.js" type="text/javascript"></script>
-	<link href="resources/propp.css" rel="stylesheet" type="text/css">
-</head>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=windows-1252"/>
+    <title>"Authentic" Russian Folktale, Outline Generator v1.0</title>
+    <meta name="file_name" content="propp_generator_v1.htm"/>
+    <meta name="author" content="BigTime Interactive"/>
+    <meta name="copyright" content="copyright 2004-2009 Stone Dragon Press"/>
+    <meta scheme="month-day-year" name="date" content="08-05-2009"/>
+    <link href="resources/propp.css" rel="stylesheet" type="text/css" />
+  </head>
 
-<body topmargin="20" leftmargin="20" bgcolor="#ffffff" marginheight="20" marginwidth="20">
-	<form name="idForm1" onsubmit="return false;">
-		<table cell="" padding="0" border="0" width="750" cellspacing="0">
-			<tbody><tr>
-				<td class="txt" colspan="3" align="left" valign="top">
-					<p class="txth2">"Authentic" Russian Folktale, Outline Generator v1.0<br>
-					<img src="resources/sp.gif" height="1" width="30"><span class="txtb">(AKA – Proppian, Folktale Outline Generator v1.0)</span></p>
-					<p><a href="javascript:modalWin1('idElement0')">0: <img src="resources/alpha_b.gif" border="0" height="13" width="7"> (alpha) — initial situation</a></p>
-					<p class="txtb">
-						Select functions: ( <a href="javascript:modalWin1('idFunc8')" class="red">function 8</a> and/or <a href="javascript:modalWin1('idFunc8a')" class="red">function 8a</a> are required )
-					</p>
-				</td>
-			</tr>
-			<tr>
-				<td class="txt" align="left" valign="top">
-					<hr align="center" size="1" width="200">
-					<input name="func1" type="checkbox"><a href="javascript:modalWin1('idFunc1')">1: <img src="resources/beta_b.gif" border="0" height="13" width="7"> (beta) — absentation</a><br>
-					<hr align="center" size="1" width="200">
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="func2" onclick="setCheckbox('2','3')" type="checkbox"><a href="javascript:modalWin1('idFunc2')">2: <img src="resources/gamma_b.gif" border="0" height="13" width="8"> (gamma) — interdiction w/3</a><br>
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="func3" onclick="resetCheckbox('3','2')" type="checkbox"><a href="javascript:modalWin1('idFunc3')">3: <img src="resources/delta_b.gif" border="0" height="13" width="7"> (delta) — violation w/[2]</a><br>
-					<hr align="center" size="1" width="200">
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="func4" onclick="setCheckbox('4','5')" type="checkbox"><a href="javascript:modalWin1('idFunc4')">4: <img src="resources/epsilon_b.gif" border="0" height="13" width="6"> (epsilon) — reconnaissance w/5</a><br>
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="func5" onclick="resetCheckbox('5','4')" type="checkbox"><a href="javascript:modalWin1('idFunc5')">5: <img src="resources/zeta_b.gif" border="0" height="13" width="7"> (zeta) — delivery w/[4]</a><br>
-					<hr align="center" size="1" width="200">
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="func6" onclick="setCheckbox('6','7')" type="checkbox"><a href="javascript:modalWin1('idFunc6')">6: <img src="resources/eta_b.gif" border="0" height="13" width="7"> (eta) — trickery w/6</a><br>
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="func7" onclick="resetCheckbox('7','6')" type="checkbox"><a href="javascript:modalWin1('idFunc7')">7: <img src="resources/theta_b.gif" border="0" height="13" width="7"> / <img src="resources/lamda.gif" border="0" height="13" width="8"> (theta /lamda) — complicity w/[6]</a><br>
-					<hr align="center" size="1" width="200">
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="func8" onclick="setCheckbox('8','19')" type="checkbox"><a href="javascript:modalWin1('idFunc8')" class="red">8: A — villainy w/[8a] 19</a><br>
-					<img src="resources/sp.gif" height="1" width="75"><font class="txtb">and / or</font><br>
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="func8a" onclick="setCheckbox('8a','19a')" type="checkbox"><a href="javascript:modalWin1('idFunc8a')" class="red">8a: a — lack w/[8] 19</a><br>
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="func9" type="checkbox"><a href="javascript:modalWin1('idFunc9')">9: B — mediation, connective incident</a><br>
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="func10" type="checkbox"><a href="javascript:modalWin1('idFunc10')">10: C — beginning counteraction</a><br>
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="func11" onclick="resetCheckbox('11','20')" type="checkbox"><a href="javascript:modalWin1('idFunc11')" class="grn">11: <img src="resources/up_arrow_g.gif" border="0" height="13" width="8"> — departure w/[20]</a><br>
-					<hr align="center" size="1" width="200">
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="moveDEF" onclick="setDEF()" type="radio"><a href="javascript:%20modalWin2('instructions')">DEF after ABC<img src="resources/up_arrow_b.gif" border="0" height="13" width="8"> only</a><br>
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="moveDEF" onclick="setDEF()" type="radio"><a href="javascript:%20modalWin2('instructions')">DEF before ABC<img src="resources/up_arrow_b.gif" border="0" height="13" width="8"> only</a><br>
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="moveDEF" onclick="setDEF()" type="radio"><a href="javascript:%20modalWin2('instructions')">DEF before and after ABC<img src="resources/up_arrow_b.gif" border="0" height="13" width="8"></a><br>
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="func12" onclick="setCheckbox('12','13')" type="checkbox"><a href="javascript:modalWin1('idFunc12')" class="blugrn">12: D — first function of donor w/13</a><br>
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="func13" onclick="setCheckbox('13','12')" type="checkbox"><a href="javascript:modalWin1('idFunc13')" class="blugrn">13: E — protagonist's reaction w/12</a><br>
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="func14" type="checkbox"><a href="javascript:modalWin1('idFunc14')">14: F — acquisition of magical agent</a><br>
-					<hr align="center" size="1" width="200">
-					<input name="func15" type="checkbox"><a href="javascript:modalWin1('idFunc15')">15: G — transference, guidance</a><br>
-					<hr align="center" size="1" width="200">
-				</td>
-				<td class="txt" align="left" valign="top">
-					<hr align="center" size="1" width="200">
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="func16" onclick="setCheckbox('16','18')" type="checkbox"><a href="javascript:modalWin1('idFunc16')" class="gry">16: H — struggle w/18</a><br>
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="func17" type="checkbox"><a href="javascript:modalWin1('idFunc17')">17: J — branding</a><br>
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="func18" onclick="resetCheckbox('18','16')" type="checkbox"><a href="javascript:modalWin1('idFunc18')" class="gry">18: I — victory w/[16] [17]</a><br>
-					<hr align="center" size="1" width="200">
-					<input name="func19" onclick="setCheckbox('19','8')" type="checkbox"><a href="javascript:modalWin1('idFunc19')" class="red">19: K — liquidation w/8</a><br>
-					<input name="func19a" onclick="setCheckbox('19a','8a')" type="checkbox"><a href="javascript:modalWin1('idFunc19')" class="red">19: K — liquidation w/8a</a><br>
-					<hr align="center" size="1" width="200">
-					<input name="func20" onclick="setCheckbox('20','11')" type="checkbox"><a href="javascript:modalWin1('idFunc20')" class="grn">20: <img src="resources/down_arrow_g.gif" border="0" height="13" width="8"> — return w/11</a><br>
-					<hr align="center" size="1" width="200">
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="func21" onclick="setCheckbox('21','22')" type="checkbox"><a href="javascript:modalWin1('idFunc21')">21: Pr — pursuit w/22</a><br>
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="func22" onclick="setCheckbox('22','21')" type="checkbox"><a href="javascript:modalWin1('idFunc22')">22: Rs — rescue w/21</a><br>
-					<hr align="center" size="1" width="200">
-					<input name="func23" onclick="setCheckbox('23','27')" type="checkbox"><a href="javascript:modalWin1('idFunc23')" class="vio">23: o — unrecognized arrival w/27</a><br>
-					<input name="func24" onclick="setCheckbox('24','28')" type="checkbox"><a href="javascript:modalWin1('idFunc24')" class="ocr">24: L — unfounded claims w/28</a><br>
-					<hr align="center" size="1" width="200">
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="func25" onclick="setCheckbox('25','26')" type="checkbox"><a href="javascript:modalWin1('idFunc25')">25: M — difficult task w/26</a><br>
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="func26" onclick="setCheckbox('26','25')" type="checkbox"><a href="javascript:modalWin1('idFunc26')">26: N — solution w/25</a><br>
-					<hr align="center" size="1" width="200">
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="func27" onclick="setCheckbox('27','23')" type="checkbox"><a href="javascript:modalWin1('idFunc27')" class="vio">27: Q — recognition w/23</a><br>
-					&nbsp;&nbsp;&nbsp;&nbsp;<input name="func28" onclick="setCheckbox('28','24')" type="checkbox"><a href="javascript:modalWin1('idFunc28')" class="ocr">28: Ex — exposure w/24</a><br>
-					<hr align="center" size="1" width="200">
-					<input name="func29" type="checkbox"><a href="javascript:modalWin1('idFunc29')">29: T — transfiguration</a><br>
-					<input name="func30" type="checkbox"><a href="javascript:modalWin1('idFunc30')">30: U — punishment</a><br>
-					<input name="func31" type="checkbox"><a href="javascript:modalWin1('idFunc31')">31: W — wedding</a><br>
-					<hr align="center" size="1" width="200">
-				</td>
-				<td class="txt" align="left" valign="top">
-					<p class="txth2">Help</p>
-					<p><a href="javascript:%20modalWin2('instructions')">instructions</a><br>
-					<a href="javascript:%20modalWin2('explanation')">explanation</a><br>
-					<a href="javascript:%20modalWin2('how_it_works')">how it works</a></p>
-					<p><font class="txtb">functions</font><br>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:%20modalWin2('all')">all</a><br>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:%20modalWin2('paired')">paired</a><br>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:%20modalWin2('grouped')">grouped</a><br>
-					<a href="javascript:%20modalWin2('characters')">characters</a><br>
-					<a href="javascript:%20modalWin2('moves')">moves</a><br>
-					<a href="javascript:%20modalWin2('other_elements')">other elements</a></p>
-				</td>
-			</tr>
-			<tr><!-- spacer -->
-				<td class="txt" align="left" valign="top"><img src="resources/sp.gif" height="10" width="320"></td>
-				<td class="txt" align="left" valign="top"><img src="resources/sp.gif" height="10" width="320"></td>
-				<td class="txt" align="left" valign="top"><img src="resources/sp.gif" height="10" width="110"></td>
-			</tr>
-			<tr>
-				<td class="txt" colspan="2" align="center" valign="top">
-                                  <textarea id="itsalltext_generated_id_folktale_1" name="folktale" wrap="true" rows="10" cols="60"></textarea>
-				</td>
-				<td class="txt" align="center" valign="top">
-					<p><input class="txt" value="generate" onclick="generateOutline()" type="button"></p>
-					<p><input class="txt" value="clear" type="reset"></p>
-					<p><input class="txt" value="select all" onclick="document.idForm1.folktale.select()" type="button"></p>
-				</td>
-			</tr>
-		</tbody></table>
-	</form>
+  <body topmargin="20" leftmargin="20" bgcolor="#ffffff" marginheight="20" marginwidth="20">
+    <form name="idForm1" onsubmit="return false;">
+      <table cell="" padding="0" border="0" width="750" cellspacing="0">
+	<tbody>
+          <tr>
+	    <td class="txt" colspan="3" align="left" valign="top">
+	      <p class="txth2">"Authentic" Russian Folktale, Outline Generator v1.0<br />
+	      <img src="resources/sp.gif" height="1" width="30"><span class="txtb">(AKA – Proppian, Folktale Outline Generator v1.0)</span></p>
+	      <p><a href="javascript:modalWin1('idElement0')">0: <img src="resources/alpha_b.gif" border="0" height="13" width="7"> (alpha) — initial situation</a></p>
+	      <p class="txtb">
+	        Select functions: ( <a href="javascript:modalWin1('idFunc8')" class="red">function 8</a> and/or <a href="javascript:modalWin1('idFunc8a')" class="red">function 8a</a> are required )
+	      </p>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td class="txt" align="left" valign="top">
+	      <hr  align="center" size="1" width="200" />
+	      <input name="func1" type="checkbox"><a href="javascript:modalWin1('idFunc1')">1: <img src="resources/beta_b.gif" border="0" height="13" width="7"> (beta) — absentation</a><br />
+	      <hr  align="center" size="1" width="200" />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="func2" onclick="setCheckbox('2','3')" type="checkbox"><a href="javascript:modalWin1('idFunc2')">2: <img src="resources/gamma_b.gif" border="0" height="13" width="8"> (gamma) — interdiction w/3</a><br />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="func3" onclick="resetCheckbox('3','2')" type="checkbox"><a href="javascript:modalWin1('idFunc3')">3: <img src="resources/delta_b.gif" border="0" height="13" width="7"> (delta) — violation w/[2]</a><br />
+	      <hr  align="center" size="1" width="200" />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="func4" onclick="setCheckbox('4','5')" type="checkbox"><a href="javascript:modalWin1('idFunc4')">4: <img src="resources/epsilon_b.gif" border="0" height="13" width="6"> (epsilon) — reconnaissance w/5</a><br />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="func5" onclick="resetCheckbox('5','4')" type="checkbox"><a href="javascript:modalWin1('idFunc5')">5: <img src="resources/zeta_b.gif" border="0" height="13" width="7"> (zeta) — delivery w/[4]</a><br />
+	      <hr  align="center" size="1" width="200" />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="func6" onclick="setCheckbox('6','7')" type="checkbox"><a href="javascript:modalWin1('idFunc6')">6: <img src="resources/eta_b.gif" border="0" height="13" width="7"> (eta) — trickery w/6</a><br />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="func7" onclick="resetCheckbox('7','6')" type="checkbox"><a href="javascript:modalWin1('idFunc7')">7: <img src="resources/theta_b.gif" border="0" height="13" width="7"> / <img src="resources/lamda.gif" border="0" height="13" width="8"> (theta /lamda) — complicity w/[6]</a><br />
+	      <hr  align="center" size="1" width="200" />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="func8" onclick="setCheckbox('8','19')" type="checkbox"><a href="javascript:modalWin1('idFunc8')" class="red">8: A — villainy w/[8a] 19</a><br />
+	      <img src="resources/sp.gif" height="1" width="75"><font class="txtb">and / or</font><br />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="func8a" onclick="setCheckbox('8a','19a')" type="checkbox"><a href="javascript:modalWin1('idFunc8a')" class="red">8a: a — lack w/[8] 19</a><br />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="func9" type="checkbox"><a href="javascript:modalWin1('idFunc9')">9: B — mediation, connective incident</a><br />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="func10" type="checkbox"><a href="javascript:modalWin1('idFunc10')">10: C — beginning counteraction</a><br />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="func11" onclick="resetCheckbox('11','20')" type="checkbox"><a href="javascript:modalWin1('idFunc11')" class="grn">11: <img src="resources/up_arrow_g.gif" border="0" height="13" width="8"> — departure w/[20]</a><br />
+	      <hr  align="center" size="1" width="200" />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="moveDEF" onclick="setDEF()" type="radio"><a href="javascript:%20modalWin2('instructions')">DEF after ABC<img src="resources/up_arrow_b.gif" border="0" height="13" width="8"> only</a><br />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="moveDEF" onclick="setDEF()" type="radio"><a href="javascript:%20modalWin2('instructions')">DEF before ABC<img src="resources/up_arrow_b.gif" border="0" height="13" width="8"> only</a><br />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="moveDEF" onclick="setDEF()" type="radio"><a href="javascript:%20modalWin2('instructions')">DEF before and after ABC<img src="resources/up_arrow_b.gif" border="0" height="13" width="8"></a><br />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="func12" onclick="setCheckbox('12','13')" type="checkbox"><a href="javascript:modalWin1('idFunc12')" class="blugrn">12: D — first function of donor w/13</a><br />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="func13" onclick="setCheckbox('13','12')" type="checkbox"><a href="javascript:modalWin1('idFunc13')" class="blugrn">13: E — protagonist's reaction w/12</a><br />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="func14" type="checkbox"><a href="javascript:modalWin1('idFunc14')">14: F — acquisition of magical agent</a><br />
+	      <hr  align="center" size="1" width="200" />
+	      <input name="func15" type="checkbox"><a href="javascript:modalWin1('idFunc15')">15: G — transference, guidance</a><br />
+	      <hr  align="center" size="1" width="200" />
+	    </td>
+	    <td class="txt" align="left" valign="top">
+	      <hr  align="center" size="1" width="200" />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="func16" onclick="setCheckbox('16','18')" type="checkbox"><a href="javascript:modalWin1('idFunc16')" class="gry">16: H — struggle w/18</a><br />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="func17" type="checkbox"><a href="javascript:modalWin1('idFunc17')">17: J — branding</a><br />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="func18" onclick="resetCheckbox('18','16')" type="checkbox"><a href="javascript:modalWin1('idFunc18')" class="gry">18: I — victory w/[16] [17]</a><br />
+	      <hr  align="center" size="1" width="200" />
+	      <input name="func19" onclick="setCheckbox('19','8')" type="checkbox"><a href="javascript:modalWin1('idFunc19')" class="red">19: K — liquidation w/8</a><br />
+	      <input name="func19a" onclick="setCheckbox('19a','8a')" type="checkbox"><a href="javascript:modalWin1('idFunc19')" class="red">19: K — liquidation w/8a</a><br />
+	      <hr  align="center" size="1" width="200" />
+	      <input name="func20" onclick="setCheckbox('20','11')" type="checkbox"><a href="javascript:modalWin1('idFunc20')" class="grn">20: <img src="resources/down_arrow_g.gif" border="0" height="13" width="8"> — return w/11</a><br />
+	      <hr  align="center" size="1" width="200" />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="func21" onclick="setCheckbox('21','22')" type="checkbox"><a href="javascript:modalWin1('idFunc21')">21: Pr — pursuit w/22</a><br />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="func22" onclick="setCheckbox('22','21')" type="checkbox"><a href="javascript:modalWin1('idFunc22')">22: Rs — rescue w/21</a><br />
+	      <hr  align="center" size="1" width="200" />
+	      <input name="func23" onclick="setCheckbox('23','27')" type="checkbox"><a href="javascript:modalWin1('idFunc23')" class="vio">23: o — unrecognized arrival w/27</a><br />
+	      <input name="func24" onclick="setCheckbox('24','28')" type="checkbox"><a href="javascript:modalWin1('idFunc24')" class="ocr">24: L — unfounded claims w/28</a><br />
+	      <hr  align="center" size="1" width="200" />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="func25" onclick="setCheckbox('25','26')" type="checkbox"><a href="javascript:modalWin1('idFunc25')">25: M — difficult task w/26</a><br />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="func26" onclick="setCheckbox('26','25')" type="checkbox"><a href="javascript:modalWin1('idFunc26')">26: N — solution w/25</a><br />
+	      <hr  align="center" size="1" width="200" />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="func27" onclick="setCheckbox('27','23')" type="checkbox"><a href="javascript:modalWin1('idFunc27')" class="vio">27: Q — recognition w/23</a><br />
+	      &nbsp;&nbsp;&nbsp;&nbsp;<input name="func28" onclick="setCheckbox('28','24')" type="checkbox"><a href="javascript:modalWin1('idFunc28')" class="ocr">28: Ex — exposure w/24</a><br />
+	      <hr  align="center" size="1" width="200" />
+	      <input name="func29" type="checkbox"><a href="javascript:modalWin1('idFunc29')">29: T — transfiguration</a><br />
+	      <input name="func30" type="checkbox"><a href="javascript:modalWin1('idFunc30')">30: U — punishment</a><br />
+	      <input name="func31" type="checkbox"><a href="javascript:modalWin1('idFunc31')">31: W — wedding</a><br />
+	      <hr  align="center" size="1" width="200" />
+	    </td>
+	    <td class="txt" align="left" valign="top">
+	      <p class="txth2">Help</p>
+	      <p><a href="javascript:%20modalWin2('instructions')">instructions</a><br />
+	      <a href="javascript:%20modalWin2('explanation')">explanation</a><br />
+	      <a href="javascript:%20modalWin2('how_it_works')">how it works</a></p>
+	      <p><font class="txtb">functions</font><br />
+	      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:%20modalWin2('all')">all</a><br />
+	      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:%20modalWin2('paired')">paired</a><br />
+	      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:%20modalWin2('grouped')">grouped</a><br />
+	      <a href="javascript:%20modalWin2('characters')">characters</a><br />
+	      <a href="javascript:%20modalWin2('moves')">moves</a><br />
+	      <a href="javascript:%20modalWin2('other_elements')">other elements</a></p>
+	    </td>
+	  </tr>
+	  <tr><!-- spacer -->
+	    <td class="txt" align="left" valign="top"><img src="resources/sp.gif" height="10" width="320"></td>
+	    <td class="txt" align="left" valign="top"><img src="resources/sp.gif" height="10" width="320"></td>
+	    <td class="txt" align="left" valign="top"><img src="resources/sp.gif" height="10" width="110"></td>
+	  </tr>
+	  <tr>
+	    <td class="txt" colspan="2" align="center" valign="top">
+              <textarea id="itsalltext_generated_id_folktale_1" name="folktale" wrap="true" rows="10" cols="60"></textarea>
+	    </td>
+	    <td class="txt" align="center" valign="top">
+	      <p><input class="txt" value="generate" onclick="generateOutline()" type="button"></p>
+	      <p><input class="txt" value="clear" type="reset"></p>
+	      <p><input class="txt" value="select all" onclick="document.idForm1.folktale.select()" type="button"></p>
+	    </td>
+	  </tr>
+	</tbody>
+      </table>
+    </form>
 
+    <script src="resources/propp.js" type="text/javascript"></script>
 
-</body></html>
+  </body>
+</html>
