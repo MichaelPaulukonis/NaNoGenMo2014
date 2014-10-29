@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Simple Story Creator</title>
+	<style>
+		textarea {
+			display: block;
+			width: 800px;
+			margin: 0 auto;
+			height: 300px;
+			border: 1px solid black;
+		}
+
+		button.NewStory {
+			display: block;
+			margin: 0 auto;
+		}
+
+		h3 {
+			text-align: center;
+			margin-bottom: 0;
+			margin-top: 20px;
+		}
+
+		h1 {
+			text-align: center;
+		}
+
+		.list {
+			display: block;
+			width: 800px;
+			margin: 0 auto;
+			border: 1px solid black;
+		}
+
+		.list_block {
+			display: none;
+		}
+	</style>
+</head>
+<body>
+	<h1>Simple Story Creator</h1>
+	<textarea id="log"></textarea>
+	<button onclick="javascript:NewStory();" class="NewStory">New Story</button>
+
+	<script src="js/ssc.js"></script>
+	<script>
+		var MyStory = new SimpleStoryCreator();
+		var MyLog = document.getElementById("log");
+
+		NewStory();
+
+		function NewStory() {
+			MyStory.createStory("revenge");
+			var RealStory = MyStory.getStoryText();
+			MyLog.value = "";
+			for ( var lIndex = 0; lIndex < RealStory.length; lIndex++ ) {
+				MyLog.value += RealStory[ lIndex ] + "\n";
+			}
+		}
+
+		function ToggleDisplay( aID ) {
+			var lElement = document.getElementById( aID );
+			if ( lElement.style.display == "none" ) {
+				lElement.style.display = "block";
+			} else {
+				lElement.style.display = "none";
+			}
+		}
+	</script>
+
+
+	<h3>List of heros <button onclick="javascript:ToggleDisplay('hero_section');">Show/Hide</button></h3>
+	<div class="list_block" id="hero_section">
+		<select size="10" class="list">
+			<option>a / trader / both</option>
+			<option>a / merchant / both</option>
+			<option>a / salesperson / both</option>
+			<option>a / salesman / both</option>
+			<option>a / peasant / both</option>
+			<option>a / farmer / male</option>
+			<option>a / farmer's wife / female</option>
+			<option>a / hero / male</option>
+			<option>a / heroine / female</option>
+			<option>a / blacksmith / both</option>
+			<option>an / artist / both</option>
+			<option>a / poet / both</option>
+			<option>a / programmer / both
+			<option>an / artist / both</option>
+			<option>a / musician / both</option>
+			<option>a / princess / female</option>
+			<option>a / prince / male</option>
+		</select>
+	</div>
+
+	<h3>List of basic Adjectives <button onclick="javascript:ToggleDisplay('ba_section');">Show/Hide</button></h3>
+	<div class="list_block" id="ba_section">
+		<select size="10" class="list">
+			<option>a / brave</option>
+			<option>a / wealthy</option>
+			<option>a / rich</option>
+			<option>a / poor</option>
+			<option>a / smart</option>
+		</select>
+	</div>
+
+	<h3>List of ways to destroy <button onclick="javascript:ToggleDisplay('destroy_section');">Show/Hide</button></h3>
+	<div class="list_block" id="destroy_section">
+		<select size="10" class="list">
+			<option>destroy</option>
+			<option>ruined</option>
+			<option>wrecked</option>
+			<option>smashed</option>
+			<option>demolished</option>
+		</select>
+	</div>
+
+	<h3>List of ways to kill <button onclick="javascript:ToggleDisplay('kill_section');">Show/Hide</button></h3>
+	<div class="list_block" id="kill_section">
+		<select size="10" class="list">
+			<option>killed</option>
+			<option>murdered</option>
+			<option>slayed</option>
+			<option>assassinated</option>
+		</select>
+	</div>
+</body>
+</html>
