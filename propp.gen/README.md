@@ -85,10 +85,10 @@ http://en.wikipedia.org/wiki/Vladimir_Propp
 * [another variant](http://writinghorrorfiction.blogspot.com/2010/02/vladimir-propps-31-dramatic-situations.html) - includes the seven character types (covered elsewhere?)
 
 [Fairy Tale Generator](https://web.archive.org/web/20061112014356/http://www.brown.edu/Courses/FR0133/Fairytale_Generator/gen.html) - archive.org link, and source for some of the code herein. Heavily poeticized sentence/paragraph fragments. Doesn't always flow well. Need to jettison the original text (too static, too unique).
-* I found at least one other online copy not at archive.org
+* [mirror made in 2006](http://tz69.3x.ro/Generator/gen.html) using HttTrack, so it grabbed all of the instructions, etc.
 * as of 2014.10.22 I have not copied all of the associated info-texts that popup, although I did from the skeleton generator, below.
 
-[Proto-Proppian Generator](http://www.stonedragonpress.com/vladimir_propp/propp_generator_v1.htm) outputs skeleton, not text. brief look at the JS appears similar to the Fairytale generator, above.
+[Proto-Proppian Outline Generator](http://www.stonedragonpress.com/vladimir_propp/propp_generator_v1.htm) outputs skeleton, not text. brief look at the JS appears similar to the Fairytale generator, above.
 
 [Bard](http://web.fdi.ucm.es/profesor/fpeinado/projects/bard/) appears to be a newer version; written in Java. Can't find anything else online.
 
