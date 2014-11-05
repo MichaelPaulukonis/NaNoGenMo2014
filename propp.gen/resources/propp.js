@@ -288,22 +288,20 @@ function initializeGenerator() {
 
 }
 
-function betaTheta() {
+function betaTheta(settings) {
 
-    var obj1 = window.document.idForm1;
-
-    if (obj1.func1.checked) {
+    if (settings.func1) {
 	world.str1 += proppFunction1[0] + gui.divider;
 	world.str1 += proppFunction1[random(proppFunction1.length - 1) + 1] + "\n\n";
     }
 
-    if (obj1.func2.checked) {
+    if (settings.func2) {
 	world.str1 += proppFunction2[0] + gui.divider;
 	world.ndxFunc2 = random(proppFunction2.length - 1) + 1;
 	world.str1 += proppFunction2[world.ndxFunc2] + "\n\n";
     }
 
-    if (obj1.func3.checked) {
+    if (settings.func3) {
 	world.str1 += proppFunction3[0] + gui.divider;
 	if (world.ndxFunc2 > 0) {
 	    world.str1 += proppFunction3[world.ndxFunc2] + "\n\n";
@@ -312,13 +310,13 @@ function betaTheta() {
 	}
     }
 
-    if (obj1.func4.checked) {
+    if (settings.func4) {
 	world.str1 += proppFunction4[0] + gui.divider;
 	world.ndxFunc4 = random(proppFunction4.length - 1) + 1;
 	world.str1 += proppFunction4[world.ndxFunc4] + "\n\n";
     }
 
-    if (obj1.func5.checked) {
+    if (settings.func5) {
 	world.flgAntagonist = 1;
 
 	world.str1 += proppFunction5[0] + gui.divider;
@@ -330,13 +328,13 @@ function betaTheta() {
 
     }
 
-    if (obj1.func6.checked) {
+    if (settings.func6) {
 	world.str1 += proppFunction6[0] + gui.divider;
 	world.ndxFunc6 = random(proppFunction4.length - 1) + 1;
 	world.str1 += proppFunction6[world.ndxFunc6] + "\n\n";
     }
 
-    if (obj1.func7.checked) {
+    if (settings.func7) {
 	world.flgAntagonist = 1;
 
 	world.str1 += proppFunction7[0] + gui.divider;
@@ -348,11 +346,9 @@ function betaTheta() {
     }
 }
 
-function DEF() {
+function DEF(settings) {
 
-    var obj1 = window.document.idForm1;
-
-    if (obj1.func12.checked) {
+    if (settings.func12) {
 	world.flgDonor = 1;
 	world.ndxFunc12 = random(proppFunction12.length - 1) + 1;
 
@@ -360,12 +356,12 @@ function DEF() {
 	world.str1 += proppFunction12[world.ndxFunc12] + "\n\n";
     }
 
-    if (obj1.func13.checked) {
+    if (settings.func13) {
 	world.str1 += proppFunction13[0] + gui.divider;
 	world.str1 += proppFunction13[world.ndxFunc12] + "\n\n";
     }
 
-    if (obj1.func14.checked) {
+    if (settings.func14) {
 	world.flgDonor = 1;
 
 	world.str1 += proppFunction14[0] + gui.divider;
@@ -373,21 +369,19 @@ function DEF() {
     }
 }
 
-function ABCuparrowDEFG() {
+function ABCuparrowDEFG(settings) {
 
-    var obj1 = window.document.idForm1;
-
-    if (obj1.func12.checked) {
-	if (obj1.moveDEF[1].checked || obj1.moveDEF[2].checked) {
-	    DEF();
+    if (settings.func12) {
+	if (settings.moveDEF[1] || settings.moveDEF[2]) {
+	    DEF(settings);
 	}
     }
 
-    if (obj1.func9.checked) {
+    if (settings.func9) {
 	world.ndxFunc9 = random(proppFunction9.length - 1) + 1;
     }
 
-    if (obj1.func8.checked) {
+    if (settings.func8) {
 	world.flgAntagonist = 1;
 
 	if (world.ndxFunc9 == 7) {
@@ -401,39 +395,39 @@ function ABCuparrowDEFG() {
 	world.str1 += proppFunction8[world.ndxFunc8] + "\n\n";
     }
 
-    if (obj1.func8a.checked) {
+    if (settings.func8a) {
 	world.ndxFunc8a = random(proppFunction8a.length - 1) + 1;
 
 	world.str1 += proppFunction8a[0] + gui.divider;
 	world.str1 += proppFunction8a[world.ndxFunc8a] + "\n\n";
     }
 
-    if (obj1.func9.checked) {
+    if (settings.func9) {
 	world.flgDispatcher = 1;
 
 	world.str1 += proppFunction9[0] + gui.divider;
 	world.str1 += proppFunction9[world.ndxFunc9] + "\n\n";
     }
 
-    if (obj1.func10.checked) {
+    if (settings.func10) {
 	if (world.ndxFunc9 > 0 && world.ndxFunc9 < 5) {
 	    world.str1 += proppFunction10[0] + gui.divider;
 	    world.str1 += proppFunction10[random(proppFunction10.length - 1) + 1] + "\n\n";
 	}
     }
 
-    if (obj1.func11.checked) {
+    if (settings.func11) {
 	world.str1 += proppFunction11[0] + gui.divider;
 	world.str1 += proppFunction11[random(proppFunction11.length - 1) + 1] + "\n\n";
     }
 
-    if (obj1.func12.checked) {
-	if (!obj1.moveDEF[1].checked) {
-	    DEF();
+    if (settings.func12) {
+	if (!settings.moveDEF[1]) {
+	    DEF(settings);
 	}
     }
 
-    if (obj1.func15.checked) {
+    if (settings.func15) {
 	world.flgHelper = 1;
 
 	world.str1 += proppFunction15[0] + gui.divider;
@@ -441,18 +435,16 @@ function ABCuparrowDEFG() {
     }
 }
 
-function HJI() {
+function HJI(settings) {
 
-    var obj1 = window.document.idForm1;
-
-    if (obj1.func16.checked) {
+    if (settings.func16) {
 	world.ndxFunc16 = random(proppFunction16.length - 1) + 1;
 
 	world.str1 += proppFunction16[0] + gui.divider;
 	world.str1 += proppFunction16[world.ndxFunc16] + "\n\n";
     }
 
-    if (obj1.func17.checked) {
+    if (settings.func17) {
 	world.ndxFunc17 = random(proppFunction17.length - 1) + 1;
 
 	if (world.ndxFunc17 == 2) {
@@ -463,7 +455,7 @@ function HJI() {
 	world.str1 += proppFunction17[world.ndxFunc17] + "\n\n";
     }
 
-    if (obj1.func18.checked) {
+    if (settings.func18) {
 	world.flgAntagonist = 1;
 
 	world.str1 += proppFunction18[0] + gui.divider;
@@ -475,11 +467,9 @@ function HJI() {
     }
 } // end  of function
 
-function Kdownarrow() {
+function Kdownarrow(settings) {
 
-    var obj1 = window.document.idForm1;
-
-    if (obj1.func19.checked) {
+    if (settings.func19) {
 	if (world.ndxFunc8 == 3) {
 	    world.ndxFunc19 = 7;
 	} else if (world.ndxFunc8 == 11) {
@@ -497,7 +487,7 @@ function Kdownarrow() {
 	world.str1 += proppFunction19[world.ndxFunc19] + "\n\n";
     }
 
-    if (obj1.func19a.checked) {
+    if (settings.func19a) {
 	if (world.ndxFunc8a == 2) {
 	    world.ndxFunc19a = 19;
 	} else if (world.ndxFunc8a == 5) {
@@ -511,24 +501,22 @@ function Kdownarrow() {
 	world.str1 += proppFunction19[world.ndxFunc19a] + "\n\n";
     }
 
-    if (obj1.func20.checked) {
+    if (settings.func20) {
 	world.str1 += proppFunction20[0] + gui.divider;
 	world.str1 += proppFunction20[random(proppFunction20.length - 1) + 1] + "\n\n";
     }
 } // end  of function
 
-function PrRs() {
+function PrRs(settings) {
 
-    var obj1 = window.document.idForm1;
-
-    if (obj1.func21.checked) {
+    if (settings.func21) {
 	world.ndxFunc21 = random(proppFunction21.length - 1) + 1;
 
 	world.str1 += proppFunction21[0] + gui.divider;
 	world.str1 += proppFunction21[world.ndxFunc21] + "\n\n";
     }
 
-    if (obj1.func22.checked) {
+    if (settings.func22) {
 	world.flgAntagonist = 1;
 	world.flgHelper = 1;
 
@@ -543,16 +531,14 @@ function PrRs() {
     }
 } // end  of function
 
-function oL() {
+function oL(settings) {
 
-    var obj1 = window.document.idForm1;
-
-    if (obj1.func23.checked) {
+    if (settings.func23) {
 	world.str1 += proppFunction23[0] + gui.divider;
 	world.str1 += proppFunction23[random(proppFunction23.length - 1) + 1] + "\n\n";
     }
 
-    if (obj1.func24.checked) {
+    if (settings.func24) {
 	world.flgFalseProtagonist = 1;
 
 	world.str1 += proppFunction24[0] + gui.divider;
@@ -560,11 +546,9 @@ function oL() {
     }
 } // end  of function
 
-function MJN() {
+function MJN(settings) {
 
-    var obj1 = window.document.idForm1;
-
-    if (obj1.func25.checked) {
+    if (settings.func25) {
 	world.ndxFunc25 = random(proppFunction25.length - 1) + 1;
 	world.flgSoughtFor = 1;
 
@@ -572,7 +556,7 @@ function MJN() {
 	world.str1 += proppFunction25[world.ndxFunc25] + "\n\n";
     }
 
-    if (obj1.func17.checked) {
+    if (settings.func17) {
 	world.ndxFunc17 = random(proppFunction17.length - 1) + 1;
 	if (world.ndxFunc17 == 2) {
 	    world.flgSoughtFor = 1;
@@ -582,7 +566,7 @@ function MJN() {
 	world.str1 += proppFunction17[world.ndxFunc17] + "\n\n";
     }
 
-    if (obj1.func26.checked) {
+    if (settings.func26) {
 	world.flgHelper = 1;
 
 	world.str1 += proppFunction26[0] + gui.divider;
@@ -591,11 +575,9 @@ function MJN() {
     }
 } // end  of function
 
-function QExTUW() {
+function QExTUW(settings) {
 
-    var obj1 = window.document.idForm1;
-
-    if (obj1.func27.checked) {
+    if (settings.func27) {
 	if (world.ndxFunc17 == 1 | world.ndxFunc17 == 2) {
 	    world.ndxFunc27 = world.ndxFunc17;
 	} else {
@@ -609,7 +591,7 @@ function QExTUW() {
 	world.str1 += proppFunction27[world.ndxFunc27] + "\n\n";
     }
 
-    if (obj1.func28.checked) {
+    if (settings.func28) {
 
 	if (world.ndxFunc17 ==1 | world.ndxFunc17 == 2) {
 	    world.ndxFunc28 = world.ndxFunc17;
@@ -627,21 +609,21 @@ function QExTUW() {
 	world.str1 += proppFunction28[world.ndxFunc28] + "\n\n";
     }
 
-    if (obj1.func29.checked) {
+    if (settings.func29) {
 	world.flgHelper = 1;
 
 	world.str1 += proppFunction29[0] + gui.divider;
 	world.str1 += proppFunction29[random(proppFunction29.length - 1) + 1] + "\n\n";
     }
 
-    if (obj1.func30.checked) {
+    if (settings.func30) {
 	world.flgSoughtFor = 1;
 
 	world.str1 += proppFunction30[0] + gui.divider;
 	world.str1 += proppFunction30[random(proppFunction30.length - 1) + 1] + "\n\n";
     }
 
-    if (obj1.func31.checked) {
+    if (settings.func31) {
 	world.flgSoughtFor = 1;
 
 	world.str1 += proppFunction31[0] + gui.divider;
@@ -691,39 +673,44 @@ function makeCharacterList() {
 // generate outline for folktale
 function generateOutline() {
 
-    var obj1 = window.document.idForm1;
+    var form = window.document.idForm1;
+    var settings = gui.getSettings(form);
 
     initializeGenerator();
-    betaTheta();
-    ABCuparrowDEFG();
+    betaTheta(settings);
+    ABCuparrowDEFG(settings);
 
-    if (obj1.func16.checked && !obj1.func25.checked) {
-	HJI();
-	Kdownarrow();
-	PrRs();
-	oL();
-    } else if (!obj1.func16.checked && obj1.func25.checked) {
-	oL();
-	MJN();
-	Kdownarrow();
-	PrRs();
-    } else if (obj1.func16.checked && obj1.func25.checked) {
-	HJI();
-	Kdownarrow();
-	PrRs();
-	oL();
-	MJN();
-	Kdownarrow();
-	PrRs();
+    if (settings.func16 && !settings.func25) {
+	HJI(settings);
+	Kdownarrow(settings);
+	PrRs(settings);
+	oL(settings);
+    } else if (!settings.func16 && settings.func25) {
+	oL(settings);
+	MJN(settings);
+	Kdownarrow(settings);
+	PrRs(settings);
+    } else if (settings.func16 && settings.func25) {
+	HJI(settings);
+	Kdownarrow(settings);
+	PrRs(settings);
+	oL(settings);
+	MJN(settings);
+	Kdownarrow(settings);
+	PrRs(settings);
     } else {
-	Kdownarrow();
-	PrRs();
+	Kdownarrow(settings);
+	PrRs(settings);
     }
-    QExTUW();
-    makeCharacterList();
-    obj1.folktale.value = world.str1;
+
+    QExTUW(settings);
+    makeCharacterList(settings);
+
+    form.folktale.value = world.str1;
 }
 
+
+// GUI function only
 function setStructure () {
     var obj1 = window.document.idForm1;
     if (obj1.func12.checked) {
@@ -735,12 +722,14 @@ function setStructure () {
     }
 }
 
+// GUI function only
 function setDEF() {
     var obj1 = window.document.idForm1;
     obj1.func12.checked = true;
     obj1.func13.checked = true;
 }
 
+// GUI function only
 function setCheckbox(strClicked, strPaired) {
     var obj1 = window.document.idForm1;
     if (eval("obj1.func" + strClicked + ".checked")) {
@@ -751,9 +740,72 @@ function setCheckbox(strClicked, strPaired) {
     setStructure();
 }
 
+// GUI function only
 function resetCheckbox(strClicked, strPaired) {
     var obj1 = window.document.idForm1;
     if (eval("obj1.func" + strClicked + ".checked == false")) {
 	eval("obj1.func" + strPaired + ".checked = false");
     }
 }
+
+
+gui.getSettings = function(form) {
+
+    var settings = {};
+    settings.func1 = form.func1.checked;
+    settings.func2 = form.func2.checked;
+    settings.func3 = form.func3.checked;
+    settings.func4 = form.func4.checked;
+    settings.func5 = form.func5.checked;
+    settings.func6 = form.func6.checked;
+    settings.func7 = form.func7.checked;
+    settings.func8 = form.func8.checked;
+    settings.func8a = form.func8a.checked;
+    settings.func8a = form.func8a.checked;
+    settings.func9 = form.func9.checked;
+    settings.func9 = form.func9.checked;
+    settings.func10 = form.func10.checked;
+    settings.func11 = form.func11.checked;
+    settings.func12 = form.func12.checked;
+    settings.func12 = form.func12.checked;
+    settings.func12 = form.func12.checked;
+    settings.func12 = form.func12.checked;
+    settings.func12 = form.func12.checked;
+    settings.func13 = form.func13.checked;
+    settings.func13 = form.func13.checked;
+    settings.func14 = form.func14.checked;
+    settings.func15 = form.func15.checked;
+    settings.func16 = form.func16.checked;
+    settings.func16 = form.func16.checked;
+    settings.func16 = form.func16.checked;
+    settings.func16 = form.func16.checked;
+    settings.func17 = form.func17.checked;
+    settings.func17 = form.func17.checked;
+    settings.func18 = form.func18.checked;
+    settings.func19 = form.func19.checked;
+    settings.func19a = form.func19a.checked;
+    settings.func20 = form.func20.checked;
+    settings.func21 = form.func21.checked;
+    settings.func22 = form.func22.checked;
+    settings.func23 = form.func23.checked;
+    settings.func24 = form.func24.checked;
+    settings.func25 = form.func25.checked;
+    settings.func25 = form.func25.checked;
+    settings.func25 = form.func25.checked;
+    settings.func25 = form.func25.checked;
+    settings.func26 = form.func26.checked;
+    settings.func27 = form.func27.checked;
+    settings.func28 = form.func28.checked;
+    settings.func29 = form.func29.checked;
+    settings.func30 = form.func30.checked;
+    settings.func31 = form.func31.checked;
+
+    settings.moveDEF = [];
+    settings.moveDEF[0] = form.moveDEF[0].checked;
+    settings.moveDEF[0] = form.moveDEF[0].checked;
+    settings.moveDEF[1] = form.moveDEF[1].checked;
+    settings.moveDEF[2] = form.moveDEF[2].checked;
+
+    return settings;
+
+};

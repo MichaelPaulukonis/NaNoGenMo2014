@@ -94,7 +94,8 @@ http://en.wikipedia.org/wiki/Vladimir_Propp
 
 http://tvtropes.org/pmwiki/pmwiki.php/Main/ProppsFunctionsOfFolktales
 
-## extant online generators
+
+## prior art for story generators
 *[ProjectPropp](http://projectpropp.yolasite.com/text-generator.php) - the js source is very procedural, but works.
 ** [some notes](http://sandileonard.com/projects.php) on the above
 
@@ -113,13 +114,28 @@ http://tvtropes.org/pmwiki/pmwiki.php/Main/ProppsFunctionsOfFolktales
 ** [JavaScript port](https://github.com/anihex/SimpleStoryCreator) - no online version. Not as complicated as the proppian-gen I'm working with, but has some interesting ideas. With a larger word-bank might have enough variance?
 
 
-## something else
+## Further Research
 [NLG Generator list](http://www.fb10.uni-bremen.de/anglistik/langpro/NLG-table/NLG-table-date-sort.html)
 This should go somewhere; dumping it here so I see it again (found during Propp-searches)
+
 This doc mentions an application by [Sheldon Klein](http://pages.cs.wisc.edu/~sklein/sklein.html)  that is more completely described (including source) in [this pdf](http://minds.wisconsin.edu/handle/1793/57894?show=full). An [expanded edition](http://pages.cs.wisc.edu/~sklein/Simulation-Meta-Symbolique%20d%27Hypotheses-Propp%20&%20Levi-Strauss.pdf) [pdf] is available, in French, but with extended source code.
 See also [AUTOMATIC NOVEL WRITING,  UWCS Tech Report No. 186,109 pages.](http://www.cs.wisc.edu/%7Esklein/Automatic%20Novel%20Writing-1973-UWCS-TR183.pdf)
 
-Of sideways interest is [Meta-symbolic Simulation System (MESSY) user manual](http://pages.cs.wisc.edu/~sklein/Meta-symbolic%20Simulation%20System.pdf) by one of the same authors.
+Of interest is [Meta-symbolic Simulation System (MESSY) user manual](http://pages.cs.wisc.edu/~sklein/Meta-symbolic%20Simulation%20System.pdf) by one of the same authors. This was used for the Murder Mystery sotories, the R&TC tales, and the Propp folktales. It's a very clear scan. The code is `Fortran V`.
+
+I have some notes at [WordSalad.Generators](http://www.xradiograph.com/WordSalad.Generators), but they are mostly links (academic below).
+
+http://www.newscientist.com/article/dn26377-told-by-a-robot-fiction-by-storytelling-computers.html?full=true#.VE-J98mRGkz
+[Story Generator Algorithms](http://www.lhn.uni-hamburg.de/article/story-generator-algorithms)
+http://aaaipress.org/ojs/indx.php/aimagazine/article/viewFile/2250/2101 - includes section "a brief history of story-telling systems"
+http://codercuckoo.wordpresscom/2013/07/26/final-project-story-generation/
+[Linear Logic Programming for Narrative Generation (pdf)](https://www.cs.cmu.edu/~cmartens/lpnmr13.pdf)
+http://dl.acm.org/citation.cfm?id=1087175
+https://research.cc.gatech.eu/eilab/mark-riedl
+https://research.cc.gatech.eu/inc/fabulist
+[Mark O. Riedl. Story Planning: Creativity Through Exploration, Retrieval, and Analogical Transformation. (pdf)](http://www.cc.gatech.edu/~riedl/pubs/mm.pdf)
+https://research.cc.gatech.edu/inc/category/project-types/fabulist
+[Storytelling with Adjustable Narrator Styles and Sentiments (pdf)](http://www.cc.gatech.edu/~riedl/pubs/icids14.pdf)
 
 
 ## Functions
