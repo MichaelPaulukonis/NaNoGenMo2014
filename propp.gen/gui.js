@@ -18,9 +18,68 @@ var gui = function() {
 }();
 
 
+function cinderella() {
+    window.document.myform.func1.checked = true;
+    window.document.myform.func8.checked = true;
+    window.document.myform.func9.checked = true;
+    window.document.myform.func15.checked = true;
+    window.document.myform.func20.checked = true;
+    window.document.myform.func24.checked = true;
+    window.document.myform.func28.checked = true;
+    window.document.myform.func32.checked = true;
+}
+
+function hansel(){
+    window.document.myform.func6.checked = true;
+    window.document.myform.func7.checked = true;
+    window.document.myform.func8.checked = true;
+    window.document.myform.func9.checked = true;
+    window.document.myform.func17.checked = true;
+    window.document.myform.func19.checked = true;
+    window.document.myform.func21.checked = true;
+}
+
+function swhite(){
+    window.document.myform.func1.checked = true;
+    window.document.myform.func5.checked = true;
+    window.document.myform.func6.checked = true;
+    window.document.myform.func7.checked = true;
+    window.document.myform.func12.checked = true;
+    window.document.myform.func22.checked = true;
+    window.document.myform.func31.checked = true;
+    window.document.myform.func32.checked = true;
+}
+
+function lrrh(){
+    window.document.myform.func4.checked = true;
+    window.document.myform.func5.checked = true;
+    window.document.myform.func6.checked = true;
+    window.document.myform.func7.checked = true;
+    window.document.myform.func8.checked = true;
+    window.document.myform.func10.checked = true;
+    window.document.myform.func11.checked = true;
+    window.document.myform.func17.checked = true;
+    window.document.myform.func19.checked = true;
+}
+
+function juniper(){
+    window.document.myform.func6.checked = true;
+    window.document.myform.func7.checked = true;
+    window.document.myform.func8.checked = true;
+    window.document.myform.func12.checked = true;
+    window.document.myform.func13.checked = true;
+    window.document.myform.func14.checked = true;
+    window.document.myform.func15.checked = true;
+    window.document.myform.func21.checked = true;
+    window.document.myform.func31.checked = true;
+}
+
+
+
 var getFunctionsFromGui = function() {
 
     for (var index in proppFunctions) {
+        if (index === 'func0') continue;
 	proppFunctions[index].active = window.document.myform[index].checked;
     }
 
