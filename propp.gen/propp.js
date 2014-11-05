@@ -18,10 +18,9 @@ var fairyTaleGen = {};
 
 var gender = {
     female: 'female',
-    male: 'male'
+    male: 'male',
+    neuter: 'neuter'
 };
-
-
 
 
 var settings = {
@@ -89,7 +88,7 @@ function random(limit){
 
 // TODO: you know, this should probably be part of the templates
 // and not even in here
-var wordBank = function(settings) {
+var world = function(settings) {
 
     var pick = function(arr) {
         return arr[Math.floor(Math.random()*arr.length)];
@@ -100,6 +99,31 @@ var wordBank = function(settings) {
         return arr.splice(index,1)[0];
     };
 
+    var pickRandomProperty = function(obj) {
+        var result;
+        var count = 0;
+        for (var prop in obj)
+            if (Math.random() < 1/++count)
+                result = prop;
+        return result;
+    };
+
+    var randomProperty = function (obj) {
+        var keys = Object.keys(obj);
+        return obj[keys[ keys.length * Math.random() << 0]];
+    };
+
+    var bank = {
+        character: {},
+        location: []
+    } ;
+
+    bank.character = {
+        male: ['Jaffar', 'Tyrion Lannister', 'PeeWee Herman', 'Santa Claus', 'Jolly Green Giant', 'Stay-Puft Marshmallow Man'],
+        female:  ['Brienne of Tarth', 'Joan of Arc', 'Holly Shiftwell'],
+        neuter: ['Easter Bunny', 'TIAMAT', 'Spirit of 1776']
+    };
+
     var cache = {};
 
     // the values here are purely for testing
@@ -107,13 +131,20 @@ var wordBank = function(settings) {
     // characters should be more.. object-y
     // have gender, relations (siblings, parents, etc.)
 
+    var character = function(gender) {
+	// TODO: what happens when we've used up everything in the bank?
+	// SOLUTION: don't worry about it: make the bank bigger than any of our templates
+	// for now...
+        return pickRemove(bank.character[gender]);
+    };
+
     var location = function() {
         var bank = ['Hobbiton', 'New Haven', 'East Lansing', 'Not In Kansas'];
         return pickRemove(bank);
     };
 
     var hero = function() {
-        return ((fairyTaleGen.settings.gender == 'male') ? 'hero' : 'heroine');
+        return (character(settings.gender));
     };
 
     var home = function() {
@@ -121,13 +152,26 @@ var wordBank = function(settings) {
     };
 
     var villain = function() {
+        var gdr = randomProperty(gender);
+        return character(gdr);
         var bank = ['Jaffar', 'Tyrion Lannister', 'Brienne of Tarth', 'PeeWee Herman'];
         return pick(bank);
     };
 
+    // does not have to be a family-unit of blood-related people.
+    var family = function() {
+	var rels = [ character(randomProperty(gender)), character(randomProperty(gender)) ];
+        return rels;
+    };
+
+    var victim = function() {
+	// TODO: should allow the chance for victim to be the hero.
+	// TODO: should allow the victom to be somebody else entirely (townspeople, etc.)
+	// so.. this becomes COMPLICATED
+    };
+
     var falsehero = function() {
-        var bank = ['Santa Claus', 'Easter Bunny', 'Jolly Green Giant', 'Stay-Puft Marshmallow Man'];
-        return pick(bank);
+        return character(randomProperty(gender));
     };
 
     var magicalitem = function() {
@@ -141,7 +185,7 @@ var wordBank = function(settings) {
     };
 
     var punished = function() {
-        var bank = ['brought to justice', 'hung, drawn, and quartered', 'given a tongue-lashing.'];
+        var bank = ['brought to justice', 'hung, drawn, and quartered', 'given a tongue-lashing'];
         return pick(bank);
     };
 
@@ -153,17 +197,21 @@ var wordBank = function(settings) {
         cache.punished = punished();
         cache.task = task();
         cache.villain = villain();
+        cache.family = family();
+	cache.victim = pick(cache.family);
     }();
 
     return {
         init: init,
         falsehere: function() { return cache.falsehero; },
+        family: function() { return cache.family; },
         hero: function() { return cache.hero;},
         home: function() { return cache.home;},
         villain: function() { return cache.villain;},
         punished: function() { return cache.punished; },
         magicalitem: function() { return cache.magicalitem; },
-        task: function() { return cache.task;}
+        task: function() { return cache.task;},
+	victim: function() { return cache.victim; }
     };
 
 };
@@ -192,7 +240,7 @@ function generate(){
     getFunctionsFromGui();
 
     var tale = [];
-    var helper = wordBank(fairyTaleGen.settings);
+    var helper = world(fairyTaleGen.settings);
 
     for (var index in proppFunctions) {
         var s = sentence(index, helper);
