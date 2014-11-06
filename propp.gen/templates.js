@@ -7,9 +7,12 @@ var nTemplates = function(propp) {
 
     // 0: Initial situation
     // missing so far..
-    propp["func0"].templates.push("<%= hero() %> lives in <%= home() %>. <%= hero() %> lives with <%= family().join(' and ') %>.");
+    propp["func0"].templates.push("<%= hero() %> lives in <%= home() %>. <%= hero() %> lives with <%= list(family()) %>.");
+
     // Proppian-function templates
     // Absentation: Someone goes missing
+    // this could be the hero leaving home
+    // so we'd have to have more logic to cover this
     propp["func1"].templates.push("<%= victim() %> goes missing.");
     propp["func1"].templates.push("<%= victim() %> unexpectedly dies, leaving <%= hero() %> devastated.");
 
@@ -20,10 +23,13 @@ var nTemplates = function(propp) {
     propp["func3"].templates.push("Violation of Interdiction");
 
     // Reconnaissance: Villain seeks something
-    propp["func4"].templates.push("<%= villain() %> seeks something.");
+    propp["func4"].templates.push("<%= villain() %> pays a visit to <%= home() %>.");
+    propp["func4"].templates.push("<%= home() %> plays host to <%= villain() %>.");
 
     // Delivery: The villain gains information
     propp["func5"].templates.push("<%= villain() %> gains information.");
+    propp["func5"].templates.push("After a chat with <%= pick(family()) %>, <%= villain() %> learns some interesting news.");
+    propp["func5"].templates.push("While skulking about <%= home() %>, <%= villain() %> overhears some gossip about <%= hero() %>.");
 
     // Trickery: Villain attempts to deceive victim.
     propp["func6"].templates.push("<%= villain() %> attempts to deceive victim.");
@@ -116,8 +122,10 @@ var nTemplates = function(propp) {
     propp["func31"].templates.push("<%= villain() %> is <%= punished() %> by <%= hero() %>.");
 
     // Wedding: hero marries and ascends the throne
-    propp["func32"].templates.push("<%= hero() %> marries and ascends the throne.");
-    propp["func32"].templates.push("Everything works out for <%= hero() %>.");
+    propp["func32"].templates.push("<%= hero() %> <%= marriage() %> and <%= ascension() %>.");
+    propp["func32"].templates.push("<%= hero() %> <%= or(marriage, ascension) %>. It's a good life.");
+    propp["func32"].templates.push("<%= hero() %> settles down and <%= or(marriage, ascension) %>.");
+    propp["func32"].templates.push("Everything works out for <%= hero() %>, who <%= or(marriage, ascension) %>.");
 
     return propp;
 

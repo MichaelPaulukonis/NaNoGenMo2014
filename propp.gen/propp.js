@@ -113,16 +113,31 @@ var world = function(settings) {
         return obj[keys[ keys.length * Math.random() << 0]];
     };
 
-    var bank = {
-        character: {},
-        location: []
-    } ;
+    // return true or false
+    // 50-50 chance (unless override)
+    var coinflip = function(chance) {
+        if (!chance) chance = 0.5;
+        return (Math.random() < chance);
+    };
+
+    var bank = {};
 
     bank.character = {
-        male: ['Jaffar', 'Tyrion Lannister', 'PeeWee Herman', 'Santa Claus', 'Jolly Green Giant', 'Stay-Puft Marshmallow Man'],
-        female:  ['Brienne of Tarth', 'Joan of Arc', 'Holly Shiftwell'],
-        neuter: ['Easter Bunny', 'TIAMAT', 'Spirit of 1776']
+        male: ['Jaffar', 'Tyrion Lannister', 'PeeWee Herman', 'Santa Claus', 'Jolly Green Giant', 'Stay-Puft Marshmallow Man' ,'Jacob', 'Michael', 'Joshua', 'Matthew', 'Daniel', 'Christopher', 'Andrew', 'Ethan', 'Joseph', 'William', 'Anthony', 'David', 'Alexander', 'Nicholas', 'Ryan', 'Tyler', 'James', 'John', 'Jonathan', 'Noah', 'Brandon', 'Christian', 'Dylan', 'Samuel', 'Benjamin', 'Nathan'],
+        female:  ['Brienne of Tarth', 'Joan of Arc', 'Holly Shiftwell','Lauren', 'Chloe', 'Natalie', 'Kayla', 'Jessica', 'Anna', 'Victoria', 'Mia', 'Hailey', 'Sydney', 'Jasmine', 'Julia', 'Morgan', 'Destiny', 'Rachel', 'Ella', 'Kaitlyn', 'Megan', 'Katherine', 'Savannah', 'Jennifer', 'Alexandra', 'Allison', 'Haley', 'Maria', 'Kaylee', 'Lily', 'Makayla'],
+        neuter: ['Easter Bunny', 'TIAMAT', 'Spirit of 1776', 'Pat', 'Chris', 'Leslie', 'DEATH']
     };
+
+    bank.location = ['Hobbiton', 'New Haven', 'East Lansing', 'Madchester', 'Oblivion'];
+
+    bank.magicalitem = ['Singing Telegram', 'Singing Sword', 'Magic Accordion', 'Air Jordans', 'Mad Skillz', '#SWAG'];
+
+    bank.task = ['walk the dog', 'retrieve the Crown Jewels', 'find a hammer', 'cut down the tallest tree in the forest with a herring'];
+
+    bank.punish = ['brought to justice', 'hung, drawn, and quartered', 'given a tongue-lashing'];
+
+    bank.ascension = ['is made king', 'becomes a god', 'becomes filled with knowledge'];
+    bank.marries = ['marries',  'is given keys to the city', 'has parking tickets forgiven', 'dates for a few years, but decides to remain single' ];
 
     var cache = {};
 
@@ -139,8 +154,7 @@ var world = function(settings) {
     };
 
     var location = function() {
-        var bank = ['Hobbiton', 'New Haven', 'East Lansing', 'Not In Kansas'];
-        return pickRemove(bank);
+        return pickRemove(bank.location);
     };
 
     var hero = function() {
@@ -154,20 +168,16 @@ var world = function(settings) {
     var villain = function() {
         var gdr = randomProperty(gender);
         return character(gdr);
-        var bank = ['Jaffar', 'Tyrion Lannister', 'Brienne of Tarth', 'PeeWee Herman'];
-        return pick(bank);
     };
 
     // does not have to be a family-unit of blood-related people.
     var family = function() {
-	var rels = [ character(randomProperty(gender)), character(randomProperty(gender)) ];
+        var members = random(12);
+	var rels = [];
+        for (var i = 0; i < members; i++) {
+            rels.push(character(randomProperty(gender)));
+        }
         return rels;
-    };
-
-    var victim = function() {
-	// TODO: should allow the chance for victim to be the hero.
-	// TODO: should allow the victom to be somebody else entirely (townspeople, etc.)
-	// so.. this becomes COMPLICATED
     };
 
     var falsehero = function() {
@@ -175,18 +185,28 @@ var world = function(settings) {
     };
 
     var magicalitem = function() {
-        var bank = ['Singing Telegram', 'Singing Sword', 'Magic Accordion', 'Air Jordans', 'Mad Skillz', '#SWAG'];
-        return pickRemove(bank);
+        return pickRemove(bank.magicalitem);
     };
 
     var task = function() {
-        var bank = ['walk the dog', 'retrieve the Crown Jewels', 'find a hammer', 'cut down the tallest tree in the forest with a herring'];
-        return pick(bank);
+        return pick(bank.task);
     };
 
     var punished = function() {
-        var bank = ['brought to justice', 'hung, drawn, and quartered', 'given a tongue-lashing'];
-        return pick(bank);
+        return pick(bank.punish);
+    };
+
+    var list = function(arr) {
+        var lst = '';
+        for (var i = 0; i < arr.length-1; i++) {
+            lst += arr[i] + ', ';
+        }
+        lst += 'and ' + arr[arr.length-1];
+        return lst;
+    };
+
+    var or = function(f1, f2) {
+        return (coinflip() ? f1() : f2() );
     };
 
     var init = function() {
@@ -195,15 +215,17 @@ var world = function(settings) {
         cache.home = home();
         cache.magicalitem = magicalitem();
         cache.punished = punished();
-        cache.task = task();
+        cache.task = pick(bank.task);
         cache.villain = villain();
         cache.family = family();
 	cache.victim = pick(cache.family);
+        cache.ascension = pick(bank.ascension);
+        cache.marries = pick(bank.marries);
     }();
 
     return {
         init: init,
-        falsehere: function() { return cache.falsehero; },
+        falsehero: function() { return cache.falsehero; },
         family: function() { return cache.family; },
         hero: function() { return cache.hero;},
         home: function() { return cache.home;},
@@ -211,7 +233,12 @@ var world = function(settings) {
         punished: function() { return cache.punished; },
         magicalitem: function() { return cache.magicalitem; },
         task: function() { return cache.task;},
-	victim: function() { return cache.victim; }
+	victim: function() { return cache.victim; },
+        ascension: function() { return cache.ascension; },
+        marriage: function() { return cache.marries; },
+        pick: pick,
+        or : or,
+        list: list
     };
 
 };
