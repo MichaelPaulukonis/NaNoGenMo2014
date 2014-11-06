@@ -148,7 +148,7 @@ var world = function(settings, wordbank) {
         // TODO: what happens when we've used up everything in the bank?
         // SOLUTION: don't worry about it: make the bank bigger than any of our templates
         // for now...
-	gndr = gndr || randomProperty(gender);
+        gndr = gndr || randomProperty(gender);
         return pickRemove(bank.character[gndr]);
     };
 
@@ -166,13 +166,11 @@ var world = function(settings, wordbank) {
 
     var interdiction = function() {
         var loc;
-        var advisor = character();
         var person;
         var action;
 
         var ptype = randomProperty(prohibitType);
         var prohibit = {
-            advisor: advisor,
             type: ptype,
             location: '',
             text: '',
@@ -185,21 +183,21 @@ var world = function(settings, wordbank) {
             loc = location();
 
             prohibit.location = loc;
-            prohibit.text = advisor + ' warns ' + cache.hero + ' to avoid ' + prohibit.location;
+            prohibit.text = cache.advisor + ' warns ' + cache.hero + ' to avoid ' + prohibit.location;
 
             break;
 
         case prohibitType.action:
 
             prohibit.action = 'take the Lord\'s name in vain';
-            prohibit.text = advisor + ' tells ' + cache.hero + ' to not ' + prohibit.action;
+            prohibit.text = cache.advisor + ' tells ' + cache.hero + ' to not ' + prohibit.action;
 
             break;
 
         case prohibitType.speak:
 
             prohibit.action = 'talk to ' + cache.villain;
-            prohibit.text = advisor + ' warns ' + cache.hero + ' to not ' + prohibit.action;
+            prohibit.text = cache.advisor + ' warns ' + cache.hero + ' to not ' + prohibit.action;
 
             break;
         }
@@ -212,31 +210,31 @@ var world = function(settings, wordbank) {
     // just to use more words for the same thing...
     var violation = function(prohibit) {
 
-	var text;
+        var text;
 
-	switch (prohibit.type) {
+        switch (prohibit.type) {
         case prohibitType.movement:
 
-	    text = 'Despite the warning, ' + cache.hero + ' goes to ' + prohibit.location + '.';
-	    text += ' ' + cache.villain + ' appears.';
+            text = 'Despite the warning, ' + cache.hero + ' goes to ' + prohibit.location + '.';
+            text += ' ' + cache.villain + ' appears.';
 
             break;
 
         case prohibitType.action:
 
-	    text = 'Shockingly, ' + cache.hero + ' proceeds to ' + prohibit.action + '.';
-	    text += ' ' + cache.villain + ' appears.';
+            text = 'Shockingly, ' + cache.hero + ' proceeds to ' + prohibit.action + '.';
+            text += ' ' + cache.villain + ' appears.';
 
             break;
 
         case prohibitType.speak:
 
-	    text = 'As soon as ' +  prohibit.advisor + ' is gone, ' + cache.hero
-		+ ' runs off to find ' + cache.villain + ' and has an interesting conversation.';
+            text = 'As soon as ' +  prohibit.advisor + ' is gone, ' + cache.hero
+                + ' runs off to find ' + cache.villain + ' and has an interesting conversation.';
             break;
         }
 
-	return text;
+        return text;
 
     };
 
@@ -287,8 +285,14 @@ var world = function(settings, wordbank) {
         return (coinflip() ? f1() : f2() );
     };
 
+    var select = function() {
+        return pick(arguments);
+    };
+
     var init = function() {
         if (wordbank) { bank = wordbank; }
+
+        cache.advisor = character();
         cache.falsehero = falsehero();
         cache.hero = hero();
         cache.home = home();
@@ -301,17 +305,18 @@ var world = function(settings, wordbank) {
         cache.ascension = pick(bank.ascension);
         cache.marries = pick(bank.marries);
         cache.interdiction = interdiction();
-	cache.violation = violation(cache.interdiction);
+        cache.violation = violation(cache.interdiction);
     }();
 
     return {
         init: init,
+        advisor: function() { return cache.advisor; },
         falsehero: function() { return cache.falsehero; },
         family: function() { return cache.family; },
         hero: function() { return cache.hero;},
         home: function() { return cache.home;},
         interdiction: function() { return cache.interdiction; },
-	violation: function() { return cache.violation; },
+        violation: function() { return cache.violation; },
         villain: function() { return cache.villain;},
         punished: function() { return cache.punished; },
         magicalitem: function() { return cache.magicalitem; },
@@ -321,7 +326,8 @@ var world = function(settings, wordbank) {
         marriage: function() { return cache.marries; },
         pick: pick,
         or: or,
-        list: list
+        list: list,
+        select: select
     };
 
 };

@@ -41,6 +41,8 @@ from reading about the MESSy system used by Klein.
 * https://www.npmjs.org/package/file-concept-network
 * https://www.npmjs.org/package/concept-network
 
+* http://en.wikipedia.org/wiki/Cyc
+
 This may be going too far.
 Some simple variables might be enough (common to all templates).
 Or even just the templates -- and go with the flow.
