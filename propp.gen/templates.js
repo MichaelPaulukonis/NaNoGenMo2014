@@ -17,10 +17,11 @@ var nTemplates = function(propp) {
     propp["func1"].templates.push("<%= victim() %> unexpectedly dies, leaving <%= hero() %> devastated.");
 
     // Interdiction: hero is warned
-    propp["func2"].templates.push("<%= hero() %> is warned.");
+    // propp["func2"].templates.push("<%= hero() %> is warned.");
+    propp["func2"].templates.push("<%= interdiction().text %>.");
 
     // Violation of Interdiction
-    propp["func3"].templates.push("Violation of Interdiction");
+    propp["func3"].templates.push("<%= violation() %>");
 
     // Reconnaissance: Villain seeks something
     propp["func4"].templates.push("<%= villain() %> pays a visit to <%= home() %>.");
