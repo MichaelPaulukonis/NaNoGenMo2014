@@ -1,6 +1,9 @@
 # NaNoGenMo2014
 [National Novel Generation Month 2014](https://github.com/dariusk/NaNoGenMo-2014)
 
+[Discussion of this work](https://github.com/dariusk/NaNoGenMo-2014/issues/6).
+
+
 # What's in _here_?
 * [Proppian Narrateme Story Generators](https://github.com/MichaelPaulukonis/NaNoGenMo2014/tree/master/propp.gen)
 

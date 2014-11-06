@@ -1,3 +1,5 @@
+[Discussion of this work](https://github.com/dariusk/NaNoGenMo-2014/issues/6).
+
 ## What's going on in here?
 I'm playing with some _Proppian_ story/skeleton generators. My end goal is to have a generator than I can call `n` times, until 50,000 words have been created. Each output should be distinctly different enough to have a passing resemblance to interesting. One of the steps there will be a templating system (underscore, probably), and word-replacement in the templates (WordNik, probably).
 
