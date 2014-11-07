@@ -83,7 +83,7 @@ var getFunctionsFromGui = function() {
     // to the extant that without that file, the GUI has no purpose
     // propp.js should be able to function w/o the GUI, however...
     for (var index in proppFunctions) {
-        if (index === 'func0') continue;
+        if (index === 'func0') continue; // not in the GUI (it's an invariant function)
 	proppFunctions[index].active = window.document.myform[index].checked;
     }
 
@@ -94,14 +94,11 @@ var getFunctionsFromGui = function() {
         functions: proppFunctions
     };
 
-    fairyTaleGen.settings.gender = g;
-    fairyTaleGen.proppFunctions = proppFunctions;
-
 };
 
 var shoveToGui = function(tale) {
 
-    window.document.myform.fairytale.value = tale;
+    window.document.myform.output.value = tale;
 
 };
 

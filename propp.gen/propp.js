@@ -15,6 +15,9 @@
 
 "use strict";
 
+// http://blog.elliotjameschong.com/2012/10/10/underscore-js-deepclone-and-deepextend-mix-ins/
+_.mixin({ deepClone: function (p_object) { return JSON.parse(JSON.stringify(p_object)); } });
+
 var fairyTaleGen = {};
 
 var gender = {
@@ -26,7 +29,7 @@ var gender = {
 
 var settings = {
 
-    gender: gender.female,
+    gender: '',
     functions: {}
 
 };
@@ -68,49 +71,41 @@ var proppFunctions = {
     "func32": { active: false, templates: [] }
 };
 
-settings.functions = proppFunctions;
-fairyTaleGen.settings = settings;
-
-//TEST CODE (non-functional)
-//sets villian to female witch, checks absention
-//function preset(){
-//      window.document.myform.villain.value = "witch";
-//      window.document.myform.func1.checked = true;
-//      window.document.myform.villainGender[1].checked = true;
-//}
-
 
 // generates a random number
-function random(limit){
+var random = function(limit){
     var num = Math.floor(Math.random() * limit);
     return num;
-}
+};
+
+var randomProperty = function (obj) {
+    var keys = Object.keys(obj);
+    return obj[keys[ keys.length * Math.random() << 0]];
+};
+
+
+var pick = function(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+};
+
+var pickRemove = function(arr) {
+    var index = Math.floor(Math.random() * arr.length);
+    return arr.splice(index,1)[0];
+};
+
+// return true or false
+// 50-50 chance (unless override)
+var coinflip = function(chance) {
+    if (!chance) { chance = 0.5; }
+    return (Math.random() < chance);
+};
+
 
 
 // TODO: you know, this should probably be part of the templates
 // and not even in here
 var world = function(settings, wordbank) {
 
-    var pick = function(arr) {
-        return arr[Math.floor(Math.random() * arr.length)];
-    };
-
-    var pickRemove = function(arr) {
-        var index = Math.floor(Math.random() * arr.length);
-        return arr.splice(index,1)[0];
-    };
-
-    var randomProperty = function (obj) {
-        var keys = Object.keys(obj);
-        return obj[keys[ keys.length * Math.random() << 0]];
-    };
-
-    // return true or false
-    // 50-50 chance (unless override)
-    var coinflip = function(chance) {
-        if (!chance) { chance = 0.5; }
-        return (Math.random() < chance);
-    };
 
     var bank = {};
 
@@ -119,11 +114,7 @@ var world = function(settings, wordbank) {
     // characters should be more.. object-y
     // have gender, relations (siblings, parents, etc.)
 
-    bank.character = {
-        male: ['Jaffar', 'Tyrion Lannister', 'PeeWee Herman', 'Santa Claus', 'Jolly Green Giant', 'Stay-Puft Marshmallow Man', 'Jacob', 'Michael', 'Joshua', 'Matthew', 'Daniel', 'Christopher', 'Andrew', 'Ethan', 'Joseph', 'William', 'Anthony', 'David', 'Alexander', 'Nicholas', 'Ryan', 'Tyler', 'James', 'John', 'Jonathan', 'Noah', 'Brandon', 'Christian', 'Dylan', 'Samuel', 'Benjamin', 'Nathan'],
-        female: ['Brienne of Tarth', 'Joan of Arc', 'Holly Shiftwell', 'Lauren', 'Chloe', 'Natalie', 'Kayla', 'Jessica', 'Anna', 'Victoria', 'Mia', 'Hailey', 'Sydney', 'Jasmine', 'Julia', 'Morgan', 'Destiny', 'Rachel', 'Ella', 'Kaitlyn', 'Megan', 'Katherine', 'Savannah', 'Jennifer', 'Alexandra', 'Allison', 'Haley', 'Maria', 'Kaylee', 'Lily', 'Makayla'],
-        neuter: ['Easter Bunny', 'TIAMAT', 'Spirit of 1776', 'Pat', 'Chris', 'Leslie', 'DEATH']
-    };
+    bank.character = _.deepClone(names); // from names.js
 
     bank.location = ['Hobbiton', 'New Haven', 'East Lansing', 'Madchester', 'Oblivion', 'a valley', 'small village', 'grass hut'];
 
@@ -145,23 +136,26 @@ var world = function(settings, wordbank) {
     // we should have departure/death
     // parents/siblings
     // maybe make it simple: departure/death, familymember
-    // kidnap is a departure, but involuntary
     var absentationType = {
-        kidnap: 'kidnap',
         departure: 'departure',
         death: 'death'
     };
 
     // elder := parents, grand-parents
     // family := siblings and all those people we list.
-    var absentationPersion = {
+    var absentationPerson = {
         elder: 'elder',
+	elders: 'elders',
+	parent: 'parent',
+	parents: 'parents',
+	sibling: 'sibling',
+	siblings: 'siblings',
         family: 'family'
     };
 
     var cache = {};
 
-    var character = function(gndr) {
+    var getCharacter = function(gndr) {
         // TODO: what happens when we've used up everything in the bank?
         // SOLUTION: don't worry about it: make the bank bigger than any of our templates
         // for now...
@@ -173,17 +167,21 @@ var world = function(settings, wordbank) {
         return pickRemove(bank.location);
     };
 
-    var hero = function() {
-        return (character(settings.gender));
+    var getHero = function() {
+	var g = settings.gender;
+	var c = getCharacter(g);
+        return c;
     };
 
-    var home = function() {
+    var getHome = function() {
         return location();
     };
 
     var absention = function() {
         // TODO: select a family member
         // select an absention type
+	var aPerson = randomProperty(absentationPerson);
+	var aType = randomProperty(absentationType);
     };
 
     var interdiction = function() {
@@ -225,6 +223,8 @@ var world = function(settings, wordbank) {
             break;
         }
 
+	prohibit.text += '. ' + prohibit.advisor + ' introduces ' + cache.magicalhelper + ' to ' + cache.hero;
+
         return  prohibit;
 
     };
@@ -262,13 +262,26 @@ var world = function(settings, wordbank) {
     };
 
 
-    var villain = function() {
+    var getVillain = function() {
         var gdr = randomProperty(gender);
-        return character(gdr);
+        return getCharacter(gdr);
+    };
+
+    var getCharacters = function() {
+        var members = random(12) + 1; // must always have at least one?
+        // or... lives alone???
+        // that would take some other sort of coding.
+        // and change to the template
+        // and make sure that the victim would be the hero, or some random person....
+        var acqs = [];
+        for (var i = 0; i < members; i++) {
+            acqs.push(getCharacter(randomProperty(gender)));
+        }
+        return acqs;
     };
 
     // does not have to be a family-unit of blood-related people.
-    var family = function() {
+    var getFamily = function() {
         var members = random(12) + 1; // must always have at least one?
         // or... lives alone???
         // that would take some other sort of coding.
@@ -276,20 +289,27 @@ var world = function(settings, wordbank) {
         // and make sure that the victim would be the hero, or some random person....
         var rels = [];
         for (var i = 0; i < members; i++) {
-            rels.push(character(randomProperty(gender)));
+            rels.push(getCharacter(randomProperty(gender)));
         }
         return rels;
     };
 
-    var falsehero = function() {
-        return character(randomProperty(gender));
+    var getFalsehero = function() {
+	var g = randomProperty(gender);
+	var c = getCharacter(g);
+        return c;
     };
 
-    var magicalitem = function() {
+    var getMagicalitem = function() {
         return pickRemove(bank.magicalitem);
     };
 
-    var punished = function() {
+
+    var getMagicalHelper = function() {
+	return capitalize(pick(sciencefictionWordBank.adjectives)) + getCharacter();
+    };
+
+    var getPunished = function() {
         return pick(bank.punish);
     };
 
@@ -297,8 +317,8 @@ var world = function(settings, wordbank) {
         var lst = '';
         if (arr.length > 0) {
             for (var i = 0; i < arr.length - 1; i++) {
-            lst += arr[i] + ', ';
-        }
+		lst += arr[i] + ', ';
+            }
             lst += 'and ' + arr[arr.length - 1];
         }
         return lst;
@@ -317,36 +337,60 @@ var world = function(settings, wordbank) {
     };
 
     var init = function() {
-        if (wordbank) { bank = wordbank; }
+	try {
 
-        cache.advisor = character();
-        cache.falsehero = falsehero();
-        cache.hero = hero();
-        cache.home = home();
-        cache.magicalitem = magicalitem();
-        cache.punished = punished();
-        cache.task = pick(bank.task);
-        cache.villain = villain();
-        cache.family = family();
-        cache.victim = pick(cache.family);
-        cache.ascension = pick(bank.ascension);
-        cache.marries = pick(bank.marries);
-        cache.interdiction = interdiction();
-        cache.violation = violation(cache.interdiction);
-    }();
+            if (wordbank) { bank = wordbank; }
+
+	    // TODO: move this
+	    // also, contingent upon "theme" or something....
+	    for (var i = 0; i < 10; i++) {
+		bank.magicalitem.push(sfItemGen());
+	    }
+
+	    if (!settings.gender) { settings.gender = randomProperty(gender); }
+
+            cache.hero = getHero();
+            cache.advisor = getCharacter();
+            cache.falsehero = getFalsehero();
+            cache.home = getHome();
+            cache.magicalitem = getMagicalitem();
+	    cache.magicalhelper = getMagicalHelper();
+            cache.punished = getPunished();
+            cache.task = pick(bank.task);
+            cache.villain = getVillain();
+            cache.family = getCharacters();
+	    cache.acquantainces = getCharacters();
+	    cache.minions = getCharacters();
+            cache.victim = pick(cache.family);
+            cache.ascension = pick(bank.ascension);
+            cache.marries = pick(bank.marries);
+            cache.interdiction = interdiction();
+            cache.violation = violation(cache.interdiction);
+
+	} catch(ex) {
+	    var msg = 'EXCEPTION: ' + ex.message
+	    + ' line: ' + ex.lineNumber + ' col: ' + ex.columnNumber + '\n'
+	    + ex.stack;
+	    console.log(msg);
+	}
+    }(settings);
 
     return {
         init: init,
         advisor: function() { return cache.advisor; },
         falsehero: function() { return cache.falsehero; },
+	// TODO: if there are NO family or acquantainces, how is this handled??
         family: function() { return cache.family; },
+        acquantainces: function() { return cache.acquantainces; },
         hero: function() { return cache.hero;},
         home: function() { return cache.home;},
         interdiction: function() { return cache.interdiction; },
+	minions: function() { return cache.minions; },
         violation: function() { return cache.violation; },
         villain: function() { return cache.villain;},
         punished: function() { return cache.punished; },
         magicalitem: function() { return cache.magicalitem; },
+        magicalhelper: function() { return cache.magicalhelper; },
         task: function() { return cache.task;},
         victim: function() { return cache.victim; },
         ascension: function() { return cache.ascension; },
@@ -360,6 +404,12 @@ var world = function(settings, wordbank) {
 
 };
 
+var capitalize = function(str) {
+    return str.slice(0,1).toUpperCase() + str.slice(1);
+};
+
+// populate template
+// which may contain multiple sentences.
 var sentence = function(index, helper) {
 
     var f;
@@ -368,6 +418,7 @@ var sentence = function(index, helper) {
         f = func.templates[random(func.templates.length)];
         var t = _.template(f);
         f = t(helper);
+	f = capitalize(f);
     }
 
     return f;
@@ -378,7 +429,7 @@ var sentence = function(index, helper) {
 // generate the fairy tale
 function generate(settings){
 
-    fairyTaleGen.settings.gender = settings.gender;
+    fairyTaleGen.settings.gender = settings.gender || randomProperty(gender);
     fairyTaleGen.proppFunctions = proppFunctions;
 
     // proppFunctions = defaultTemplates(proppFunctions);
@@ -389,6 +440,7 @@ function generate(settings){
     fairyTaleGen.helper = world(fairyTaleGen.settings);
 
     for (var index in proppFunctions) {
+	// TODO: we could retrieve the function HERE.....
         var s = sentence(index, fairyTaleGen.helper);
         if (s) {
             tale.push(s);
@@ -401,11 +453,16 @@ function generate(settings){
 
 
 
+settings.functions = proppFunctions;
+
+fairyTaleGen.settings = settings;
+fairyTaleGen.random = random;
+fairyTaleGen.sentence = sentence;
+fairyTaleGen.generate = generate;
+
+
 fairyTaleGen.cinderella = cinderella;
 fairyTaleGen.hansel = hansel;
 fairyTaleGen.swhite = swhite;
 fairyTaleGen.lrrh = lrrh;
 fairyTaleGen.juniper = juniper;
-fairyTaleGen.random = random;
-fairyTaleGen.sentence = sentence;
-fairyTaleGen.generate = generate; // TODO: includes a GUI call. o noes!

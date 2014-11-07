@@ -37,6 +37,7 @@ ul.sphere {
     background-color: chartreuse;
 }
 
-#fairytale {
+#output {
     /* float: right; */
+    width: 100%;
 }

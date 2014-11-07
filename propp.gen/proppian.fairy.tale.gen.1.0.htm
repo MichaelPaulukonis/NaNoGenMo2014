@@ -67,7 +67,7 @@
 	      </ul>
 	      <ul class='sphere' id='storybody'>
 		<!-- NOTE: in the original (?) framework 8&9 are combined; this explains 32 funcs in this version, as opposed to Propps 31 functions -->
-		<li><input name="func8" type="checkbox" /><a href="javascript:gui.popup('func8')">villainy</a></li>
+		<li><input name="func8" type="checkbox" checked /><a href="javascript:gui.popup('func8')">villainy</a></li>
 		<li><input name="func9" type="checkbox" /><a href="javascript:gui.popup('func9')">lack</a></li>
 		<li><input name="func10" type="checkbox" /><a href="javascript:gui.popup('func10')">mediation</a></li>
 		<li><input name="func11" type="checkbox" /><a href="javascript:gui.popup('func11')">beginning counteraction</a></li>
@@ -110,6 +110,7 @@
 		  <input name='gender' type='radio' value='female' checked='checked'>female</input>
                   <input name='gender' type='radio' value='male'>male</input>
                   <input name='gender' type='radio' value='neuter'>neuter</input>
+                  <input name='gender' type='radio' value=''>random</input>
 		</li>
               </ul>
             </td>
@@ -122,7 +123,7 @@
 	      <input value="clear" align="middle" type="reset" />
 	      <br />
 	      <br />
-	      <textarea id="fairytale" cols="35" rows="20" wrap="true" name="fairytale"> </textarea>
+	      <textarea id="output" cols="35" rows="20" wrap="true" name="fairytale"> </textarea>
             </td>
 	    <td>
 	    </td>
@@ -137,10 +138,14 @@
   <!-- well, that was installed in the wrong location -->
   <script type="text/javascript" src="../node_modules/underscore/underscore.js"></script>
   <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
+
+
+  <script type="text/javascript" src="templates.js"></script>
+  <script type="text/javascript" src="names.js"></script>
+
+  <!-- some functions from gui are referenced in propp. ouch. -->
   <script type="text/javascript" src="gui.js"></script>
   <script type="text/javascript" src="propp.js"></script>
-  <script type="text/javascript" src="templates.js"></script>
-
 
 </body>
 </html>

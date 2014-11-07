@@ -2,7 +2,12 @@
 var nTemplates = function(propp) {
 
     // 0: Initial situation
-    propp['func0'].templates.push('<%= hero() %> lives in <%= home() %>. <%= hero() %> lives with <%= list(family()) %>.');
+    // TODO: multiple sentences within a template may not be punctuated correctly.
+    // hrm. maybe they should each appear as a sub-component, so they can be processed externally?
+    // for example, if sentence begins with <%= list(acquainainces()) %> and the first is 'the Easter Bunny' it will not be auto-capitalised
+    // since that only works on the first letter of the template-output (erroneously called 'sentence' in the code).
+    // TODO: what about "lives alone." how would THAT be figured out???
+    propp['func0'].templates.push('<%= hero() %> lives in <%= home() %>. <%= hero() %> lives with <%= list(family()) %>. <%= list(acquantainces()) %> are <%= select("friends of", "known to") %> <%= hero() %>.');
 
     // Proppian-function templates
     // Absentation: Someone goes missing
@@ -14,10 +19,12 @@ var nTemplates = function(propp) {
 
     // Interdiction: hero is warned
     // propp['func2'].templates.push('<%= hero() %> is warned.');
+    // TODO: introduction of personage from interdiction
+    // TODO: rework the d**n interdiction template-function
     propp['func2'].templates.push('<%= interdiction().text %>.');
 
     // Violation of Interdiction
-    propp['func3'].templates.push('<%= violation() %>');
+    propp['func3'].templates.push('<%= violation() %> <%= list(minions()) %> are in league with <%= villain() %>.');
 
     // Reconnaissance: Villain seeks something
     propp['func4'].templates.push('<%= villain() %> pays a visit to <%= home() %>.');
@@ -35,10 +42,41 @@ var nTemplates = function(propp) {
     propp['func7'].templates.push('<%= hero() %> unwittingly helps <%= villain() %>.');
 
     // 2nd Sphere: The Body of the story
-    // Villainy and lack: The need is identified (Villainy)
-    propp['func8'].templates.push('The need is identified (Villainy).');
+    // 8A - Villainy: The need is identified (Villainy)
+    // function 8 (and/or 8a) is always present in tale
+    // antagonist(s) causes harm or injury to victim(s)/member of protagonist's family = villainy - A
+    // propp['func8'].templates.push('The need is identified (Villainy).');
+    // propp['func8'].templates.push('<%= villain() %> kidnaps <%= pick(select(family, acquantainces)()) %>.');
+    // propp['func8'].templates.push('<%= villain() %> seizes of <%= magicalitem() %>.');
+    // originally "magical helper" ... which could be a person
+    // that's probably for the item function to handle...
+    propp['func8'].templates.push('<%= villain() %> forcibly seizes <%= magicalhelper() %>.');
+    // propp['func8'].templates.push('pillaging or ruining of crops by <%= villain() %>.');
+    // propp['func8'].templates.push('<%= villain() %> steals the daylight!');
+    // propp['func8'].templates.push('plundering in other forms.');
+    // propp['func8'].templates.push('<%= villain() %> causes bodily injury, maiming, mutilation.');
+    // propp['func8'].templates.push('<%= villain() %> causes sudden disappearance.');
+    // TODO: more code is needed for THIS one...
+    // propp['func8'].templates.push('<%= hero() %>\'s bride is forgotten after <%= villain() %> casts a spell.');
+    // propp['func8'].templates.push('<%= villain() %>  makes a demand for delivery or enticement, abduction.');
+    // propp['func8'].templates.push('<%= hero() %> is driven from <%= home() %>.');
+    // propp['func8'].templates.push('<%= villain() %>  throws <%= hero() %> into body of water.');
+    // propp['func8'].templates.push('casting of a spell, transformation.');
+    // // TODO: posession needs to be tracked
+    // // so item now "belongs" to villain (or hench-person)
+    // propp['func8'].templates.push('false substitution.');
+    // propp['func8'].templates.push('<%= villain() %> issues order to kill [requires proof].');
+    // propp['func8'].templates.push('<%= villain() %> commits murder.');
+    // propp['func8'].templates.push('imprisonment, detention of <%= hero() %>.');
+    // propp['func8'].templates.push('<%= villain() %> threat of forced matrimony.');
+    // propp['func8'].templates.push('<%= villain() %> threat of forced matrimony between relatives.');
+    // propp['func8'].templates.push('threat of cannibalism.');
+    // propp['func8'].templates.push('threat of cannibalism among relatives.');
+    // propp['func8'].templates.push('<%= villain() %> tormenting at night (visitaion, vampirism).');
+    // propp['func8'].templates.push('<%= villain() %> declares war on <%= hero() %>.');
 
-    //  Villainy and lack: The need is identified (Lack)
+
+    //  8a - Lack: The need is identified (Lack)
     propp['func9'].templates.push('The need is identified (Lack)');
 
     // Mediation: hero discovers the lack
@@ -79,7 +117,7 @@ var nTemplates = function(propp) {
 
     // Victory: Villain is defeated
     propp['func19'].templates.push('Through deft use of <%= magicalitem() %>, <%= villain() %> is defeated.');
-    propp['func19'].templates.push('<%= hero() %> <%= select(\'deploys\', \'uses\', \'manipulates\') %> <%= magicalitem() %> to <%= select(\'defeat\', \'trounce\', \'vanquish\', \'annoy\') %> <%= villain() %>.');
+    propp['func19'].templates.push('<%= hero() %> <%= select("deploys", "uses", "manipulates") %> <%= magicalitem() %> to <%= select("defeat", "trounce", "vanquish", "annoy") %> <%= villain() %>.');
 
     // Resolution: Initial misfortune or lack is resolved
     propp['func20'].templates.push('Initial misfortune or lack is resolved.');
@@ -131,7 +169,8 @@ var nTemplates = function(propp) {
     propp['func32'].templates.push('<%= hero() %> settles down and <%= (select(marriage, ascension))() %>.');
     propp['func32'].templates.push('Everything works out for <%= hero() %>, who <%= (select(marriage, ascension))() %>.');
     // TODO: verb tense DOES NOT WORK here
-    propp['func32'].templates.push('<%= (select(marriage, ascension))() %>, <%= hero() %> retires to a life of farming..');
+    // TODO: posession DOES NOT WORK here
+    propp['func32'].templates.push('<%= (select(marriage, ascension))() %>, <%= hero() %> retires to <%= select("a life of farming", "write memoirs", "live in peace", "pine for days of adventure") %>.');
 
     return propp;
 

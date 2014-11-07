@@ -33,6 +33,10 @@ A perhaps better model is the [Proto-Proppian Generator](http://www.stonedragonp
 * [Indian Fairy Tales](https://github.com/GITenberg/Indian-Fairy-Tales_7128) on github, from Gutenberg.
 ** there are others in this vein from the same group
 
+* [alyphen's generator](https://github.com/dariusk/NaNoGenMo-2014/issues/73) has some interesting lists. The sentences are purely random (based on a hard-coded gammar?) but read well. There's no connectivity, but the method of construction has some pointers.
+  * particularly look at [nanogenmo.py](https://github.com/alyphen/nanogenmo/blob/master/nanogenmo/nanogenmo.py)
+
+
 ### Semantic Networks
 from reading about the MESSy system used by Klein.
 
