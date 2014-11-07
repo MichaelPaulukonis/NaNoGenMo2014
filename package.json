@@ -1,0 +1,23 @@
+{
+  "name": "propp.gen",
+  "version": "0.0.0",
+  "description": "Story Generator using Proppiann Narratemes",
+  "main": "propp.js",
+  "dependencies": {
+    "underscore": "~1.7.0",
+    "jquery": "~2.1.1",
+    "concept-net": "~0.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MichaelPaulukonis/nanogenmo2014.git"
+  },
+  "author": "Michael Paulukonis",
+  "license": "MIT",
+  "gitHead": "ac7779550e40822d743f8edf2c5ca642ca3ac7cc",
+  "readmeFilename": "README.md"
+}

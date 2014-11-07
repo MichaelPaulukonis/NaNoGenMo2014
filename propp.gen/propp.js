@@ -142,6 +142,23 @@ var world = function(settings, wordbank) {
         speak: 'speakwith'
     };
 
+    // we should have departure/death
+    // parents/siblings
+    // maybe make it simple: departure/death, familymember
+    // kidnap is a departure, but involuntary
+    var absentationType = {
+        kidnap: 'kidnap',
+        departure: 'departure',
+        death: 'death'
+    };
+
+    // elder := parents, grand-parents
+    // family := siblings and all those people we list.
+    var absentationPersion = {
+        elder: 'elder',
+        family: 'family'
+    };
+
     var cache = {};
 
     var character = function(gndr) {
@@ -164,6 +181,11 @@ var world = function(settings, wordbank) {
         return location();
     };
 
+    var absention = function() {
+        // TODO: select a family member
+        // select an absention type
+    };
+
     var interdiction = function() {
         var loc;
         var person;
@@ -175,7 +197,8 @@ var world = function(settings, wordbank) {
             location: '',
             text: '',
             action: '',
-            person: ''
+            person: '',
+            advisor: cache.advisor
         };
 
         switch (ptype) {
@@ -197,7 +220,7 @@ var world = function(settings, wordbank) {
         case prohibitType.speak:
 
             prohibit.action = 'talk to ' + cache.villain;
-            prohibit.text = cache.advisor + ' warns ' + cache.hero + ' to not ' + prohibit.action;
+            prohibit.text = prohibit.advisor + ' warns ' + cache.hero + ' to not ' + prohibit.action;
 
             break;
         }
@@ -289,6 +312,10 @@ var world = function(settings, wordbank) {
         return pick(arguments);
     };
 
+    var dump = function() {
+        return JSON.stringify(cache, null, '\t');
+    };
+
     var init = function() {
         if (wordbank) { bank = wordbank; }
 
@@ -327,7 +354,8 @@ var world = function(settings, wordbank) {
         pick: pick,
         or: or,
         list: list,
-        select: select
+        select: select,
+        dump: dump
     };
 
 };
@@ -348,12 +376,13 @@ var sentence = function(index, helper) {
 
 
 // generate the fairy tale
-function generate(){
+function generate(settings){
+
+    fairyTaleGen.settings.gender = settings.gender;
+    fairyTaleGen.proppFunctions = proppFunctions;
 
     // proppFunctions = defaultTemplates(proppFunctions);
     proppFunctions = nTemplates(proppFunctions);
-
-    getFunctionsFromGui();
 
     var tale = [];
 

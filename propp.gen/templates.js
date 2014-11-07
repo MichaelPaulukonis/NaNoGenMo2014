@@ -1,12 +1,7 @@
 
 var nTemplates = function(propp) {
 
-    // TODO: what? why?
-    //WHEN YOU START FILLING IN CONTENT, STICK \'\N\' AT END OF LINE
-    //THEN ERASE THE \'\N\' IN FINAL STRING
-
     // 0: Initial situation
-    // missing so far..
     propp['func0'].templates.push('<%= hero() %> lives in <%= home() %>. <%= hero() %> lives with <%= list(family()) %>.');
 
     // Proppian-function templates

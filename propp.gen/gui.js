@@ -78,12 +78,21 @@ function juniper(){
 
 var getFunctionsFromGui = function() {
 
+    // proppFunctions is defined in propp.js
+    // this is an external dependency to the GUI
+    // to the extant that without that file, the GUI has no purpose
+    // propp.js should be able to function w/o the GUI, however...
     for (var index in proppFunctions) {
         if (index === 'func0') continue;
 	proppFunctions[index].active = window.document.myform[index].checked;
     }
 
     var g = $('input[type=radio]:checked').val();
+
+    return {
+        gender: g,
+        functions: proppFunctions
+    };
 
     fairyTaleGen.settings.gender = g;
     fairyTaleGen.proppFunctions = proppFunctions;
@@ -97,6 +106,7 @@ var shoveToGui = function(tale) {
 };
 
 var guiGet = function() {
-    var tale = generate();
+    var settings = getFunctionsFromGui();
+    var tale = generate(settings);
     shoveToGui(tale);
 };
