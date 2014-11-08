@@ -29,7 +29,9 @@ var gender = {
 
 var settings = {
 
-    gender: '',
+    herogender: null,
+    villaingender: null,
+    peoplegender: null,
     functions: {}
 
 };
@@ -109,23 +111,30 @@ var world = function(settings, wordbank) {
 
     var bank = {};
 
-    // the values here are purely for testing
-    // and do not represent "final" objects
-    // characters should be more.. object-y
-    // have gender, relations (siblings, parents, etc.)
+    if (wordbank) {
+        bank = _.deepClone(bank);
+    } else {
 
-    bank.character = _.deepClone(names); // from names.js
+        // the values here are purely for testing
+        // and do not represent "final" objects
+        // characters should be more.. object-y
+        // have gender, relations (siblings, parents, etc.)
 
-    bank.location = ['Hobbiton', 'New Haven', 'East Lansing', 'Madchester', 'Oblivion', 'a valley', 'small village', 'grass hut'];
+        // bank.character = _.deepClone(names); // from names.js
 
-    bank.magicalitem = ['Singing Telegram', 'Singing Sword', 'Magic Accordion', 'Air Jordans', 'Mad Skillz', '#SWAG'];
 
-    bank.task = ['walk the dog', 'retrieve the Crown Jewels', 'find a hammer', 'cut down the tallest tree in the forest with a herring'];
+        bank.location = ['Hobbiton', 'New Haven', 'East Lansing', 'Madchester', 'Oblivion', 'a valley', 'small village', 'grass hut'];
 
-    bank.punish = ['brought to justice', 'hung, drawn, and quartered', 'given a tongue-lashing'];
+        bank.magicalitem = ['Singing Telegram', 'Singing Sword', 'Magic Accordion', 'Air Jordans', 'Mad Skillz', '#SWAG'];
 
-    bank.ascension = ['is made king', 'becomes a god', 'becomes filled with knowledge'];
-    bank.marries = ['marries', 'is given keys to the city', 'has parking tickets forgiven', 'dates for a few years, but decides to remain single' ];
+        bank.task = ['walk the dog', 'retrieve the Crown Jewels', 'find a hammer', 'cut down the tallest tree in the forest with a herring'];
+
+        bank.punish = ['brought to justice', 'hung, drawn, and quartered', 'given a tongue-lashing'];
+
+        bank.ascension = ['is made king', 'becomes a god', 'becomes filled with knowledge'];
+        bank.marries = ['marries', 'is given keys to the city', 'has parking tickets forgiven', 'dates for a few years, but decides to remain single' ];
+
+    };
 
     var prohibitType = {
         movement: 'movement',
@@ -160,15 +169,28 @@ var world = function(settings, wordbank) {
         // SOLUTION: don't worry about it: make the bank bigger than any of our templates
         // for now...
         gndr = gndr || randomProperty(gender);
-        return pickRemove(bank.character[gndr]);
+        return pickRemove(bank.names[gndr]);
+    };
+
+    var getCharacters = function(gndr) {
+        var members = random(12) + 1; // must always have at least one?
+        // or... lives alone???
+        // that would take some other sort of coding.
+        // and change to the template
+        // and make sure that the victim would be the hero, or some random person....
+        var acqs = [];
+        for (var i = 0; i < members; i++) {
+            var g = (!gndr || gndr == 'random' ? randomProperty(gender) : gndr);
+            acqs.push(getCharacter(g));
+        }
+        return acqs;
     };
 
     var location = function() {
         return pickRemove(bank.location);
     };
 
-    var getHero = function() {
-	var g = settings.gender;
+    var getHero = function(g) {
 	var c = getCharacter(g);
         return c;
     };
@@ -262,37 +284,10 @@ var world = function(settings, wordbank) {
     };
 
 
-    var getVillain = function() {
-        var gdr = randomProperty(gender);
+    var getVillain = function(gdr) {
         return getCharacter(gdr);
     };
 
-    var getCharacters = function() {
-        var members = random(12) + 1; // must always have at least one?
-        // or... lives alone???
-        // that would take some other sort of coding.
-        // and change to the template
-        // and make sure that the victim would be the hero, or some random person....
-        var acqs = [];
-        for (var i = 0; i < members; i++) {
-            acqs.push(getCharacter(randomProperty(gender)));
-        }
-        return acqs;
-    };
-
-    // does not have to be a family-unit of blood-related people.
-    var getFamily = function() {
-        var members = random(12) + 1; // must always have at least one?
-        // or... lives alone???
-        // that would take some other sort of coding.
-        // and change to the template
-        // and make sure that the victim would be the hero, or some random person....
-        var rels = [];
-        for (var i = 0; i < members; i++) {
-            rels.push(getCharacter(randomProperty(gender)));
-        }
-        return rels;
-    };
 
     var getFalsehero = function() {
 	var g = randomProperty(gender);
@@ -306,7 +301,7 @@ var world = function(settings, wordbank) {
 
 
     var getMagicalHelper = function() {
-	return capitalize(pick(sciencefictionWordBank.adjectives)) + getCharacter();
+	return capitalize(pick(sciencefictionWordBank.adjectives)) + ' ' + getCharacter();
     };
 
     var getPunished = function() {
@@ -347,9 +342,11 @@ var world = function(settings, wordbank) {
 		bank.magicalitem.push(sfItemGen());
 	    }
 
-	    if (!settings.gender) { settings.gender = randomProperty(gender); }
+	    if (!settings.herogender || settings.herogender == 'random') { settings.herogender = randomProperty(gender); }
+	    if (!settings.villaingender || settings.villaingender == 'random') { settings.villaingender = randomProperty(gender); }
+	    if (!settings.peoplegender || settings.peoplegender == 'random') { settings.peoplegender = randomProperty(gender); }
 
-            cache.hero = getHero();
+            cache.hero = getHero(settings.herogender);
             cache.advisor = getCharacter();
             cache.falsehero = getFalsehero();
             cache.home = getHome();
@@ -357,10 +354,10 @@ var world = function(settings, wordbank) {
 	    cache.magicalhelper = getMagicalHelper();
             cache.punished = getPunished();
             cache.task = pick(bank.task);
-            cache.villain = getVillain();
-            cache.family = getCharacters();
-	    cache.acquantainces = getCharacters();
-	    cache.minions = getCharacters();
+            cache.villain = getVillain(settings.villaingender);
+            cache.family = getCharacters(settings.peoplegender);
+	    cache.acquantainces = getCharacters(settings.peoplegender);
+	    cache.minions = getCharacters(settings.peoplegender);
             cache.victim = pick(cache.family);
             cache.ascension = pick(bank.ascension);
             cache.marries = pick(bank.marries);
@@ -369,8 +366,8 @@ var world = function(settings, wordbank) {
 
 	} catch(ex) {
 	    var msg = 'EXCEPTION: ' + ex.message
-	    + ' line: ' + ex.lineNumber + ' col: ' + ex.columnNumber + '\n'
-	    + ex.stack;
+	            + ' line: ' + ex.lineNumber + ' col: ' + ex.columnNumber + '\n'
+	            + ex.stack;
 	    console.log(msg);
 	}
     }(settings);
@@ -429,7 +426,7 @@ var sentence = function(index, helper) {
 // generate the fairy tale
 function generate(settings){
 
-    fairyTaleGen.settings.gender = settings.gender || randomProperty(gender);
+    fairyTaleGen.settings = settings;
     fairyTaleGen.proppFunctions = proppFunctions;
 
     // proppFunctions = defaultTemplates(proppFunctions);
@@ -437,7 +434,7 @@ function generate(settings){
 
     var tale = [];
 
-    fairyTaleGen.helper = world(fairyTaleGen.settings);
+    fairyTaleGen.helper = world(fairyTaleGen.settings, defaultbank);
 
     for (var index in proppFunctions) {
 	// TODO: we could retrieve the function HERE.....

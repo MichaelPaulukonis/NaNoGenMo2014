@@ -1,4 +1,19 @@
-var names = {
+var defaultbank = {};
+
+defaultbank.location = ['Hobbiton', 'New Haven', 'East Lansing', 'Madchester', 'Oblivion', 'a valley', 'small village', 'grass hut'];
+
+defaultbank.magicalitem = ['a Singing Telegram', 'the Singing Sword', 'the Magic Accordion', 'a pair of Air Jordans', 'Mad Skillz', '#SWAG'];
+
+defaultbank.task = ['walk the dog', 'retrieve the Crown Jewels', 'find a hammer', 'cut down the tallest tree in the forest with a herring'];
+
+defaultbank.punish = ['brought to justice', 'hung, drawn, and quartered', 'given a tongue-lashing'];
+
+defaultbank.ascension = ['is made king', 'becomes a god', 'becomes filled with knowledge'];
+
+defaultbank.marries = ['marries', 'is given keys to the city', 'has parking tickets forgiven', 'dates for a few years, but decides to remain single' ];
+
+
+defaultbank.names = {
 
     male: ['Baitogogo', 'Jaffar', 'Tyrion Lannister', 'PeeWee Herman', 'Santa Claus',
 	   'Jolly Green Giant', 'Stay-Puft Marshmallow Man', 'Jacob',

@@ -87,10 +87,14 @@ var getFunctionsFromGui = function() {
 	proppFunctions[index].active = window.document.myform[index].checked;
     }
 
-    var g = $('input[type=radio]:checked').val();
+    var herog = $('input[name=herogender][type=radio]:checked').val();
+    var villaing = $('input[name=villaingender][type=radio]:checked').val();
+    var peopleg = $('input[name=peoplegender][type=radio]:checked').val();
 
     return {
-        gender: g,
+        herogender: herog,
+        villaingender: villaing,
+        peoplegender: peopleg,
         functions: proppFunctions
     };
 
