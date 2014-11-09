@@ -109,32 +109,7 @@ var coinflip = function(chance) {
 var world = function(settings, wordbank) {
 
 
-    var bank = {};
-
-    if (wordbank) {
-        bank = _.deepClone(bank);
-    } else {
-
-        // the values here are purely for testing
-        // and do not represent "final" objects
-        // characters should be more.. object-y
-        // have gender, relations (siblings, parents, etc.)
-
-        // bank.character = _.deepClone(names); // from names.js
-
-
-        bank.location = ['Hobbiton', 'New Haven', 'East Lansing', 'Madchester', 'Oblivion', 'a valley', 'small village', 'grass hut'];
-
-        bank.magicalitem = ['Singing Telegram', 'Singing Sword', 'Magic Accordion', 'Air Jordans', 'Mad Skillz', '#SWAG'];
-
-        bank.task = ['walk the dog', 'retrieve the Crown Jewels', 'find a hammer', 'cut down the tallest tree in the forest with a herring'];
-
-        bank.punish = ['brought to justice', 'hung, drawn, and quartered', 'given a tongue-lashing'];
-
-        bank.ascension = ['is made king', 'becomes a god', 'becomes filled with knowledge'];
-        bank.marries = ['marries', 'is given keys to the city', 'has parking tickets forgiven', 'dates for a few years, but decides to remain single' ];
-
-    };
+    var bank = _.deepClone(wordbank);
 
     var prohibitType = {
         movement: 'movement',
@@ -169,7 +144,10 @@ var world = function(settings, wordbank) {
         // SOLUTION: don't worry about it: make the bank bigger than any of our templates
         // for now...
         gndr = gndr || randomProperty(gender);
-        return pickRemove(bank.names[gndr]);
+
+        return { name: pickRemove(bank.names[gndr]),
+                 gender: gndr
+                 };
     };
 
     var getCharacters = function(gndr) {
@@ -192,7 +170,12 @@ var world = function(settings, wordbank) {
 
     var getHero = function(g) {
 	var c = getCharacter(g);
-        return c;
+        var family = getCharacters(settings.peoplegender);
+        return {
+            name: c.name,
+            gender: c.gender,
+            family: family
+            };
     };
 
     var getHome = function() {
@@ -226,26 +209,26 @@ var world = function(settings, wordbank) {
             loc = location();
 
             prohibit.location = loc;
-            prohibit.text = cache.advisor + ' warns ' + cache.hero + ' to avoid ' + prohibit.location;
+            prohibit.text = cache.advisor.name + ' warns ' + cache.hero.name + ' to avoid ' + prohibit.location;
 
             break;
 
         case prohibitType.action:
 
             prohibit.action = 'take the Lord\'s name in vain';
-            prohibit.text = cache.advisor + ' tells ' + cache.hero + ' to not ' + prohibit.action;
+            prohibit.text = cache.advisor.name + ' tells ' + cache.hero.name + ' to not ' + prohibit.action;
 
             break;
 
         case prohibitType.speak:
 
-            prohibit.action = 'talk to ' + cache.villain;
-            prohibit.text = prohibit.advisor + ' warns ' + cache.hero + ' to not ' + prohibit.action;
+            prohibit.action = 'talk to ' + cache.villain.name;
+            prohibit.text = prohibit.advisor.name + ' warns ' + cache.hero.name + ' to not ' + prohibit.action;
 
             break;
         }
 
-	prohibit.text += '. ' + prohibit.advisor + ' introduces ' + cache.magicalhelper + ' to ' + cache.hero;
+	prohibit.text += '. ' + prohibit.advisor.name + ' introduces ' + cache.magicalhelper.name + ' to ' + cache.hero.name;
 
         return  prohibit;
 
@@ -301,20 +284,27 @@ var world = function(settings, wordbank) {
 
 
     var getMagicalHelper = function() {
-	return capitalize(pick(sciencefictionWordBank.adjectives)) + ' ' + getCharacter();
+        var person = getCharacter();
+        person.name = capitalize(pick(sciencefictionWordBank.adjectives)) + ' ' + person.name;
+	return person;
     };
 
     var getPunished = function() {
         return pick(bank.punish);
     };
 
+    var getName = function(person) {
+        var elem = (typeof person == 'string' ? person : person.name);
+        return elem;
+    };
+    // TODO: what ELSE needs to be updated?
     var list = function(arr) {
         var lst = '';
         if (arr.length > 0) {
             for (var i = 0; i < arr.length - 1; i++) {
-		lst += arr[i] + ', ';
+		lst += getName(arr[i]) + ', ';
             }
-            lst += 'and ' + arr[arr.length - 1];
+            lst += 'and ' + getName(arr[arr.length - 1]);
         }
         return lst;
     };
@@ -333,8 +323,6 @@ var world = function(settings, wordbank) {
 
     var init = function() {
 	try {
-
-            if (wordbank) { bank = wordbank; }
 
 	    // TODO: move this
 	    // also, contingent upon "theme" or something....
@@ -355,10 +343,10 @@ var world = function(settings, wordbank) {
             cache.punished = getPunished();
             cache.task = pick(bank.task);
             cache.villain = getVillain(settings.villaingender);
-            cache.family = getCharacters(settings.peoplegender);
+            // cache.family = getCharacters(settings.peoplegender);
 	    cache.acquantainces = getCharacters(settings.peoplegender);
 	    cache.minions = getCharacters(settings.peoplegender);
-            cache.victim = pick(cache.family);
+            cache.victim = pick(cache.hero.family);
             cache.ascension = pick(bank.ascension);
             cache.marries = pick(bank.marries);
             cache.interdiction = interdiction();
@@ -377,7 +365,7 @@ var world = function(settings, wordbank) {
         advisor: function() { return cache.advisor; },
         falsehero: function() { return cache.falsehero; },
 	// TODO: if there are NO family or acquantainces, how is this handled??
-        family: function() { return cache.family; },
+        // family: function() { return cache.family; },
         acquantainces: function() { return cache.acquantainces; },
         hero: function() { return cache.hero;},
         home: function() { return cache.home;},
@@ -392,11 +380,13 @@ var world = function(settings, wordbank) {
         victim: function() { return cache.victim; },
         ascension: function() { return cache.ascension; },
         marriage: function() { return cache.marries; },
+        cache: cache, // hunh. exposing this?????
         pick: pick,
         or: or,
         list: list,
         select: select,
-        dump: dump
+        dump: dump,
+        prohibitType: prohibitType
     };
 
 };
@@ -412,7 +402,11 @@ var sentence = function(index, helper) {
     var f;
     var func = proppFunctions[index];
     if (func.active) {
-        f = func.templates[random(func.templates.length)];
+        if (func.exec) {
+            f = func.exec(helper);
+            } else {
+                f = func.templates[random(func.templates.length)];
+            }
         var t = _.template(f);
         f = t(helper);
 	f = capitalize(f);

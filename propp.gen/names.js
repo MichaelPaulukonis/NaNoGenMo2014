@@ -1,6 +1,13 @@
 var defaultbank = {};
 
+// need a home
+defaultbank.building = ['grass hut', 'small house', 'barn', 'hovel', 'stately manor', 'decayed mansion', 'shack', 'shed', 'house'];
+
+// the vicinity of the home
 defaultbank.location = ['Hobbiton', 'New Haven', 'East Lansing', 'Madchester', 'Oblivion', 'a valley', 'small village', 'grass hut'];
+
+// this should more be country. 'Nation' is short-hand.
+defaultbank.nation = ['the Monastic State of the Teutonic Knights', 'Prussia', 'East German', 'Middle Earth', 'Orange County', 'Northern California', 'Talexico'];
 
 defaultbank.magicalitem = ['a Singing Telegram', 'the Singing Sword', 'the Magic Accordion', 'a pair of Air Jordans', 'Mad Skillz', '#SWAG'];
 
