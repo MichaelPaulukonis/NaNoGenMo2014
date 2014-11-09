@@ -17,6 +17,7 @@ Klein notes that "[t]he most complex problems in automatic Propp and Levi-Straus
 
 In contrast, a rather "dumb" selection of characters and objects will result in humorous or jarring discontinitues that will _distract_ from other technical faults in the underlying "narrative" construct.
 
+
 ## Notes on the extant proppian generators
 The most-referenced version - [Fairy Tale Generator](https://web.archive.org/web/20061112014356/http://www.brown.edu/Courses/FR0133/Fairytale_Generator/gen.html) - was developed for a class (at Brown? in ????). It's not the most faithful Propp version -- it breaks the 31 functions into 34 pieces, and makes them all optional and independent -- nothings depends on anything else. The high level of citations is in no doubt due to the readily pleasing effects, which are primarily due to the source materials included. Each function, instead of actually referencing characters, objects or other functions, consists of the random selection of pre-written sentences, independent of previous selections. Due to the nature of the writing, there _may be_ inter-references, but this is all accidental.
 
@@ -81,6 +82,14 @@ Story itself, though, has a structure beyond that of the generator, since it wou
 
 I'm beginning to think the templates I have should be more complicated -- that is, actual functions. Since they need to set other conditions -- death of character, etc.
 That's something that may come about (semi) organically...
+
+2014.11.09 the templates handling code has expanded to check to see if a particular property is present -- `exec` -- and if so, call it as a function (which it is. should prolly check the type, too). That will help a bit, maybe. The templates should be tied to a particular wordbank explicitly, and these things call the helper functions, not the other way around. That way a set of templates could over-ride a given function; say, the creation of magical-items and helpers (eg, use one single adjective instead of the default; or possibly none!). The template-wordbank would also hold a "title generator" -- called at the end, I suppose, so it could reference things that "happened".
+
+I want to extend the wordbanks and templates to add some variety. Bororo-esque (from Raw & The Cook), Science Fictiony, Fantasy, normal-us, Western, dullsville, corporate (home is a office, region is a floor, country is a building/corporation. competition for promotion, villain is a co-worker, manager. magical items are staplers and meetings; magical helper is an intern or something), neo-noir, etc.
+
+TODO: error-handling
+
+TODO: node.js-ify, and then browserify so it can still be used with the web interface; but web-less for testing, etc. would be really nice. And is long overdue....
 
 
 ## Morphology (and incept dates?) of the Folktale

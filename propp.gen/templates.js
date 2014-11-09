@@ -14,8 +14,8 @@ var nTemplates = function(propp) {
     // this could be the hero leaving home
     // so we\'d have to have more logic to cover this
     // TODO: also need to define the action, so it can be dealt with in Resuloution (func20)
-    propp['func1'].templates.push('<%= victim() %> goes missing.');
-    propp['func1'].templates.push('<%= victim() %> unexpectedly dies, leaving <%= hero().name %> devastated.');
+    propp['func1'].templates.push('<%= victim().name %> goes missing.');
+    propp['func1'].templates.push('<%= victim().name %> unexpectedly dies, leaving <%= hero().name %> devastated.');
 
     // Interdiction: hero is warned
     // propp['func2'].templates.push('<%= hero().name %> is warned.');
@@ -136,7 +136,7 @@ var nTemplates = function(propp) {
     propp['func14'].templates.push('<%= hero().name %> responds to test.');
 
     //  Acquisition: hero gains magical item
-    propp['func15'].templates.push('<%= advisor() %> gives <%= hero().name %> <%= magicalitem() %>.');
+    propp['func15'].templates.push('<%= advisor().name %> gives <%= hero().name %> <%= magicalitem() %>.');
 
     // Guidance: hero reaches destination
     // TODO: destination is related to task()
@@ -182,7 +182,7 @@ var nTemplates = function(propp) {
     propp['func25'].templates.push('<%= falsehero().name %> makes unfounded claims.');
 
     // Task: Difficult task proposed to the <%= hero().name %>
-    propp['func26'].templates.push('<%= advisor()name %> charges <%= hero().name %> to <%= task() %>.');
+    propp['func26'].templates.push('<%= advisor().name %> charges <%= hero().name %> to <%= task() %>.');
 
     // Solution: Task is resolved
     propp['func27'].templates.push('<%= task() %> is completed.');

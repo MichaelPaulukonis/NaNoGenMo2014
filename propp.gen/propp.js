@@ -243,22 +243,22 @@ var world = function(settings, wordbank) {
         switch (prohibit.type) {
         case prohibitType.movement:
 
-            text = 'Despite the warning, ' + cache.hero + ' goes to ' + prohibit.location + '.';
-            text += ' ' + cache.villain + ' appears.';
+            text = 'Despite the warning, ' + cache.hero.name + ' goes to ' + prohibit.location + '.';
+            text += ' ' + cache.villain.name + ' appears.';
 
             break;
 
         case prohibitType.action:
 
-            text = 'Shockingly, ' + cache.hero + ' proceeds to ' + prohibit.action + '.';
-            text += ' ' + cache.villain + ' appears.';
+            text = 'Shockingly, ' + cache.hero.name + ' proceeds to ' + prohibit.action + '.';
+            text += ' ' + cache.villain.name + ' appears.';
 
             break;
 
         case prohibitType.speak:
 
-            text = 'As soon as ' +  prohibit.advisor + ' is gone, ' + cache.hero
-                + ' runs off to find ' + cache.villain + ' and has an interesting conversation.';
+            text = 'As soon as ' +  prohibit.advisor.name + ' is gone, ' + cache.hero.name
+                + ' runs off to find ' + cache.villain.name + ' and has an interesting conversation.';
             break;
         }
 
