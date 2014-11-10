@@ -18,7 +18,7 @@
 // http://blog.elliotjameschong.com/2012/10/10/underscore-js-deepclone-and-deepextend-mix-ins/
 _.mixin({ deepClone: function (p_object) { return JSON.parse(JSON.stringify(p_object)); } });
 
-var fairyTaleGen = {};
+var proppianStoryGen = {};
 
 var gender = {
     female: 'female',
@@ -430,14 +430,14 @@ var capitalize = function(str) {
 // which may contain multiple sentences.
 var sentence = function(index, helper) {
 
-    var f;
+    var f = '';
     var func = proppFunctions[index];
-    if (func.active) {
+    if (func && func.active) {
         if (func.exec) {
             f = func.exec(helper);
-            } else {
-                f = func.templates[random(func.templates.length)];
-            }
+        } else {
+            f = func.templates[random(func.templates.length)];
+        }
         var t = _.template(f);
         f = t(helper);
         f = capitalize(f);
@@ -451,42 +451,52 @@ var sentence = function(index, helper) {
 // generate the fairy tale
 function generate(settings, theme){
 
-    fairyTaleGen.settings = settings;
-    fairyTaleGen.proppFunctions = proppFunctions;
+    try {
+        proppianStoryGen.settings = settings;
+        proppianStoryGen.proppFunctions = proppFunctions;
 
-    // proppFunctions = defaultTemplates(proppFunctions);
-    // proppFunctions = nTemplates(proppFunctions);
-    proppFunctions = theme.templates(proppFunctions);
+        proppFunctions = theme.templates(proppFunctions);
 
-    var tale = [];
+        var tale = [];
 
-    // fairyTaleGen.helper = world(fairyTaleGen.settings, defaultbank);
-    fairyTaleGen.helper = world(fairyTaleGen.settings, theme.bank);
+        proppianStoryGen.helper = world(proppianStoryGen.settings, theme.bank);
 
-    for (var index in proppFunctions) {
-        // TODO: we could retrieve the function HERE.....
-        var s = sentence(index, fairyTaleGen.helper);
-        if (s) {
-            tale.push(s);
+        // this doesn't handle recursive stories (this is the one I'm particularly interested in)
+        // multiple tasks
+        // or going back to a previous point in the chain
+        // :-(
+        for (var index in proppFunctions) {
+            var s = sentence(index, proppianStoryGen.helper);
+            if (s) {
+                tale.push(s);
+            }
         }
+
+        return tale.join('\n\n');
+    } catch(ex) {
+        // the last 3 items are non-standard.....
+        var msg = ex.name + ' : ' + ex.message;
+        if (ex.lineNumber && ex.columnNumber && ex.stack) {
+            msg += ' line: ' + ex.lineNumber + ' col: ' + ex.columnNumber + '\n'
+                + ex.stack;
+        }
+        console.log(msg);
+        return msg;
     }
-
-    return tale.join('\n\n');
-
 }
 
 
 
 settings.functions = proppFunctions;
 
-fairyTaleGen.settings = settings;
-fairyTaleGen.random = random;
-fairyTaleGen.sentence = sentence;
-fairyTaleGen.generate = generate;
+proppianStoryGen.settings = settings;
+proppianStoryGen.random = random;
+proppianStoryGen.sentence = sentence;
+proppianStoryGen.generate = generate;
 
 
-fairyTaleGen.cinderella = cinderella;
-fairyTaleGen.hansel = hansel;
-fairyTaleGen.swhite = swhite;
-fairyTaleGen.lrrh = lrrh;
-fairyTaleGen.juniper = juniper;
+proppianStoryGen.cinderella = cinderella;
+proppianStoryGen.hansel = hansel;
+proppianStoryGen.swhite = swhite;
+proppianStoryGen.lrrh = lrrh;
+proppianStoryGen.juniper = juniper;
