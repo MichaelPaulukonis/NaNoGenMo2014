@@ -43,6 +43,22 @@
 	      perrault:<br />
 	      <a href="javascript:lrrh()">lrrh</a><br />
 
+              <br />
+              <ul>
+                <li><a href="#" id='selectall' accesskey="a" >Select All</a></li>
+              </ul>
+
+              <br />
+              <ul>
+                <li>Theme:</li>
+                <li><input name='theme' type='radio' value='test' checked='checked'>test</input></li>
+                <li><input name='theme' type='radio' value='office'>office</input></li>
+                <li><input name='theme' type='radio' value='original'>original</input></li>
+                <!-- <input name='theme' type='radio' value=''>random</input> -->
+              </ul>
+
+
+
 	      <br />
 	      <ul>
 		<li>links:</li>
@@ -134,7 +150,7 @@
           <tr>
 	    <td colspan="2">
 	      <br />
-	      <input value="generate" onclick="javascript:guiGet();" align="middle" type="submit" />
+	      <input value="generate" onclick="javascript:guiGet();" align="middle" type="submit" accesskey="g" />
 	      <input value="clear" align="middle" type="reset" />
 	      <br />
 	      <br />
@@ -155,8 +171,13 @@
   <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
 
 
+  <script type="text/javascript" src="default.templates.js"></script>
   <script type="text/javascript" src="templates.js"></script>
   <script type="text/javascript" src="names.js"></script>
+
+  <script type="text/javascript" src="templates.business.js"></script>
+  <script type="text/javascript" src="business.wordbank.js"></script>
+
 
   <!-- some functions from gui are referenced in propp. ouch. -->
   <script type="text/javascript" src="gui.js"></script>

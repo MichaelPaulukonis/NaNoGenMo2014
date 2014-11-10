@@ -1,13 +1,13 @@
 var defaultbank = {};
 
-// need a home
-defaultbank.building = ['grass hut', 'small house', 'barn', 'hovel', 'stately manor', 'decayed mansion', 'shack', 'shed', 'house'];
+// the specific location, like "home" or "office"
+defaultbank.residence = ['grass hut', 'small house', 'barn', 'hovel', 'stately manor', 'decayed mansion', 'shack', 'shed', 'house'];
 
 // the vicinity of the home
-defaultbank.location = ['Hobbiton', 'New Haven', 'East Lansing', 'Madchester', 'Oblivion', 'a valley', 'small village', 'grass hut'];
+defaultbank.location = ['Hobbiton', 'New Haven', 'East Lansing', 'Madchester', 'Oblivion', 'a valley', 'a small village', 'a lonely intersection'];
 
 // this should more be country. 'Nation' is short-hand.
-defaultbank.nation = ['the Monastic State of the Teutonic Knights', 'Prussia', 'East German', 'Middle Earth', 'Orange County', 'Northern California', 'Talexico'];
+defaultbank.nation = ['the Monastic State of the Teutonic Knights', 'Prussia', 'East Germany', 'Middle Earth', 'Orange County', 'Northern California', 'Talexico'];
 
 defaultbank.magicalitem = ['a Singing Telegram', 'the Singing Sword', 'the Magic Accordion', 'a pair of Air Jordans', 'Mad Skillz', '#SWAG'];
 
@@ -125,7 +125,7 @@ defaultbank.names = {
 // are there going to be categories?
 // based on list from
 // http://webcache.googleusercontent.com/search?q=cache:hHHDD1u3puMJ:www.ironwolfgames.com/2011/09/17/fun-with-science-fiction-buzzwords/&client=firefox-a&hl=en&gl=us&strip=1
-var sciencefictionWordBank = {
+defaultbank.itembank = {
 
     adjectives: [
 	'auxiliary',
@@ -203,8 +203,8 @@ var itemGenerator = function(bank) {
 
 };
 
-var sfItemGen = function() {
+defaultbank.itemGenerator = function() {
 
-    return itemGenerator(sciencefictionWordBank);
+    return itemGenerator(defaultbank.itembank);
 
 };

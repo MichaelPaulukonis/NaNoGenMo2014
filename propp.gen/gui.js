@@ -107,7 +107,41 @@ var shoveToGui = function(tale) {
 };
 
 var guiGet = function() {
+
     var settings = getFunctionsFromGui();
-    var tale = generate(settings);
+
+    var selectedTheme = $('input[name=theme][type=radio]:checked').val();
+
+    var theme = {};
+    switch(selectedTheme) {
+        case 'office':
+        theme = {
+          bank: businessbank,
+          templates: businessTemplates
+        };
+        break;
+
+        case 'test':
+        theme = {
+            bank: defaultbank,
+            templates: nTemplates
+        };
+        break;
+
+        case 'original':
+        theme = {
+            bank: null,
+            templates: defaultTemplates
+        };
+    };
+
+    var tale = generate(settings, theme);
     shoveToGui(tale);
 };
+
+$('#selectall').click(function() {
+    var funcs = $('input[type=checkbox]');
+    funcs.each(function(index, element) {
+        $(element).prop('checked', true);
+    });
+});

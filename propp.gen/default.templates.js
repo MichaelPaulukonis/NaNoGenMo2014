@@ -5,6 +5,8 @@ var defaultTemplates = function(propp) {
     //THEN ERASE THE '\N' IN FINAL STRING
 
 
+    propp['func0'].templates.push('');
+
     // Proppian-function templates
     propp["func1"].templates.push("It is said in the place where I live the soil is made of our people.  People who toiled, sweat, cried, and screamed all bled into the ground and made us who we are today.\n\n");
     propp["func1"].templates.push("In the place where I live people wear soft leather bottomed shoes to glide over soil.  Our feet do not make a sound.  We show respect to those who fell to the floor during the wars of our times. \n\n");

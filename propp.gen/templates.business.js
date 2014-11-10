@@ -1,4 +1,4 @@
-var nTemplates = function(propp) {
+var businessTemplates = function(propp) {
 
     // 0: Initial situation
     // TODO: multiple sentences within a template may not be punctuated correctly.
@@ -6,15 +6,15 @@ var nTemplates = function(propp) {
     // for example, if sentence begins with <%= list(acquainainces()) %> and the first is 'the Easter Bunny' it will not be auto-capitalised
     // since that only works on the first letter of the template-output (erroneously called 'sentence' in the code).
     // TODO: what about "lives alone." how would THAT be figured out???
-    propp['func0'].templates.push('<%= hero().name %> lives in a <%= hero().home.residence %> near <%= hero().home.location %> in <%= hero().home.nation %>. <%= hero().name %> lives with <%= list(hero().family) %>. <%= list(hero().acquaintances) %> are <%= select("friends of", "known to") %> <%= hero().name %>.');
+    propp['func0'].templates.push('<%= hero().name %> works in a <%= hero().home.residence %> near <%= hero().home.location %> in <%= hero().home.nation %>. <%= hero().name %> works with <%= list(hero().family) %>. S/he knows <%= list(hero().acquaintances) %> from work.');
 
     // Proppian-function templates
     // Absentation: Someone goes missing
     // this could be the hero leaving home
     // so we\'d have to have more logic to cover this
     // TODO: also need to define the action, so it can be dealt with in Resuloution (func20)
-    propp['func1'].templates.push('<%= victim().name %> goes missing.');
-    propp['func1'].templates.push('<%= victim().name %> unexpectedly dies, leaving <%= hero().name %> devastated.');
+    propp['func1'].templates.push('<%= victim().name %> doesn\'t come into work.');
+    propp['func1'].templates.push('<%= victim().name %> is unexpectedly fired, leaving <%= hero().name %> devastated.');
 
     // Interdiction: hero is warned
     // propp['func2'].templates.push('<%= hero().name %> is warned.');
@@ -56,34 +56,34 @@ var nTemplates = function(propp) {
     // propp['func8'].templates.push('The need is identified (Villainy).');
     propp['func8'].templates.push('<%= villain().name %> kidnaps <%= pick(select(hero().family, hero().acquaintances)).name %>.');
     propp['func8'].templates.push('<%= villain().name %> <%= select("forcibly seizes", "kidnaps", "makes off with") %> <%= magicalhelper().name %>.');
-    propp['func8'].templates.push('The harvest is destroyed by <%= villain().name %>. All begin to feel the pangs of hunger.');
-    propp['func8'].templates.push('Suddenly, it becomes as night. <%= villain().name %> steals the daylight!');
+    propp['func8'].templates.push('The report is destroyed by <%= villain().name %>. All begin to feel the discomfort of chaos.');
+    propp['func8'].templates.push('Suddenly, it becomes as night. <%= villain().name %> has shut off the power!');
     propp['func8'].templates.push('<%= villain().name %> engages in plundering in other forms.');
     propp['func8'].templates.push('<%= villain().name %> causes bodily injury, maiming, mutilation.');
     propp['func8'].templates.push('<%= villain().name %> causes a sudden disappearance.');
     // TODO: more code is needed for THIS one...
-    propp['func8'].templates.push('<%= hero().name %>\'s bride is forgotten after <%= villain().name %> casts a spell.');
+    propp['func8'].templates.push('<%= hero().name %>\'s intern is forgotten after <%= villain().name %> casts a spell.');
     propp['func8'].templates.push('<%= villain().name %> makes a demand for delivery or enticement, abduction.');
     // TODO: code needed
     // TODO: possessive
     propp['func8'].templates.push('<%= hero().name %> is driven from <%= hero().home.residence %>.');
-    propp['func8'].templates.push('<%= villain().name %> throws <%= hero().name %> into <%= select("a small stream", "a local lake", "the murky pond", "the well") %>.');
-    propp['func8'].templates.push('There is a casting of a spell, a transformation. The effects are simply amazing. Words couldn\'t do them justice.');
+    propp['func8'].templates.push('<%= villain().name %> throws <%= hero().name %> into <%= select("the toilet", "a drinking fountain", "the decorative fountain in the lobby") %>.');
+    propp['func8'].templates.push('It is hard to describe the charged atmosphere once <%= villain().name %> has their policies enacted.');
     // TODO: posession needs to be tracked
     // so item now "belongs" to villain (or hench-person)
     propp['func8'].templates.push('A false substitution is perpretrated by <%= villain().name %>.');
-    propp['func8'].templates.push('<%= villain().name %> issues order to kill [requires proof].');
-    propp['func8'].templates.push('<%= villain().name %> commits murder.');
-    propp['func8'].templates.push('imprisonment, detention of <%= hero().name %>.');
-    propp['func8'].templates.push('<%= villain().name %> threatens to marry <%= pick(hero().family).name %>.');
-    propp['func8'].templates.push('<%= villain().name %> <%= select("insinuates", "suggests", "muses") %> that <%= list(hero().family) %> could be forced into a marriage of convenience.');
-    propp['func8'].templates.push('There is a threat of cannibalism.');
-    propp['func8'].templates.push('Thanks to the ravages <%= villain().name %>\'s predations have left on the land, there is the threat of cannibalism among the relatives of <%= hero().name %>\'s family. <%= list(hero().family) %> eye each other hungrily.');
+    propp['func8'].templates.push('<%= villain().name %> issues order to terminate [requires proof].');
+    propp['func8'].templates.push('<%= villain().name %> practically commits murder.');
+    propp['func8'].templates.push('<%= hero().name %> is called into an unexpected meeting.');
+    propp['func8'].templates.push('<%= villain().name %> threatens to fire <%= pick(hero().family).name %>.');
+    propp['func8'].templates.push('<%= villain().name %> <%= select("insinuates", "suggests", "muses") %> that <%= list(hero().family) %> could be forced to transfer to his/her division.');
+    propp['func8'].templates.push('There is a threat of layoffs.');
+    propp['func8'].templates.push('Thanks to the ravages <%= villain().name %>\'s disruptions have left on the firm, there is the threat of layoffs among <%= hero().name %>\'s work-group. <%= list(hero().family) %> eye each other nervously.');
     // //  (visitaion, vampirism)
     // // TODO: code, since this is picking a specific person
     // // actually, ALL OF THESE reqire code, since we need to know WHAT happens, here...
-    propp['func8'].templates.push('<%= hero().name %> is tormented at night by <%= pick(villain().family).name %>.');
-    propp['func8'].templates.push('<%= villain().name %> declares war on <%= hero().name %>.');
+    propp['func8'].templates.push('<%= hero().name %> is tormented during meetings by <%= pick(villain().family).name %>.');
+    propp['func8'].templates.push('<%= villain().name %> declares inter-office war on <%= hero().name %>.');
 
 
     //  8a - Lack: The need is identified (Lack)
