@@ -15,10 +15,13 @@
 
 "use strict";
 
+var _ = _ || require('underscore');
+
 // http://blog.elliotjameschong.com/2012/10/10/underscore-js-deepclone-and-deepextend-mix-ins/
 _.mixin({ deepClone: function (p_object) { return JSON.parse(JSON.stringify(p_object)); } });
 
-var proppianStoryGen = {};
+
+var storyGen = {};
 
 var gender = {
     female: 'female',
@@ -42,6 +45,32 @@ var settings = {
 };
 
 
+var func8 = {
+    '1': 'kidnapping of person',
+    '2': 'seizure of magical agent or helper',
+    '2b': 'forcible seizure of magical helper',
+    '3': 'pillaging or ruining of crops',
+    '4': 'theft of daylight',
+    '5': 'plundering in other forms',
+    '6': 'bodily injury, maiming, mutilation',
+    '7': 'causes sudden disappearance',
+    '7b': 'bride is forgotten',
+    '8': 'demand for delivery or enticement, abduction',
+    '9': 'expulsion',
+    '10': 'casting into body of water',
+    '11': 'casting of a spell, transformation',
+    '12': 'false substitution',
+    '13': 'issues order to kill [requires proof]',
+    '14': 'commits murder',
+    '15': 'imprisonment, detention',
+    '16': 'threat of forced matrimony',
+    '16b': 'threat of forced matrimony between relatives',
+    '17': 'threat of cannibalism',
+    '17b': 'threat of cannibalism among relatives',
+    '18': 'tormenting at night (visitaion, vampirism)',
+    '19': 'declaration of war'
+};
+
 // should this be reduced back down to a 0..31 array?
 var proppFunctions = {
     "func0": { active: true, templates: [] },
@@ -53,10 +82,11 @@ var proppFunctions = {
     "func6": { active: false, templates: [] },
     "func7": { active: false, templates: [] },
     "func8": { active: false, templates: [] },
+    "func8a": { active: false, templates: [] },
     "func9": { active: false, templates: [] },
     "func10": { active: false, templates: [] },
     "func11": { active: false, templates: [] },
-    "func12": { active: false, templates: [] },
+    // TODO: drop the numbers down by one....
     "func13": { active: false, templates: [] },
     "func14": { active: false, templates: [] },
     "func15": { active: false, templates: [] },
@@ -330,6 +360,10 @@ var world = function(settings, wordbank) {
         return elem;
     };
 
+    var possessive = function(gndr) {
+        return (gndr == gender.male ? 'his' : (gndr == gender.female ? 'her' : 'its'));
+    };
+
     var list = function(arr) {
         var lst = '';
         if (arr.length > 0) {
@@ -415,6 +449,7 @@ var world = function(settings, wordbank) {
         pick: pick,
         or: or,
         list: list,
+        possessive: possessive,
         select: select,
         dump: dump,
         prohibitType: prohibitType
@@ -452,21 +487,21 @@ var sentence = function(index, helper) {
 function generate(settings, theme){
 
     try {
-        proppianStoryGen.settings = settings;
-        proppianStoryGen.proppFunctions = proppFunctions;
+        storyGen.settings = settings;
+        storyGen.proppFunctions = proppFunctions;
 
         proppFunctions = theme.templates(proppFunctions);
 
         var tale = [];
 
-        proppianStoryGen.helper = world(proppianStoryGen.settings, theme.bank);
+        storyGen.helper = world(storyGen.settings, theme.bank);
 
         // this doesn't handle recursive stories (this is the one I'm particularly interested in)
         // multiple tasks
         // or going back to a previous point in the chain
         // :-(
         for (var index in proppFunctions) {
-            var s = sentence(index, proppianStoryGen.helper);
+            var s = sentence(index, storyGen.helper);
             if (s) {
                 tale.push(s);
             }
@@ -487,16 +522,14 @@ function generate(settings, theme){
 
 
 
-settings.functions = proppFunctions;
+// settings.functions = proppFunctions;
 
-proppianStoryGen.settings = settings;
-proppianStoryGen.random = random;
-proppianStoryGen.sentence = sentence;
-proppianStoryGen.generate = generate;
+storyGen.world = world;
+storyGen.settings = settings;
+storyGen.random = random;
+storyGen.sentence = sentence;
+storyGen.generate = generate;
 
 
-proppianStoryGen.cinderella = cinderella;
-proppianStoryGen.hansel = hansel;
-proppianStoryGen.swhite = swhite;
-proppianStoryGen.lrrh = lrrh;
-proppianStoryGen.juniper = juniper;
+
+if (module) module.exports = storyGen;

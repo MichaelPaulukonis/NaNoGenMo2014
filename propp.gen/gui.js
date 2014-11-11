@@ -130,7 +130,7 @@ var guiGet = function() {
 
         case 'original':
         theme = {
-            bank: null,
+            bank: defaultbank, // although it won't be used...
             templates: defaultTemplates
         };
     };

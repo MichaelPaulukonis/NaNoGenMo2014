@@ -87,12 +87,11 @@ var businessTemplates = function(propp) {
 
 
     //  8a - Lack: The need is identified (Lack)
-    propp['func9'].templates.push('The need is identified (Lack)');
     // function 8a: one member of family lacks/desires something = lack - a
     // TODO: push this into an exec function
     // pick one of the following, and store the object
     // or.... figure out a better way to accomplish this...
-    propp['func9'].exec = function(world) {
+    propp['func8a'].exec = function(world) {
 
         var lacks = ['needs a bride, friend, or an individual.',
                      'needs a helper or magical agent.',
@@ -118,18 +117,18 @@ var businessTemplates = function(propp) {
     };
 
     // Mediation: hero discovers the lack
-    propp['func10'].templates.push('<%= hero().name %> discovers the lack.');
-    propp['func10'].exec = function(world) {
+    propp['func9'].templates.push('<%= hero().name %> discovers the lack.');
+    propp['func9'].exec = function(world) {
         return '<%= hero().name %> discovers that ' + world.cache.lack.person.name + ' ' + world.cache.lack.lack;
     };
 
     // Counteraction: hero chooses positive action
     // TODO: positiveaction()
-    propp['func11'].templates.push('<%= hero().name %> chooses positive action.');
+    propp['func10'].templates.push('<%= hero().name %> chooses positive action.');
 
     // Departure: hero leave on mission
     // TODO: journey() function
-    propp['func12'].templates.push('<%= hero().name %> leaves to <%= task() %>.');
+    propp['func11'].templates.push('<%= hero().name %> leaves to <%= task() %>.');
 
     // 3rd Sphere: The Donor Sequence
     // Testing: hero is challenged to prove heroic qualities

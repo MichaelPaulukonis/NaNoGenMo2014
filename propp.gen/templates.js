@@ -53,7 +53,149 @@ var nTemplates = function(propp) {
     // 8A - Villainy: The need is identified (Villainy)
     // function 8 (and/or 8a) is always present in tale
     // antagonist(s) causes harm or injury to victim(s)/member of protagonist's family = villainy - A
-    // propp['func8'].templates.push('The need is identified (Villainy).');
+    propp['func8'].exec = function(world) {
+
+        // this needs to be picked AHEAD OF TIME
+        // since some of these require other creations earlier
+        // like 7b 'bride is forgotten'
+        //shouldn't the brider have been introduced earlier???
+        var func8 = {
+            '1': 'kidnapping of person',
+            '2': 'seizure of magical agent or helper',
+            '2b': 'forcible seizure of magical helper',
+            '3': 'pillaging or ruining of crops',
+            '4': 'theft of daylight',
+            '5': 'plundering in other forms',
+            '6': 'bodily injury, maiming, mutilation',
+            '7': 'causes sudden disappearance',
+            '7b': 'bride is forgotten',
+            '8': 'demand for delivery or enticement, abduction',
+            '9': 'expulsion',
+            '10': 'casting into body of water',
+            '11': 'casting of a spell, transformation',
+            '12': 'false substitution',
+            '13': 'issues order to kill [requires proof]',
+            '14': 'commits murder',
+            '15': 'imprisonment, detention',
+            '16': 'threat of forced matrimony',
+            '16b': 'threat of forced matrimony between relatives',
+            '17': 'threat of cannibalism',
+            '17b': 'threat of cannibalism among relatives',
+            '18': 'tormenting at night (visitaion, vampirism)',
+            '19': 'declaration of war'
+        };
+
+        // ideally, we pick the sub-type above, and then the appropriate code + template is executed
+        // that's in-progress....
+        var subFunc = randomProperty(func8);
+        var template = '';
+
+        subFunc = 'expulsion';
+
+        switch(subFunc) {
+        case 'kidnapping of person':
+            template = '<%= villain().name %> kidnaps <%= pick(select(hero().family, hero().acquaintances)).name %>.';
+            break;
+
+        case 'seizure of magical agent or helper':
+            template = '<%= villain().name %> <%= select("forcibly seizes", "kidnaps", "makes off with") %> <%= magicalhelper().name %>.';
+            break;
+
+        case 'forcible seizure of magical helper':
+            template = '<%= villain().name %> <%= select("forcibly seizes", "kidnaps", "makes off with") %> <%= magicalhelper().name %>.';
+            break;
+
+        case 'pillaging or ruining of crops':
+            template = 'The harvest is destroyed by <%= villain().name %>. All begin to feel the pangs of hunger.';
+            break;
+
+        case 'theft of daylight':
+            template = 'Suddenly, it becomes as night. <%= villain().name %> steals the daylight!';
+            break;
+
+        case 'plundering in other forms':
+            template = '<%= villain().name %> engages in plundering in other forms.';
+            break;
+
+        case 'bodily injury maiming mutilation':
+            template = '<%= villain().name %> causes bodily injury, maiming, mutilation.';
+            break;
+
+        case 'causes sudden disappearance':
+            template = '<%= villain().name %> causes a sudden disappearance.';
+            break;
+
+        case 'bride is forgotten':
+            // doesn't this have to be known AHEAD of time, so there is a bride function prepped earlier???
+            template = '<%= hero().name %>\'s bride is forgotten after <%= villain().name %> casts a spell.';
+            break;
+
+        case 'demand for delivery or enticement abduction':
+            template = '<%= villain().name %> makes a demand for delivery or enticement, abduction.';
+            break;
+
+        case 'expulsion':
+            template = '<%= hero().name %> is driven from <%= possessive(hero().gender) %> <%= hero().home.residence %>.';
+            break;
+
+        case 'casting into body of water':
+            template = '<%= villain().name %> throws <%= hero().name %> into <%= select("a small stream", "a local lake", "the murky pond", "the well") %>.';
+            break;
+
+        case 'casting of a spell transformation':
+            template = 'There is a casting of a spell, a transformation. The effects are simply amazing. Words couldn\'t do them justice.';
+            break;
+
+        case 'false substitution':
+            template = 'A false substitution is perpretrated by <%= villain().name %>.';
+            break;
+
+        case 'issues order to kill [requires proof]':
+            template = '<%= villain().name %> issues order to kill [requires proof].';
+            break;
+
+        case 'commits murder':
+            // TODO: pick a person
+            // change their health status to DEAD or whatever it is
+            template = '<%= villain().name %> commits murder.';
+            break;
+
+        case 'imprisonment detention':
+            template = 'imprisonment, detention of <%= hero().name %>.';
+            break;
+
+        case 'threat of forced matrimony':
+            template = '<%= villain().name %> threatens to marry <%= pick(hero().family).name %>.';
+            break;
+
+        case 'threat of forced matrimony between relatives':
+            template = '<%= villain().name %> <%= select("insinuates", "suggests", "muses") %> that <%= list(hero().family) %> could be forced into a marriage of convenience.';
+            break;
+
+        case 'threat of cannibalism':
+            template = 'There is a threat of cannibalism.';
+            break;
+
+        case 'threat of cannibalism among relatives':
+            template = 'Thanks to the ravages <%= villain().name %>\'s predations have left on the land, there is the threat of cannibalism among the relatives of <%= hero().name %>\'s family. <%= list(hero().family) %> eye each other hungrily.';
+            break;
+
+        case 'tormenting at night (visitaion vampirism)':
+            template = '<%= hero().name %> is tormented at night by <%= pick(villain().family).name %>.';
+            break;
+
+        case 'declaration of war':
+            template = '<%= villain().name %> declares war on <%= hero().name %>.';
+            break;
+
+
+        };
+
+        return template;
+
+    };
+
+    // 'original'
     propp['func8'].templates.push('<%= villain().name %> kidnaps <%= pick(select(hero().family, hero().acquaintances)).name %>.');
     propp['func8'].templates.push('<%= villain().name %> <%= select("forcibly seizes", "kidnaps", "makes off with") %> <%= magicalhelper().name %>.');
     propp['func8'].templates.push('The harvest is destroyed by <%= villain().name %>. All begin to feel the pangs of hunger.');
@@ -66,7 +208,7 @@ var nTemplates = function(propp) {
     propp['func8'].templates.push('<%= villain().name %> makes a demand for delivery or enticement, abduction.');
     // TODO: code needed
     // TODO: possessive
-    propp['func8'].templates.push('<%= hero().name %> is driven from <%= hero().home.residence %>.');
+    propp['func8'].templates.push('<%= hero().name %> is driven from <%= posessive(hero().gender) %> <%= hero().home.residence %>.');
     propp['func8'].templates.push('<%= villain().name %> throws <%= hero().name %> into <%= select("a small stream", "a local lake", "the murky pond", "the well") %>.');
     propp['func8'].templates.push('There is a casting of a spell, a transformation. The effects are simply amazing. Words couldn\'t do them justice.');
     // TODO: posession needs to be tracked
@@ -87,12 +229,11 @@ var nTemplates = function(propp) {
 
 
     //  8a - Lack: The need is identified (Lack)
-    propp['func9'].templates.push('The need is identified (Lack)');
     // function 8a: one member of family lacks/desires something = lack - a
     // TODO: push this into an exec function
     // pick one of the following, and store the object
     // or.... figure out a better way to accomplish this...
-    propp['func9'].exec = function(world) {
+    propp['func8a'].exec = function(world) {
 
         var lacks = ['needs a bride, friend, or an individual.',
                      'needs a helper or magical agent.',
@@ -118,18 +259,18 @@ var nTemplates = function(propp) {
     };
 
     // Mediation: hero discovers the lack
-    propp['func10'].templates.push('<%= hero().name %> discovers the lack.');
-    propp['func10'].exec = function(world) {
+    propp['func9'].templates.push('<%= hero().name %> discovers the lack.');
+    propp['func9'].exec = function(world) {
         return '<%= hero().name %> discovers that ' + world.cache.lack.person.name + ' ' + world.cache.lack.lack;
     };
 
     // Counteraction: hero chooses positive action
     // TODO: positiveaction()
-    propp['func11'].templates.push('<%= hero().name %> chooses positive action.');
+    propp['func10'].templates.push('<%= hero().name %> chooses positive action.');
 
     // Departure: hero leave on mission
     // TODO: journey() function
-    propp['func12'].templates.push('<%= hero().name %> leaves to <%= task() %>.');
+    propp['func11'].templates.push('<%= hero().name %> leaves to <%= task() %>.');
 
     // 3rd Sphere: The Donor Sequence
     // Testing: hero is challenged to prove heroic qualities
@@ -193,7 +334,7 @@ var nTemplates = function(propp) {
     propp['func27'].templates.push('<%= hero().name %> finishes off <%= task() %>.');
 
     // Recognition: hero is recognised
-    propp['func28'].templates.push('<%= hero().name %> is recognised.');
+    propp['func28'].templates.push('<%= hero().name %> is recognized.');
 
     // Exposure: False hero is exposed
     propp['func29'].templates.push('<%= falsehero().name %> is exposed.');
