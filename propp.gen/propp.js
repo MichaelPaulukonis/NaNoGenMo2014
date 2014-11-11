@@ -18,7 +18,9 @@
 var _ = _ || require('underscore');
 
 // http://blog.elliotjameschong.com/2012/10/10/underscore-js-deepclone-and-deepextend-mix-ins/
-_.mixin({ deepClone: function (p_object) { return JSON.parse(JSON.stringify(p_object)); } });
+// in case it is not clear, deepClone clones everything that can JSON-ified
+// that means properties NOT FUNCTIONS
+_.mixin({ deepClone: function (o) { return JSON.parse(JSON.stringify(o)); } });
 
 
 var storyGen = {};
@@ -35,6 +37,13 @@ var healthLevel = {
     dead: 'dead'
 };
 
+// for interdiction (using two words for this...)
+var interdictionType = {
+    movement: 'movement',
+    action: 'action',
+    speak: 'speakwith'
+};
+
 var settings = {
 
     herogender: null,
@@ -44,69 +53,80 @@ var settings = {
 
 };
 
-
+// sub-functions
 var func8 = {
-    '1': 'kidnapping of person',
-    '2': 'seizure of magical agent or helper',
-    '2b': 'forcible seizure of magical helper',
-    '3': 'pillaging or ruining of crops',
-    '4': 'theft of daylight',
-    '5': 'plundering in other forms',
-    '6': 'bodily injury, maiming, mutilation',
-    '7': 'causes sudden disappearance',
-    '7b': 'bride is forgotten',
-    '8': 'demand for delivery or enticement, abduction',
-    '9': 'expulsion',
-    '10': 'casting into body of water',
-    '11': 'casting of a spell, transformation',
-    '12': 'false substitution',
-    '13': 'issues order to kill [requires proof]',
-    '14': 'commits murder',
-    '15': 'imprisonment, detention',
-    '16': 'threat of forced matrimony',
-    '16b': 'threat of forced matrimony between relatives',
-    '17': 'threat of cannibalism',
-    '17b': 'threat of cannibalism among relatives',
-    '18': 'tormenting at night (visitaion, vampirism)',
-    '19': 'declaration of war'
+    '1'   : 'kidnapping of person',
+    '2'   : 'seizure of magical agent or helper',
+    '2b'  : 'forcible seizure of magical helper',
+    '3'   : 'pillaging or ruining of crops',
+    '4'   : 'theft of daylight',
+    '5'   : 'plundering in other forms',
+    '6'   : 'bodily injury, maiming, mutilation',
+    '7'   : 'causes sudden disappearance',
+    '7b'  : 'bride is forgotten',
+    '8'   : 'demand for delivery or enticement, abduction',
+    '9'   : 'expulsion',
+    '10'  : 'casting into body of water',
+    '11'  : 'casting of a spell, transformation',
+    '12'  : 'false substitution',
+    '13'  : 'issues order to kill [requires proof]',
+    '14'  : 'commits murder',
+    '15'  : 'imprisonment, detention',
+    '16'  : 'threat of forced matrimony',
+    '16b' : 'threat of forced matrimony between relatives',
+    '17'  : 'threat of cannibalism',
+    '17b' : 'threat of cannibalism among relatives',
+    '18'  : 'tormenting at night (visitaion, vampirism)',
+    '19'  : 'declaration of war'
 };
 
+// TODO: this needs to be accessible somewhere else...
 // should this be reduced back down to a 0..31 array?
-var proppFunctions = {
-    "func0": { active: true, templates: [] },
-    "func1": { active: false, templates: [] },
-    "func2": { active: false, templates: [] },
-    "func3": { active: false, templates: [] },
-    "func4": { active: false, templates: [] },
-    "func5": { active: false, templates: [] },
-    "func6": { active: false, templates: [] },
-    "func7": { active: false, templates: [] },
-    "func8": { active: false, templates: [] },
-    "func8a": { active: false, templates: [] },
-    "func9": { active: false, templates: [] },
-    "func10": { active: false, templates: [] },
-    "func11": { active: false, templates: [] },
-    // TODO: drop the numbers down by one....
-    "func13": { active: false, templates: [] },
-    "func14": { active: false, templates: [] },
-    "func15": { active: false, templates: [] },
-    "func16": { active: false, templates: [] },
-    "func17": { active: false, templates: [] },
-    "func18": { active: false, templates: [] },
-    "func19": { active: false, templates: [] },
-    "func20": { active: false, templates: [] },
-    "func21": { active: false, templates: [] },
-    "func22": { active: false, templates: [] },
-    "func23": { active: false, templates: [] },
-    "func24": { active: false, templates: [] },
-    "func25": { active: false, templates: [] },
-    "func26": { active: false, templates: [] },
-    "func27": { active: false, templates: [] },
-    "func28": { active: false, templates: [] },
-    "func29": { active: false, templates: [] },
-    "func30": { active: false, templates: [] },
-    "func31": { active: false, templates: [] },
-    "func32": { active: false, templates: [] }
+
+var proppFunctions = {};
+
+var resetProppFunctions = function(propp) {
+
+    propp = {
+
+        "func0": { active: false, templates: [] },
+        "func1": { active: false, templates: [] },
+        "func2": { active: false, templates: [] },
+        "func3": { active: false, templates: [] },
+        "func4": { active: false, templates: [] },
+        "func5": { active: false, templates: [] },
+        "func6": { active: false, templates: [] },
+        "func7": { active: false, templates: [] },
+        "func8": { active: false, templates: [] },
+        "func8a": { active: false, templates: [] },
+        "func9": { active: false, templates: [] },
+        "func10": { active: false, templates: [] },
+        "func11": { active: false, templates: [] },
+
+        "func12": { active: false, templates: [] },
+        "func13": { active: false, templates: [] },
+        "func14": { active: false, templates: [] },
+        "func15": { active: false, templates: [] },
+        // TODO: drop the numbers down by one....
+        "func17": { active: false, templates: [] },
+        "func18": { active: false, templates: [] },
+        "func19": { active: false, templates: [] },
+        "func20": { active: false, templates: [] },
+        "func21": { active: false, templates: [] },
+        "func22": { active: false, templates: [] },
+        "func23": { active: false, templates: [] },
+        "func24": { active: false, templates: [] },
+        "func25": { active: false, templates: [] },
+        "func26": { active: false, templates: [] },
+        "func27": { active: false, templates: [] },
+        "func28": { active: false, templates: [] },
+        "func29": { active: false, templates: [] },
+        "func30": { active: false, templates: [] },
+        "func31": { active: false, templates: [] },
+        "func32": { active: false, templates: [] }
+    };
+
+    return propp;
 };
 
 
@@ -154,7 +174,7 @@ var world = function(settings, wordbank) {
         }
     }
 
-    var prohibitType = {
+    var interdictionType = {
         movement: 'movement',
         action: 'action',
         speak: 'speakwith'
@@ -190,7 +210,7 @@ var world = function(settings, wordbank) {
 
         return { name: pickRemove(bank.names[gndr]),
                  gender: gndr,
-                 posessions: [],
+                 possessions: [],
                  health: healthLevel.alive
                };
     };
@@ -203,7 +223,7 @@ var world = function(settings, wordbank) {
         // and make sure that the victim would be the hero, or some random person....
         var acqs = [];
         for (var i = 0; i < members; i++) {
-            var g = (!gndr || gndr == 'random' ? randomProperty(gender) : gndr);
+            var g = (!gndr || gndr === 'random' ? randomProperty(gender) : gndr);
             acqs.push(createCharacter(g));
         }
         return acqs;
@@ -233,17 +253,10 @@ var world = function(settings, wordbank) {
         c.family = createCharacters(settings.peoplegender);
         c.acquaintances = createCharacters(settings.peoplegender);
         c.home = location();
+        c.location = c.residence;
 
         return c;
 
-        return {
-            name: c.name,
-            gender: c.gender,
-            family: family
-            , acquaintances: acquaintances
-            , home: location()
-            , posessions: []
-        };
     };
 
     var createHome = function() {
@@ -257,82 +270,6 @@ var world = function(settings, wordbank) {
         var aType = randomProperty(absentationType);
     };
 
-    var interdiction = function() {
-        var loc;
-        var person;
-        var action;
-
-        var ptype = randomProperty(prohibitType);
-        var prohibit = {
-            type: ptype,
-            location: '',
-            text: '',
-            action: '',
-            person: '',
-            advisor: cache.advisor
-        };
-
-        switch (ptype) {
-        case prohibitType.movement:
-            loc = location();
-
-            prohibit.place = loc;
-            prohibit.text = cache.advisor.name + ' warns ' + cache.hero.name + ' to avoid ' + prohibit.place.location;
-
-            break;
-
-        case prohibitType.action:
-
-            prohibit.action = 'take the Lord\'s name in vain';
-            prohibit.text = cache.advisor.name + ' tells ' + cache.hero.name + ' to not ' + prohibit.action;
-
-            break;
-
-        case prohibitType.speak:
-
-            prohibit.action = 'talk to ' + cache.villain.name;
-            prohibit.text = prohibit.advisor.name + ' warns ' + cache.hero.name + ' to not ' + prohibit.action;
-
-            break;
-        }
-
-        prohibit.text += '. ' + prohibit.advisor.name + ' introduces ' + cache.magicalhelper.name + ' to ' + cache.hero.name;
-
-        return  prohibit;
-
-    };
-
-    // prohibit is the output of interdiction
-    // just to use more words for the same thing...
-    var violation = function(prohibit) {
-
-        var text;
-
-        switch (prohibit.type) {
-        case prohibitType.movement:
-
-            text = 'Despite the warning, ' + cache.hero.name + ' goes to ' + prohibit.place.location + '.';
-            text += ' ' + cache.villain.name + ' appears.';
-
-            break;
-
-        case prohibitType.action:
-
-            text = 'Shockingly, ' + cache.hero.name + ' proceeds to ' + prohibit.action + '.';
-            text += ' ' + cache.villain.name + ' appears.';
-
-            break;
-
-        case prohibitType.speak:
-
-            text = 'As soon as ' +  prohibit.advisor.name + ' is gone, ' + cache.hero.name
-                + ' runs off to find ' + cache.villain.name + ' and has an interesting conversation.';
-            break;
-        }
-
-        return text;
-
-    };
 
     var createFalsehero = function() {
         var g = randomProperty(gender);
@@ -356,21 +293,21 @@ var world = function(settings, wordbank) {
     };
 
     var getName = function(person) {
-        var elem = (typeof person == 'string' ? person : person.name);
+        var elem = (typeof person === 'string' ? person : person.name);
         return elem;
     };
 
     var possessive = function(gndr) {
-        return (gndr == gender.male ? 'his' : (gndr == gender.female ? 'her' : 'its'));
+        return (gndr === gender.male ? 'his' : (gndr === gender.female ? 'her' : 'its'));
     };
 
     var list = function(arr) {
         var lst = '';
         if (arr.length > 0) {
-            if (arr.length == 1) {
+            if (arr.length === 1) {
                 lst = getName(arr[0]);
             }
-            else if (arr.length == 2) {
+            else if (arr.length === 2) {
                 lst = getName(arr[0]) + ' and ' + getName(arr[1]);
             } else {
                 for (var i = 0; i < arr.length - 1; i++) {
@@ -395,12 +332,13 @@ var world = function(settings, wordbank) {
     };
 
     var init = function() {
-        if (!bank) return;
+        // I don't think this is an issue anymore....
+        if (!bank) { return; }
         try {
 
-            if (!settings.herogender || settings.herogender == 'random') { settings.herogender = randomProperty(gender); }
-            if (!settings.villaingender || settings.villaingender == 'random') { settings.villaingender = randomProperty(gender); }
-            if (!settings.peoplegender || settings.peoplegender == 'random') { settings.peoplegender = randomProperty(gender); }
+            if (!settings.herogender || settings.herogender === 'random') { settings.herogender = randomProperty(gender); }
+            if (!settings.villaingender || settings.villaingender === 'random') { settings.villaingender = randomProperty(gender); }
+            if (!settings.peoplegender || settings.peoplegender === 'random') { settings.peoplegender = randomProperty(gender); }
 
             cache.hero = createHero(settings.herogender);
             cache.advisor = createCharacter();
@@ -412,8 +350,6 @@ var world = function(settings, wordbank) {
             cache.victim = pick(cache.hero.family);
             cache.ascension = pick(bank.ascension);
             cache.marries = pick(bank.marries);
-            cache.interdiction = interdiction();
-            cache.violation = violation(cache.interdiction);
             cache.falsehero = pick(cache.villain.family);
 
         } catch(ex) {
@@ -435,8 +371,7 @@ var world = function(settings, wordbank) {
         // family: function() { return cache.family; },
         // acquantainces: function() { return cache.acquantainces; },
         hero: function() { return cache.hero;},
-        interdiction: function() { return cache.interdiction; },
-        violation: function() { return cache.violation; },
+        // violation: function() { return cache.violation; },
         villain: function() { return cache.villain;},
         punished: function() { return cache.punished; },
         magicalitem: function() { return cache.magicalitem; },
@@ -452,7 +387,8 @@ var world = function(settings, wordbank) {
         possessive: possessive,
         select: select,
         dump: dump,
-        prohibitType: prohibitType
+        interdictionType: interdictionType,
+        location: location
     };
 
 };
@@ -500,6 +436,7 @@ function generate(settings, theme){
         // multiple tasks
         // or going back to a previous point in the chain
         // :-(
+        // TODO: also not reset - we just add each different template to the mix...
         for (var index in proppFunctions) {
             var s = sentence(index, storyGen.helper);
             if (s) {
@@ -520,16 +457,30 @@ function generate(settings, theme){
     }
 }
 
+var enforceRules = function(propp) {
 
+    if (propp['func2'].active || propp['func3'].active) {
+        propp['func2'].active = true;
+        propp['func3'].active = true;
+    }
 
-// settings.functions = proppFunctions;
+    // if returning, must depart
+    // converse is not true
+    if (propp['func21'].active) {
+        propp['func11'].active = true;
+    }
+
+    return propp;
+
+};
 
 storyGen.world = world;
 storyGen.settings = settings;
+storyGen.enforceRules = enforceRules;
 storyGen.random = random;
 storyGen.sentence = sentence;
 storyGen.generate = generate;
 
 
-
-if (module) module.exports = storyGen;
+var module = module || {};
+module.exports = storyGen;

@@ -17,7 +17,7 @@ var gui = function() {
 
 }();
 
-
+// TODO: these all need to be changed for post func8!!!
 function cinderella() {
     window.document.myform.func1.checked = true;
     window.document.myform.func8.checked = true;
@@ -75,6 +75,17 @@ function juniper(){
 }
 
 
+var pushSettingsToGui = function(proppFunctions) {
+
+   for (var index in proppFunctions) {
+       window.document.myform[index].checked = proppFunctions[index].active;
+   }
+
+    // set the radios
+    // http://stackoverflow.com/questions/871063/how-to-set-radio-option-checked-onload-with-jquery
+
+};
+
 
 var getFunctionsFromGui = function() {
 
@@ -82,14 +93,17 @@ var getFunctionsFromGui = function() {
     // this is an external dependency to the GUI
     // to the extant that without that file, the GUI has no purpose
     // propp.js should be able to function w/o the GUI, however...
+    proppFunctions = resetProppFunctions(proppFunctions);
     for (var index in proppFunctions) {
-        if (index === 'func0') continue; // not in the GUI (it's an invariant function)
 	proppFunctions[index].active = window.document.myform[index].checked;
     }
 
     var herog = $('input[name=herogender][type=radio]:checked').val();
     var villaing = $('input[name=villaingender][type=radio]:checked').val();
     var peopleg = $('input[name=peoplegender][type=radio]:checked').val();
+
+    proppFunctions = storyGen.enforceRules(proppFunctions);
+    pushSettingsToGui(proppFunctions);
 
     return {
         herogender: herog,

@@ -20,19 +20,15 @@ var businessTemplates = function(propp) {
     // propp['func2'].templates.push('<%= hero().name %> is warned.');
     // TODO: introduction of personage from interdiction
     // TODO: rework the d**n interdiction template-function
-    propp['func2'].templates.push('<%= interdiction().text %>.');
     // this is now just a proof-of-concept of executing larger functions to deal with templates
     propp['func2'].exec = function(world) {
         // world is not actually used here (now)...
-        return '<%= interdiction().text %>.';
+        return '<%= hero().name %> is warned.';
 
-        // the reason you'd build the entire thing above HERE
-        // is that THIS is the template
-        // texts should be built here. otherwise... what's the point?
     };
 
     // Violation of Interdiction
-    propp['func3'].templates.push('<%= violation() %> <%= list(villain().family) %> are in league with <%= villain().name %>.');
+    propp['func3'].templates.push('<%= list(villain().family) %> are in league with <%= villain().name %>.');
 
     // Reconnaissance: Villain seeks something
     propp['func4'].templates.push('<%= villain().name %> pays a visit to <%= hero().home.location %>.');
@@ -132,17 +128,17 @@ var businessTemplates = function(propp) {
 
     // 3rd Sphere: The Donor Sequence
     // Testing: hero is challenged to prove heroic qualities
-    propp['func13'].templates.push('<%= hero().name %> is challenged to prove heroic qualities.');
+    propp['func12'].templates.push('<%= hero().name %> is challenged to prove heroic qualities.');
 
     // Reaction: hero responds to test
-    propp['func14'].templates.push('<%= hero().name %> responds to test.');
+    propp['func13'].templates.push('<%= hero().name %> responds to test.');
 
     //  Acquisition: hero gains magical item
-    propp['func15'].templates.push('<%= advisor().name %> gives <%= hero().name %> <%= magicalitem() %>.');
+    propp['func14'].templates.push('<%= advisor().name %> gives <%= hero().name %> <%= magicalitem() %>.');
 
     // Guidance: hero reaches destination
     // TODO: destination is related to task()
-    propp['func16'].templates.push('<%= hero().name %> reaches destination.');
+    propp['func15'].templates.push('<%= hero().name %> reaches destination.');
 
     // Struggle: hero and villain do battle
     // TODO: battle() function

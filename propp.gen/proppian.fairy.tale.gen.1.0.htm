@@ -12,7 +12,7 @@
 
   <body>
 
-    <form name="myform" onsubmit="return false">
+    <form name="myform" onsubmit="return false;" action="" >
       <center>
         <br />
         <br />
@@ -27,7 +27,7 @@
 
 	    <td rowspan="3" align="right" valign="left">
               <!-- leaving these in for future replacement -->
-	      <a href="javascript:gui.popup2("instruction")">instructions</a><br />
+	      <a href="javascript:gui.popup2('instruction')">instructions</a><br />
 	      <a href="https://web.archive.org/web/20061112014356/http://www.brown.edu/Courses/FR0133/Fairytale_Generator/func.html">functions</a><br />
 	      <a href="javascript:gui.popup2(how,win)">how</a><br />
 	      <br />
@@ -73,6 +73,7 @@
           <tr>
 	    <td>
 	      <ul class='sphere' id='introduction'>
+		<li><input name="func0" type="checkbox" /><a href="javascript:gui.popup('func0')">introduction</a></li>
 		<li><input name="func1" type="checkbox" /><a href="javascript:gui.popup('func1')">absention</a></li>
 		<li><input name="func2" type="checkbox" /><a href="javascript:gui.popup('func2')">interdiction</a></li>
 		<li><input name="func3" type="checkbox" /><a href="javascript:gui.popup('func3')">violation</a></li>
@@ -90,10 +91,10 @@
 		<li><input name="func11" type="checkbox" /><a href="javascript:gui.popup('func11')">departure</a></li>
 	      </ul>
 	      <ul class='sphere' id='donorsequence'>
-		<li><input name="func13" type="checkbox" /><a href="javascript:gui.popup('func13')">first function of the donor</a></li>
-		<li><input name="func14" type="checkbox" /><a href="javascript:gui.popup('func14')">hero's reaction</a></li>
-		<li><input name="func15" type="checkbox" /><a href="javascript:gui.popup('func15')">receipt of a magical agent</a></li>
-		<li><input name="func16" type="checkbox" /><a href="javascript:gui.popup('func16')">guidance</a></li>
+		<li><input name="func12" type="checkbox" /><a href="javascript:gui.popup('func12')">first function of the donor</a></li>
+		<li><input name="func13" type="checkbox" /><a href="javascript:gui.popup('func13')">hero's reaction</a></li>
+		<li><input name="func14" type="checkbox" /><a href="javascript:gui.popup('func14')">receipt of a magical agent</a></li>
+		<li><input name="func15" type="checkbox" /><a href="javascript:gui.popup('func15')">guidance</a></li>
 	      </ul>
 	    </td>
 	    <td>
@@ -124,24 +125,24 @@
               <ul id='settings'>
                 <li>
                   Hero:
-		  <input name='herogender' type='radio' value='female' checked='checked'>female</input>
-                  <input name='herogender' type='radio' value='male'>male</input>
-                  <input name='herogender' type='radio' value='neuter'>neuter</input>
-                  <input name='herogender' type='radio' value=''>random</input>
+		  <input name='herogender' id='genderfemale' type='radio' value='female' checked='checked'>female</input>
+                  <input name='herogender' id='gendermale'   type='radio' value='male'>male</input>
+                  <input name='herogender' id='genderneuter' type='radio' value='neuter'>neuter</input>
+                  <input name='herogender' id='genderrandom' type='radio' value=''>random</input>
 		</li>
                 <li>
                   Villain:
-		  <input name='villaingender' type='radio' value='female' checked='checked'>female</input>
-                  <input name='villaingender' type='radio' value='male'>male</input>
-                  <input name='villaingender' type='radio' value='neuter'>neuter</input>
-                  <input name='villaingender' type='radio' value=''>random</input>
+		  <input name='villaingender' id='villaingenderfemale' type='radio' value='female' checked='checked'>female</input>
+                  <input name='villaingender' id='villaingendermale' type='radio' value='male'>male</input>
+                  <input name='villaingender' id='villaingenderneuter' type='radio' value='neuter'>neuter</input>
+                  <input name='villaingender' id='villaingenderrandom' type='radio' value=''>random</input>
 		</li>
                 <li>
                   Others:
-		  <input name='peoplegender' type='radio' value='female' checked='checked'>female</input>
-                  <input name='peoplegender' type='radio' value='male'>male</input>
-                  <input name='peoplegender' type='radio' value='neuter'>neuter</input>
-                  <input name='peoplegender' type='radio' value=''>random</input>
+		  <input name='peoplegender' id='peoplegenderfemale' type='radio' value='female' checked='checked'>female</input>
+                  <input name='peoplegender' id='peoplegendermale'   type='radio' value='male'>male</input>
+                  <input name='peoplegender' id='peoplegenderneuter' type='radio' value='neuter'>neuter</input>
+                  <input name='peoplegender' id='peoplegenderrandom' type='radio' value=''>random</input>
 		</li>
               </ul>
             </td>
