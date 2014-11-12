@@ -142,71 +142,71 @@ var businessTemplates = function(propp) {
 
     // Struggle: hero and villain do battle
     // TODO: battle() function
-    propp['func17'].templates.push('<%= hero().name %> and <%= villain().name %> do battle.');
+    propp['func16'].templates.push('<%= hero().name %> and <%= villain().name %> do battle.');
 
     // Branding: hero is branded
-    propp['func18'].templates.push('<%= hero().name %> is changed by the encounter.');
-    propp['func18'].templates.push('<%= hero().name %> is scarred internally.');
-    propp['func18'].templates.push('This day would never be forgotten by <%= hero().name %>.');
-    propp['func18'].templates.push('<%= hero().name %> receives a stylish scarf as a souvenir of the encounter!');
-    propp['func18'].templates.push('<%= villain().name %>\'s head pops off, and is scavenged by <%= hero().name %>.');
+    propp['func17'].templates.push('<%= hero().name %> is changed by the encounter.');
+    propp['func17'].templates.push('<%= hero().name %> is scarred internally.');
+    propp['func17'].templates.push('This day would never be forgotten by <%= hero().name %>.');
+    propp['func17'].templates.push('<%= hero().name %> receives a stylish scarf as a souvenir of the encounter!');
+    propp['func17'].templates.push('<%= villain().name %>\'s head pops off, and is scavenged by <%= hero().name %>.');
 
     // Victory: Villain is defeated
-    propp['func19'].templates.push('Through deft use of <%= magicalitem() %>, <%= villain().name %> is defeated.');
-    propp['func19'].templates.push('<%= hero().name %> <%= select("deploys", "uses", "manipulates") %> <%= magicalitem() %> to <%= select("defeat", "trounce", "vanquish", "annoy") %> <%= villain().name %>.');
+    propp['func18'].templates.push('Through deft use of <%= magicalitem() %>, <%= villain().name %> is defeated.');
+    propp['func18'].templates.push('<%= hero().name %> <%= select("deploys", "uses", "manipulates") %> <%= magicalitem() %> to <%= select("defeat", "trounce", "vanquish", "annoy") %> <%= villain().name %>.');
 
     // Resolution: Initial misfortune or lack is resolved
-    propp['func20'].templates.push('Initial misfortune or lack is resolved.');
+    propp['func19'].templates.push('Initial misfortune or lack is resolved.');
 
     // 4th Sphere: The hero\'s return
     // In the final (and often optional) phase of the storyline, the hero returns home, hopefully uneventfully and to a hero\'s welcome, although this may not always be the case.
 
     // Return: hero sets out for home
-    propp['func21'].templates.push('<%= hero().name %> sets out for <%= hero().home.location %>.');
+    propp['func20'].templates.push('<%= hero().name %> sets out for <%= hero().home.location %>.');
 
     // Pursuit: hero is chased
     // TODO: character/thing that chases
     // TODO: chase() function
-    propp['func22'].templates.push('<%= hero().name %> is chased.');
+    propp['func21'].templates.push('<%= hero().name %> is chased.');
 
     // Rescue: pursuit ends
     // TODO: template to end the above
-    propp['func23'].templates.push('pursuit ends.');
+    propp['func22'].templates.push('pursuit ends.');
 
     // Arrival: hero arrives unrecognized
-    propp['func24'].templates.push('<%= hero().name %> arrives in <%= hero().home.location %> but is unrecognized.');
+    propp['func23'].templates.push('<%= hero().name %> arrives in <%= hero().home.location %> but is unrecognized.');
 
     // Claim: False hero makes unfounded claims
-    propp['func25'].templates.push('<%= falsehero().name %> makes unfounded claims.');
+    propp['func24'].templates.push('<%= falsehero().name %> makes unfounded claims.');
 
     // Task: Difficult task proposed to the <%= hero().name %>
-    propp['func26'].templates.push('<%= advisor().name %> charges <%= hero().name %> to <%= task() %>.');
+    propp['func25'].templates.push('<%= advisor().name %> charges <%= hero().name %> to <%= task() %>.');
 
     // Solution: Task is resolved
-    propp['func27'].templates.push('<%= task() %> is completed.');
-    propp['func27'].templates.push('<%= task() %> is completed by <%= hero().name %>.');
-    propp['func27'].templates.push('<%= hero().name %> finishes off <%= task() %>.');
+    propp['func26'].templates.push('<%= task() %> is completed.');
+    propp['func26'].templates.push('<%= task() %> is completed by <%= hero().name %>.');
+    propp['func26'].templates.push('<%= hero().name %> finishes off <%= task() %>.');
 
     // Recognition: hero is recognised
-    propp['func28'].templates.push('<%= hero().name %> is recognised.');
+    propp['func27'].templates.push('<%= hero().name %> is recognised.');
 
     // Exposure: False hero is exposed
-    propp['func29'].templates.push('<%= falsehero().name %> is exposed.');
+    propp['func28'].templates.push('<%= falsehero().name %> is exposed.');
 
     // Transfiguration: hero is given a new appearance
-    propp['func30'].templates.push('<%= hero().name %> is given a new appearance.');
+    propp['func29'].templates.push('<%= hero().name %> is given a new appearance.');
 
     // Punishment: Villain is punished
-    propp['func31'].templates.push('<%= villain().name %> is <%= punished() %> by <%= hero().name %>.');
+    propp['func30'].templates.push('<%= villain().name %> is <%= punished() %> by <%= hero().name %>.');
 
     // Wedding: hero marries and ascends the throne
-    propp['func32'].templates.push('<%= hero().name %> <%= (select(marriage, ascension))() %>. It\'s a good life.');
-    propp['func32'].templates.push('<%= hero().name %> <%= marriage() %> and <%= ascension() %>.');
-    propp['func32'].templates.push('<%= hero().name %> settles down and <%= (select(marriage, ascension))() %>.');
-    propp['func32'].templates.push('Everything works out for <%= hero().name %>, who <%= (select(marriage, ascension))() %>.');
+    propp['func31'].templates.push('<%= hero().name %> <%= (select(marriage, ascension))() %>. It\'s a good life.');
+    propp['func31'].templates.push('<%= hero().name %> <%= marriage() %> and <%= ascension() %>.');
+    propp['func31'].templates.push('<%= hero().name %> settles down and <%= (select(marriage, ascension))() %>.');
+    propp['func31'].templates.push('Everything works out for <%= hero().name %>, who <%= (select(marriage, ascension))() %>.');
     // TODO: verb tense DOES NOT WORK here
     // TODO: posession DOES NOT WORK here
-    propp['func32'].templates.push('<%= (select(marriage, ascension))() %>, <%= hero().name %> retires to <%= select("a life of farming", "write memoirs", "live in peace", "pine for days of adventure") %>.');
+    propp['func31'].templates.push('<%= (select(marriage, ascension))() %>, <%= hero().name %> retires to <%= select("a life of farming", "write memoirs", "live in peace", "pine for days of adventure") %>.');
 
     return propp;
 

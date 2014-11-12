@@ -107,12 +107,11 @@ var resetProppFunctions = function(propp) {
         "func9": { active: false, templates: [] },
         "func10": { active: false, templates: [] },
         "func11": { active: false, templates: [] },
-
         "func12": { active: false, templates: [] },
         "func13": { active: false, templates: [] },
         "func14": { active: false, templates: [] },
         "func15": { active: false, templates: [] },
-        // TODO: drop the numbers down by one....
+        "func16": { active: false, templates: [] },
         "func17": { active: false, templates: [] },
         "func18": { active: false, templates: [] },
         "func19": { active: false, templates: [] },
@@ -127,8 +126,7 @@ var resetProppFunctions = function(propp) {
         "func28": { active: false, templates: [] },
         "func29": { active: false, templates: [] },
         "func30": { active: false, templates: [] },
-        "func31": { active: false, templates: [] },
-        "func32": { active: false, templates: [] }
+        "func31": { active: false, templates: [] }
     };
 
     return propp;
@@ -304,6 +302,18 @@ var world = function(settings, wordbank) {
         return (gndr === gender.male ? 'his' : (gndr === gender.female ? 'her' : 'its'));
     };
 
+    // calculate the speaking tone
+    // VERY PRELIMINARY
+    var tone = function(p1, p2) {
+// comparison of alignment or other characteristics
+// friendly - good <-> good | bad <-> bad
+// love - hero <->bride[groom]
+// dislike
+// hatred
+// mourning - person.alive -> person.dead
+// the latter suggests a post-mortem tone in the other direction. let's leave that for now?
+    };
+
     // not really sure where this is going.
     // see if they are friendly? talk about the location? posessions?
     // pass in an intent?
@@ -316,13 +326,26 @@ var world = function(settings, wordbank) {
     // if all is well, could talk about locale, descriptions, homes, posessions
     // would we want to _transfer_ a posession during conversation?
     // that could be interesting....
-    var converse = function(p1, p2) {
-        // TODO: gah, who knows!
+    // characters known to each other?
+    // if not, they should introduce
+    // one could know another
+    // so, each char has a "knows" list of characters.
+    // ugh. this will get recursive, and can't be serialized
+    // should just be names, I suppose. more overhead, but serialization is kept. yes?
+    var converse = function(p1, p2, tone) {
         var c = [];
-        c.push('"Hello there, ' + p1.name + '" said ' + p2.name + '.');
-        c.push('"Hello there, yourself, ' + p2.name + '" replied ' + p1.name + '.');
-        c.push('"Well, you certainly are ' + p1.description[0] + '," remarked ' + p2.name + '.');
-        c.push('"Yes, I am," conceded ' + p1.name + '. "It\'s been said that I\'m also ' + p1.description[1] + '!"');
+
+        if (p1 && p2) {
+            // TODO: gah, who knows!
+            c.push('"Hello there, ' + p1.name + '" said ' + p2.name + '.');
+            c.push('"Hello there, yourself, ' + p2.name + '" replied ' + p1.name + '.');
+            c.push('"Well, you certainly are ' + p1.description[0] + '," remarked ' + p2.name + '.');
+            c.push('"Yes, I am," conceded ' + p1.name + '. "It\'s been said that I\'m also ' + p1.description[1] + '!"');
+
+        } else if (p1 && !p2) {
+            c.push('"' + capitalize(pick(bank.interjections)) + '!" said ' + p1.name + ' to nobody in particular.');
+        }
+
         return c.join('\n');
     };
 
@@ -383,6 +406,7 @@ var world = function(settings, wordbank) {
         return (coinflip() ? f1() : f2() );
     };
 
+    // select one of any number of arguments
     var select = function() {
         return pick(arguments);
     };
@@ -429,21 +453,17 @@ var world = function(settings, wordbank) {
     // world return
     return {
         init: init,
-        advisor: function() { return cache.advisor; },
-        falsehero: function() { return cache.falsehero; },
-        // TODO: if there are NO family or acquantainces, how is this handled??
-        // family: function() { return cache.family; },
-        // acquantainces: function() { return cache.acquantainces; },
-        hero: function() { return cache.hero;},
-        // violation: function() { return cache.violation; },
-        villain: function() { return cache.villain;},
-        punished: function() { return cache.punished; },
-        magicalitem: function() { return cache.magicalitem; },
-        magicalhelper: function() { return cache.magicalhelper; },
-        task: function() { return cache.task;},
-        victim: function() { return cache.victim; },
-        ascension: function() { return cache.ascension; },
-        marriage: function() { return cache.marries; },
+        advisor: cache.advisor,
+        falsehero: cache.falsehero,
+        hero: cache.hero,
+        villain: cache.villain,
+        punished: cache.punished,
+        magicalitem: cache.magicalitem,
+        magicalhelper: cache.magicalhelper,
+        task: cache.task,
+        victim: cache.victim,
+        ascension: cache.ascension,
+        marriage: cache.marries,
         converse: converse,
         cache: cache, // hunh. exposing this?????
         pick: pick,
@@ -474,6 +494,7 @@ var sentence = function(index, helper) {
         } else {
             f = func.templates[random(func.templates.length)];
         }
+        console.log(f);
         var t = _.template(f);
         f = t(helper);
         f = capitalize(f);
@@ -503,6 +524,7 @@ function generate(settings, theme){
         // :-(
         // TODO: also not reset - we just add each different template to the mix...
         for (var index in proppFunctions) {
+            console.log(index);
             var s = sentence(index, storyGen.helper);
             if (s) {
                 tale.push(s);
