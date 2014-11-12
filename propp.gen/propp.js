@@ -174,6 +174,8 @@ var world = function(settings, wordbank) {
     if (wordbank && wordbank.itemGenerator) {
         bank.itemGenerator = wordbank.itemGenerator;
 
+        // TODO: this is not enough!
+        // need to have these things as adjectives....
         for (var i = 0; i < 10; i++) {
             bank.magicalitem.push(bank.itemGenerator());
         }
@@ -214,12 +216,17 @@ var world = function(settings, wordbank) {
         gndr = gndr || randomProperty(gender);
         aspct = aspct || randomProperty(aspect);
         var adjs = (aspct === aspect.good ? bank.adjectives.personal : bank.adjectives.negative);
+        var descr = [pick(adjs), pick(adjs)];
+        var name = pickRemove(bank.names[gndr]);
+        var nick = (coinflip() ? name + ' the ' + capitalize(pick(descr)) : capitalize(pick(descr)) + ' ' + name);
 
-        return { name: pickRemove(bank.names[gndr]),
+        return { name: name,
+                 nickname: nick,
+                 alignment: aspct,
                  gender: gndr,
                  possessions: [],
                  health: healthLevel.alive,
-                 description: [pick(adjs), pick(adjs)]
+                 description: descr
                };
     };
 
@@ -248,7 +255,7 @@ var world = function(settings, wordbank) {
     };
 
     // hero or villain
-    var createHero = function(g, aspct) {
+    var createHero = function(g, aspct, item) {
         // oooooh, we just want to ADD properties to the character
         // so we d on't repeat the name, gender, posessions, etc....
         var c = createCharacter(g, aspct);
@@ -256,6 +263,7 @@ var world = function(settings, wordbank) {
         c.acquaintances = createCharacters(settings.peoplegender, aspct);
         c.home = location();
         c.location = c.residence;
+        if (item) { c.possessions.push(item); }
 
         return c;
 
@@ -286,8 +294,9 @@ var world = function(settings, wordbank) {
         return pick(bank.punish);
     };
 
-    var getName = function(person) {
-        var elem = (typeof person === 'string' ? person : person.name);
+    var getName = function(thing, property) {
+        if (property && thing[property]) { return thing[property]; }
+        var elem = (typeof thing === 'string' ? thing : thing.name);
         return elem;
     };
 
@@ -299,6 +308,14 @@ var world = function(settings, wordbank) {
     // see if they are friendly? talk about the location? posessions?
     // pass in an intent?
     // adjectives are completely random. SO IT GOES.
+    // TODO: get a better sense of "aspect"... forgot the correct term
+    // the relationship of speaker to speaker
+    // like, awe, fondness, sadness, dislike, hatred
+    // if nobody to speak to, use an interjection, or a comment on the current location
+    // if other person is dead, talk in memorium (how so, what to remember?)
+    // if all is well, could talk about locale, descriptions, homes, posessions
+    // would we want to _transfer_ a posession during conversation?
+    // that could be interesting....
     var converse = function(p1, p2) {
         // TODO: gah, who knows!
         var c = [];
@@ -309,19 +326,54 @@ var world = function(settings, wordbank) {
         return c.join('\n');
     };
 
-    var list = function(arr) {
+    // battle between two people
+    // each of which could have family and acquaintances join in
+    // or does that need to be made explicit ???
+    // if victor is not passed in, the result could be random!
+    var battle = function(p1, p2, victor) {
+        // TODO: who knows!
+
+        // this really seems like something for the template, though. BLARG!
+
+
+        // weapons!
+        // the magical item that is passed from advisor to hero should be used
+        // and the villain needs a weapon
+        // aaaand, other things? Any other posession, I suppose? or just ones marked "weapon" ?
+        // that could be interesting. Objects in the following form:
+        // so, magical things fall into this category
+        var thing = {
+            item: 'egg', // name could be "Egg of Death" or "Death Egg" or "Primordial Magic Death Egg of the Borderlands" or something telse
+            //
+            name: 'Magical Egg of the Wong Foo the Elder',
+            description: ['shiny', 'round', 'egg-shaped', 'magical', 'filigreed', 'expensive'],
+            weapon: true, // or false
+            magic: true, // or false
+            // special powers? how would THAT work ????
+            origin: {
+                // if a person gave the object, or it was found ?
+                person: null,
+                place: null
+            }
+        };
+
+    };
+
+    // list it out, using optional property for value
+    // awkward construction....
+    var list = function(arr, property) {
         var lst = '';
         if (arr.length > 0) {
             if (arr.length === 1) {
-                lst = getName(arr[0]);
+                lst = getName(arr[0], property);
             }
             else if (arr.length === 2) {
-                lst = getName(arr[0]) + ' and ' + getName(arr[1]);
+                lst = getName(arr[0], property) + ' and ' + getName(arr[1], property);
             } else {
                 for (var i = 0; i < arr.length - 1; i++) {
-                    lst += getName(arr[i]) + ', ';
+                    lst += getName(arr[i], property) + ', ';
                 }
-                lst += 'and ' + getName(arr[arr.length - 1]);
+                lst += 'and ' + getName(arr[arr.length - 1], property);
             }
         }
         return lst;
@@ -335,8 +387,9 @@ var world = function(settings, wordbank) {
         return pick(arguments);
     };
 
-    var dump = function() {
-        return JSON.stringify(cache, null, '\t');
+    var dump = function(thing) {
+        var target = (thing ? thing : cache);
+        return JSON.stringify(target, null, '\t');
     };
 
     var init = function() {
@@ -349,12 +402,14 @@ var world = function(settings, wordbank) {
             if (!settings.peoplegender || settings.peoplegender === 'random') { settings.peoplegender = randomProperty(gender); }
 
             cache.hero = createHero(settings.herogender, aspect.good);
+            // TODO: magical item starts as a posession of the advisor, no?
+            // NO: it could just be... lying about.
             cache.advisor = createCharacter(null, aspect.good);
             cache.magicalitem = createMagicalitem();
             cache.magicalhelper = createMagicalHelper();
             cache.punished = createPunished();
             cache.task = pick(bank.task);
-            cache.villain = createHero(settings.villaingender, aspect.bad);
+            cache.villain = createHero(settings.villaingender, aspect.bad, createMagicalitem());
             cache.victim = pick(cache.hero.family);
             cache.ascension = pick(bank.ascension);
             cache.marries = pick(bank.marries);

@@ -9,9 +9,9 @@ var nTemplates = function(propp) {
     // TODO: what about "lives alone." how would THAT be figured out???
     // aaaand: Milan are known to Natalie.
     propp['func0'].exec = function(world) {
-        var template = '<%= hero().name %> lives in a <%= hero().home.residence %> near <%= hero().home.location %> in <%= hero().home.nation %>. ';
-        template += '<%= hero().name %> lives with <%= list(hero().family) %>. ';
-        template += '<%= list(hero().acquaintances) %> are <%= select("friends of", "known to") %> <%= hero().name %>.';
+        var template = '<%= hero().nickname %> lives in a <%= hero().home.residence %> near <%= hero().home.location %> in <%= hero().home.nation %>. ';
+        template += '<%= hero().name %> lives with <%= list(hero().family, "nickname") %>. ';
+        template += '<%= list(hero().acquaintances, "nickname") %> are <%= select("friends of", "known to") %> <%= hero().name %>.';
 
         return template;
 
