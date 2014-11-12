@@ -25,6 +25,11 @@ _.mixin({ deepClone: function (o) { return JSON.parse(JSON.stringify(o)); } });
 
 var storyGen = {};
 
+var aspect = {
+    good: 'good',
+    bad: 'bad'
+};
+
 var gender = {
     female: 'female',
     male: 'male',
@@ -202,20 +207,23 @@ var world = function(settings, wordbank) {
 
     var cache = {};
 
-    var createCharacter = function(gndr) {
+    var createCharacter = function(gndr, aspct) {
         // TODO: what happens when we've used up everything in the bank?
         // SOLUTION: don't worry about it: make the bank bigger than any of our templates
         // for now...
         gndr = gndr || randomProperty(gender);
+        aspct = aspct || randomProperty(aspect);
+        var adjs = (aspct === aspect.good ? bank.adjectives.personal : bank.adjectives.negative);
 
         return { name: pickRemove(bank.names[gndr]),
                  gender: gndr,
                  possessions: [],
-                 health: healthLevel.alive
+                 health: healthLevel.alive,
+                 description: [pick(adjs), pick(adjs)]
                };
     };
 
-    var createCharacters = function(gndr) {
+    var createCharacters = function(gndr, aspct) {
         var members = random(12) + 1; // must always have at least one?
         // or... lives alone???
         // that would take some other sort of coding.
@@ -224,18 +232,12 @@ var world = function(settings, wordbank) {
         var acqs = [];
         for (var i = 0; i < members; i++) {
             var g = (!gndr || gndr === 'random' ? randomProperty(gender) : gndr);
-            acqs.push(createCharacter(g));
+            aspct = aspct || randomProperty(aspect);
+            acqs.push(createCharacter(g, aspct));
         }
         return acqs;
     };
 
-    // TODO: use these three things and create an "object"
-    // need a home
-    // defaultbank.home
-    // // the vicinity of the home
-    // defaultbank.location
-    // // this should more be country. 'Nation' is short-hand.
-    // defaultbank.nation
     var location = function() {
         // return pickRemove(bank.home);
         return {
@@ -246,12 +248,12 @@ var world = function(settings, wordbank) {
     };
 
     // hero or villain
-    var createHero = function(g) {
+    var createHero = function(g, aspct) {
         // oooooh, we just want to ADD properties to the character
         // so we d on't repeat the name, gender, posessions, etc....
-        var c = createCharacter(g);
-        c.family = createCharacters(settings.peoplegender);
-        c.acquaintances = createCharacters(settings.peoplegender);
+        var c = createCharacter(g, aspct);
+        c.family = createCharacters(settings.peoplegender, aspct);
+        c.acquaintances = createCharacters(settings.peoplegender, aspct);
         c.home = location();
         c.location = c.residence;
 
@@ -263,17 +265,9 @@ var world = function(settings, wordbank) {
         return location();
     };
 
-    var absention = function() {
-        // TODO: select a family member
-        // select an absention type
-        var aPerson = randomProperty(absentationPerson);
-        var aType = randomProperty(absentationType);
-    };
-
-
     var createFalsehero = function() {
         var g = randomProperty(gender);
-        var c = createCharacter(g);
+        var c = createCharacter(g, aspect.bad);
         return c;
     };
 
@@ -299,6 +293,20 @@ var world = function(settings, wordbank) {
 
     var possessive = function(gndr) {
         return (gndr === gender.male ? 'his' : (gndr === gender.female ? 'her' : 'its'));
+    };
+
+    // not really sure where this is going.
+    // see if they are friendly? talk about the location? posessions?
+    // pass in an intent?
+    // adjectives are completely random. SO IT GOES.
+    var converse = function(p1, p2) {
+        // TODO: gah, who knows!
+        var c = [];
+        c.push('"Hello there, ' + p1.name + '" said ' + p2.name + '.');
+        c.push('"Hello there, yourself, ' + p2.name + '" replied ' + p1.name + '.');
+        c.push('"Well, you certainly are ' + p1.description[0] + '," remarked ' + p2.name + '.');
+        c.push('"Yes, I am," conceded ' + p1.name + '. "It\'s been said that I\'m also ' + p1.description[1] + '!"');
+        return c.join('\n');
     };
 
     var list = function(arr) {
@@ -340,13 +348,13 @@ var world = function(settings, wordbank) {
             if (!settings.villaingender || settings.villaingender === 'random') { settings.villaingender = randomProperty(gender); }
             if (!settings.peoplegender || settings.peoplegender === 'random') { settings.peoplegender = randomProperty(gender); }
 
-            cache.hero = createHero(settings.herogender);
-            cache.advisor = createCharacter();
+            cache.hero = createHero(settings.herogender, aspect.good);
+            cache.advisor = createCharacter(null, aspect.good);
             cache.magicalitem = createMagicalitem();
             cache.magicalhelper = createMagicalHelper();
             cache.punished = createPunished();
             cache.task = pick(bank.task);
-            cache.villain = createHero(settings.villaingender);
+            cache.villain = createHero(settings.villaingender, aspect.bad);
             cache.victim = pick(cache.hero.family);
             cache.ascension = pick(bank.ascension);
             cache.marries = pick(bank.marries);
@@ -363,6 +371,7 @@ var world = function(settings, wordbank) {
         }
     }(settings);
 
+    // world return
     return {
         init: init,
         advisor: function() { return cache.advisor; },
@@ -380,6 +389,7 @@ var world = function(settings, wordbank) {
         victim: function() { return cache.victim; },
         ascension: function() { return cache.ascension; },
         marriage: function() { return cache.marries; },
+        converse: converse,
         cache: cache, // hunh. exposing this?????
         pick: pick,
         or: or,

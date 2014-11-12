@@ -19,6 +19,9 @@ defaultbank.ascension = ['is made king', 'becomes a god', 'becomes filled with k
 
 defaultbank.marries = ['marries', 'is given keys to the city', 'has parking tickets forgiven', 'dates for a few years, but decides to remain single' ];
 
+defaultbank.adjectives = adjectives;
+defaultbank.interjections = interjections;
+
 
 defaultbank.names = {
 

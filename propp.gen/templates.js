@@ -8,6 +8,14 @@ var nTemplates = function(propp) {
     // since that only works on the first letter of the template-output (erroneously called 'sentence' in the code).
     // TODO: what about "lives alone." how would THAT be figured out???
     // aaaand: Milan are known to Natalie.
+    propp['func0'].exec = function(world) {
+        var template = '<%= hero().name %> lives in a <%= hero().home.residence %> near <%= hero().home.location %> in <%= hero().home.nation %>. ';
+        template += '<%= hero().name %> lives with <%= list(hero().family) %>. ';
+        template += '<%= list(hero().acquaintances) %> are <%= select("friends of", "known to") %> <%= hero().name %>.';
+
+        return template;
+
+    };
     propp['func0'].templates.push('<%= hero().name %> lives in a <%= hero().home.residence %> near <%= hero().home.location %> in <%= hero().home.nation %>. <%= hero().name %> lives with <%= list(hero().family) %>. <%= list(hero().acquaintances) %> are <%= select("friends of", "known to") %> <%= hero().name %>.');
 
     // Proppian-function templates
@@ -66,25 +74,27 @@ var nTemplates = function(propp) {
         var interdiction = {
             type: ptype,
             location: '',
-            text: '',
             action: '',
             person: '',
             advisor: advisor
         };
+
+        var text = [];
+        text.push(world.converse(advisor, hero));
 
         hero.interdiction = interdiction;
 
         switch (ptype) {
         case interdictionType.movement:
             interdiction.place = world.location();
-            interdiction.text = '<%= advisor().name %> warns <%= hero().name %> to avoid <%= hero().interdiction.place.location %>.';
+            text.push('<%= advisor().name %> warns <%= hero().name %> to avoid <%= hero().interdiction.place.location %>.');
 
             break;
 
         case interdictionType.action:
 
             interdiction.action = 'take the Lord\'s name in vain AGAIN';
-            interdiction.text = '<%= advisor().name %> tells <%= hero().name %> to not <%= hero().interdiction.action %>.';
+            text.push('<%= advisor().name %> tells <%= hero().name %> to not <%= hero().interdiction.action %>.');
 
             break;
 
@@ -93,15 +103,15 @@ var nTemplates = function(propp) {
             // TODO: action should have a target
             // that way, we can "travel" to target....
             interdiction.action = 'talk to ' + world.villain().name;
-            interdiction.text = '<%= hero().interdiction.advisor.name %> warns <%= hero().name %> to not <%= hero().interdiction.action %>.';
+            text.push('<%= hero().interdiction.advisor.name %> warns <%= hero().name %> to not <%= hero().interdiction.action %>.');
 
             break;
         }
 
         // TODO: make the magicalhelper here. I guess
-        interdiction.text += ' ' + interdiction.advisor.name + ' introduces ' + world.magicalhelper().name + ' to ' + hero.name;
+        text.push(interdiction.advisor.name + ' introduces ' + world.magicalhelper().name + ' to ' + hero.name);
 
-        return interdiction.text;
+        return text.join('\n');
 
     };
 
@@ -116,21 +126,21 @@ var nTemplates = function(propp) {
         case interdictionType.movement:
 
             text = 'Despite the warning, <%= hero().name %> goes to <%= hero().interdiction.place.location %>.';
-            text += ' <%= villain().name %> appears.';
+            text += ' <%= villain().name %>, a rather <%= list(villain().description) %> person, appears.';
 
             break;
 
         case interdictionType.action:
 
             text = 'Shockingly, <%= hero().name %> proceeds to <%= hero().interdiction.action %>.';
-            text += ' <%= villain().name %> appears.';
+            text += ' <%= villain().name %>, a rather <%= list(villain().description) %> person, appears.';
 
             break;
 
         case interdictionType.speak:
 
             text = 'As soon as <%= hero().interdiction.advisor.name %> is gone, <%= hero().name %> '
-            + 'runs off to find <%= villain().name %>  and has an interesting conversation.';
+            + 'runs off to find <%= villain().name %> and has an interesting conversation.';
             break;
         }
 
@@ -168,7 +178,7 @@ var nTemplates = function(propp) {
         subFunc = subFunc || randomProperty(func8);
         var template = '';
 
-        subFunc = 'casting into body of water'; // for testing
+        // subFunc = 'casting into body of water'; // for testing
 
         switch(subFunc) {
         case 'kidnapping of person':
