@@ -36,7 +36,7 @@ var nTemplates = function(propp) {
 
         var t = pick(templates);
 
-        t += ' ' + world.converse(world.hero);
+        t += '\n\n' + world.converse(world.hero);
 
         return t;
 
@@ -80,7 +80,12 @@ var nTemplates = function(propp) {
         };
 
         var text = [];
+
+        text.push('<%= hero.name %> meets <%= advisor.nickname %>.');
+        text.push('');
+
         text.push(world.converse(advisor, hero));
+        text.push(''); // will server as a blank line
 
         hero.interdiction = interdiction;
 
@@ -102,7 +107,7 @@ var nTemplates = function(propp) {
 
             // TODO: action should have a target
             // that way, we can "travel" to target....
-            interdiction.action = 'talk to ' + world.villain.name;
+            interdiction.action = 'talk to ' + world.villain.nickname;
             text.push('<%= hero.interdiction.advisor.name %> warns <%= hero.name %> to not <%= hero.interdiction.action %>.');
 
             break;
@@ -110,41 +115,49 @@ var nTemplates = function(propp) {
 
         // TODO: make the magicalhelper here. I guess
         text.push(interdiction.advisor.name + ' introduces ' + world.magicalhelper.name + ' to ' + hero.name);
+        text.push('');
+        text.push(world.converse(hero, world.magicalhelper));
 
         return text.join('\n');
 
     };
 
     // Violation of Interdiction
-    propp['func3'].templates.push('<%= violation() %> <%= list(villain.family) %> are in league with <%= villain.name %>.');
     propp['func3'].exec = function(world) {
 
-        var text;
+        var text = [];
         var interdiction = world.hero.interdiction;
 
         switch (interdiction.type) {
         case interdictionType.movement:
 
-            text = 'Despite the warning, <%= hero.name %> goes to <%= hero.interdiction.place.location %>.';
-            text += ' <%= villain.name %>, a rather <%= list(villain.description) %> person, appears.';
+            text.push('Despite the warning, <%= hero.name %> goes to <%= hero.interdiction.place.location %>.');
+            text.push('<%= villain.name %>, a rather <%= list(villain.description) %> person, appears.');
 
             break;
 
         case interdictionType.action:
 
-            text = 'Shockingly, <%= hero.name %> proceeds to <%= hero.interdiction.action %>.';
-            text += ' <%= villain.name %>, a rather <%= list(villain.description) %> person, appears.';
-
+            text.push('Shockingly, <%= hero.name %> proceeds to <%= hero.interdiction.action %>.');
+            text.push('<%= villain.name %>, a rather <%= list(villain.description) %> person, appears in front of <%= hero.name %>.');
             break;
 
         case interdictionType.speak:
 
-            text = 'As soon as <%= hero.interdiction.advisor.name %> is gone, <%= hero.name %> '
+            var t = 'As soon as <%= hero.interdiction.advisor.name %> is gone, <%= hero.name %> '
             + 'runs off to find <%= villain.name %> and has an interesting conversation.';
+            text.push(t);
             break;
         }
 
-        return text;
+        text.push('');
+        text.push(world.converse(world.villain, world.hero));
+
+        // find a way to integrate this
+        //     propp['func3'].templates.push('<%= violation() %> <%= list(villain.family) %> are in league with <%= villain.name %>.');
+
+
+        return text.join('\n');
 
 
     };
@@ -178,7 +191,7 @@ var nTemplates = function(propp) {
         subFunc = subFunc || randomProperty(func8);
         var template = '';
 
-        // subFunc = 'casting into body of water'; // for testing
+        subFunc = 'commits murder'; // for testing
 
         switch(subFunc) {
         case 'kidnapping of person':
@@ -257,6 +270,7 @@ var nTemplates = function(propp) {
             // TODO: need to store this somewhere....
             // the _person_ is marked as dead, but we need to "remember" that a murder was perpetrated...
             template = '<%= villain.name %> kills ' + murdervictim.name + '.';
+            template += '\n\n<%= converse(villain) %>';
             break;
 
         case 'imprisonment, detention':
@@ -334,7 +348,7 @@ var nTemplates = function(propp) {
 
     // Counteraction: hero chooses positive action
     // TODO: positiveaction()
-    propp['func10'].templates.push('<%= hero.name %> chooses positive action.');
+    propp['func10'].templates.push('<%= hero.name %> chooses positive action (just like in all those self-help books)..');
 
     // Departure: hero leave on mission
     // TODO: journey() function
@@ -345,7 +359,7 @@ var nTemplates = function(propp) {
     propp['func12'].templates.push('<%= hero.name %> is challenged to prove heroic qualities.');
 
     // Reaction: hero responds to test
-    propp['func13'].templates.push('<%= hero.name %> responds to test.');
+    propp['func13'].templates.push('<%= hero.name %> responds to this test.');
 
     //  Acquisition: hero gains magical item
     propp['func14'].exec = function(world, item) {
@@ -375,8 +389,8 @@ var nTemplates = function(propp) {
     propp['func17'].templates.push('<%= villain.name %>\'s head pops off, and is scavenged by <%= hero.name %>.');
 
     // Victory: Villain is defeated
-    propp['func18'].templates.push('Through deft use of <%= magicalitem %>, <%= villain.name %> is defeated.');
-    propp['func18'].templates.push('<%= hero.name %> <%= select("deploys", "uses", "manipulates") %> <%= magicalitem %> to <%= select("defeat", "trounce", "vanquish", "annoy") %> <%= villain.name %>.');
+    propp['func18'].templates.push('Through deft use of the <%= magicalitem %>, <%= villain.name %> is defeated.');
+    propp['func18'].templates.push('<%= hero.name %> <%= select("deploys", "uses", "manipulates") %> the <%= magicalitem %> to <%= select("defeat", "trounce", "vanquish", "annoy") %> <%= villain.name %>.');
 
     // Resolution: Initial misfortune or lack is resolved
     propp['func19'].templates.push('Initial misfortune or lack is resolved.');

@@ -9,7 +9,49 @@ defaultbank.location = ['Hobbiton', 'New Haven', 'East Lansing', 'Madchester', '
 // this should more be country. 'Nation' is short-hand.
 defaultbank.nation = ['the Monastic State of the Teutonic Knights', 'Prussia', 'East Germany', 'Middle Earth', 'Orange County', 'Northern California', 'Talexico'];
 
-defaultbank.magicalitem = ['a Singing Telegram', 'the Singing Sword', 'the Magic Accordion', 'a pair of Air Jordans', 'Mad Skillz', '#SWAG'];
+// TODO: things must also have properties
+// this is a proposal...
+// var thing = {
+//     item: 'egg', // name could be "Egg of Death" or "Death Egg" or "Primordial Magic Death Egg of the Borderlands" or something telse
+//     //
+//     name: 'Magical Egg of the Wong Foo the Elder',
+//     description: ['shiny', 'round', 'egg-shaped', 'magical', 'filigreed', 'expensive'],
+//     weapon: true, // or false
+//     magic: true, // or false
+//     // special powers? how would THAT work ????
+//     origin: {
+//         // if a person gave the object, or it was found ?
+//         person: null,
+//         place: null
+//     }
+// };
+
+defaultbank.magicalitem = ['Singing Telegram', 'Singing Sword', 'Magic Accordion', 'pair of Air Jordans', 'Mad Skillz', '#SWAG'];
+
+defaultbank.magicalitems = [
+    {
+        item: 'Singing Telegram',
+        name: 'Singing Telegram of the Unione Occidentem',
+        adjectives: ['papery', 'flat', 'sonorous', 'melodious', 'powerful', 'esoteric'],
+        weapon: true,
+        magic: true
+    },
+    {
+        item: 'Singing Sword',
+        name: 'Bing\s Singing Sword',
+        adjectives: ['metallic', 'sharp', 'pointy', 'musical', 'melodious', 'powerful'],
+        weapon: true,
+        magic: true
+    },
+    {
+        item: 'Magic Accordion',
+        name: 'Benedetto\'s Magic Accordion',
+        adjectives: ['clackity', 'reedy', 'angular', 'musical', 'melodious', 'powerful', 'esoteric', 'polkariffic'],
+        weapon: true,
+        magic: true
+    }
+    // TODO: 'pair of Air Jordans', 'Mad Skillz', '#SWAG'
+];
 
 defaultbank.task = ['walk the dog', 'retrieve the Crown Jewels', 'find a hammer', 'cut down the tallest tree in the forest with a herring'];
 

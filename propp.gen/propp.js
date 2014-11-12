@@ -207,6 +207,7 @@ var world = function(settings, wordbank) {
 
     var cache = {};
 
+    // see also https://github.com/dariusk/corpora/blob/master/data/archetypes/character.json
     var createCharacter = function(gndr, aspct) {
         // TODO: what happens when we've used up everything in the bank?
         // SOLUTION: don't worry about it: make the bank bigger than any of our templates
@@ -216,6 +217,7 @@ var world = function(settings, wordbank) {
         var adjs = (aspct === aspect.good ? bank.adjectives.personal : bank.adjectives.negative);
         var descr = [pick(adjs), pick(adjs)];
         var name = pickRemove(bank.names[gndr]);
+        // alt: two adjs in front, two-ads in back: "Big Bad Joan" or "Joan the Big and Bad"
         var nick = (coinflip() ? name + ' the ' + capitalize(pick(descr)) : capitalize(pick(descr)) + ' ' + name);
 
         return { name: name,
@@ -332,6 +334,8 @@ var world = function(settings, wordbank) {
     // so, each char has a "knows" list of characters.
     // ugh. this will get recursive, and can't be serialized
     // should just be names, I suppose. more overhead, but serialization is kept. yes?
+     // see also https://github.com/dariusk/corpora/blob/master/data/words/proverbs.json
+    // dialogue
     var converse = function(p1, p2, tone) {
         var c = [];
 
@@ -340,7 +344,7 @@ var world = function(settings, wordbank) {
             c.push('"Hello there, ' + p1.name + '" said ' + p2.name + '.');
             c.push('"Hello there, yourself, ' + p2.name + '" replied ' + p1.name + '.');
             c.push('"Well, you certainly are ' + p1.description[0] + '," remarked ' + p2.name + '.');
-            c.push('"Yes, I am," conceded ' + p1.name + '. "It\'s been said that I\'m also ' + p1.description[1] + '!"');
+            c.push('"Yes, I am," conceded ' + p1.name + '. "But it\'s been said that I\'m also ' + p1.description[1] + '!"');
 
         } else if (p1 && !p2) {
             c.push('"' + capitalize(pick(bank.interjections)) + '!" said ' + p1.name + ' to nobody in particular.');
@@ -473,7 +477,9 @@ var world = function(settings, wordbank) {
         select: select,
         dump: dump,
         interdictionType: interdictionType,
-        location: location
+        location: location,
+        wordbank: bank
+
     };
 
 };
