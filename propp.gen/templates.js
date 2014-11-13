@@ -1,5 +1,10 @@
 var nTemplates = function(propp) {
 
+    // TODO: VERB TENSE STANDARDIZATION - s/b past in all places. OR .... ???
+    // TODO: verb tense DOES NOT WORK here
+    // this is the... what tense? past would work.
+    // if ALL verb ar infinitive and appear as {{verb}}, then we do a global pull, conjugate, replace prior to template parsing. or after. whatever.
+
 
     // 0: Initial situation
     // TODO: multiple sentences within a template may not be punctuated correctly.
@@ -16,7 +21,7 @@ var nTemplates = function(propp) {
         // or, if we are doing it a SECOND time (re: brothers killed by dragon; new baby born, story starts again)
 
         // something like this
-        var intros = ['A long time ago,', 'Some years before you were born,', 'In the time when your parents\' parent\'s were but small babies,', 'Once upon a time,'];
+        var intros = ['A long time ago,', 'Some years before you were born,', 'In the time when your parents\' parents were but small babies,', 'Once upon a time,'];
 
         // In a certain village there lived a husband and wife - lived happily, lovingly, peaceably. All their neighbors envied them; the sight of them gave pleasure to honest folks.
 
@@ -278,7 +283,7 @@ var nTemplates = function(propp) {
             break;
 
         case 'issues order to kill [requires proof]':
-            template = '<%= villain.name %> issues order to kill [requires proof].';
+            template = '<%= villain.name %> issued order to kill [requires proof].';
             break;
 
         case 'commits murder':
@@ -287,7 +292,7 @@ var nTemplates = function(propp) {
             murdervictim.health = healthLevel.dead;
             // TODO: need to store this somewhere....
             // the _person_ is marked as dead, but we need to "remember" that a murder was perpetrated...
-            template = '<%= villain.name %> kills ' + murdervictim.name + '.';
+            template = '<%= villain.name %> killed ' + murdervictim.name + '.';
             template += '\n\n<%= converse(villain) %>';
             break;
 
@@ -296,7 +301,7 @@ var nTemplates = function(propp) {
             break;
 
         case 'threat of forced matrimony':
-            template = '<%= villain.name %> threatens to marry <%= pick(hero.family).name %>.';
+            template = '<%= villain.name %> threatened to marry <%= pick(hero.family).name %>.';
             break;
 
         case 'threat of forced matrimony between relatives':
@@ -474,30 +479,48 @@ var nTemplates = function(propp) {
 
         // marriage/ascension are arrays in the wordbank
         var templates = [
-            '<%= hero.name %> <%= select(marriage, ascension) %>. It\'s a good life.',
+            '<%= hero.name %> <%= select(marriage, ascension) %>. It was a good life.',
             '<%= hero.name %> <%= marriage %> and <%= ascension %>.',
-            '<%= hero.name %> settles down and <%= select(marriage, ascension) %>.',
-            // 'Everything works out for <%= hero.name %>, who <%= select(marriage, ascension) %>.',
+            '<%= hero.name %> settled down and <%= select(marriage, ascension) %>.',
+            'Everything worked out for <%= hero.name %>, who <%= select(marriage, ascension) %>.',
             // TODO: verb tense DOES NOT WORK here
             // this is the... what tense? past would work.
-            '<%= select(marriage, ascension) %>, <%= hero.name %> retires to ' + world.select("a life of farming", "write <%= possessive(hero) %> memoirs", "live in peace", "pine for days of adventure")  + '.'
+            // if ALL verb ar infinitive and appear as {{verb}}, then we do a global pull, conjugate, replace prior to template parsing. or after. whatever.
+            '<%= select(marriage, ascension) %>, <%= hero.name %> retired to ' + world.select("a life of farming", "write <%= possessive(hero) %> memoirs", "live in peace", "pine for days of adventure")  + '.'
         ];
 
         var dead = [];
+        var living = [];
         var people = world.hero.family.concat(world.hero.acquaintances);
         for (var i = 0; i < people.length; i++) {
-            if (people[i].health == healthLevel.dead) { dead.push(people[i]); }
+            var dora = (people[i].health == healthLevel.dead ? dead : living);
+            dora.push(people[i]);
+            // if (people[i].health == healthLevel.dead) {dead.push(people[i]); }
         }
 
         var t = pick(templates);
 
         // this a proof-of-concept
         if (dead.length > 0) {
-            var sent = '<%= hero.name %> still mourns the stinging loss of ' + world.list(dead) + '.';
+            var sent = 'Years passed, but <%= hero.name %> still mourned the stinging loss of ' + world.list(dead) + '.';
             t += ' ' + sent;
         };
 
+        // if single, can't be they
+        // TODO: earlier bride business....
         // 'And from that time forward they knew neither sorrow nor separation, but they all lived together long and happily.'
+
+
+        // where would THIS go ????
+        // 'All of this took place long before you were born, so it's not surprising if you don't remember it. But it happened, and people speak of it still.'
+        // 'This may sound fantastic, but it all happened exactly as I have told you.'
+
+        // this could get convoluted (Which is good!) "and I tell you this story as you can tell your children"
+        // 'and I tell you this story as I told your mother  [or father] and her mother before her' [or father as the case may be].
+        if (living.length > 0) {
+            var narr = world.pick(world.hero.acquaintances).name;
+            t += '\n\nThis may sound fantastic, but in all the world there is nothing stranger than the truth, and it all happened exactly as I have told you, for I was there, as sure as my name is ' + narr + '.';
+        }
 
         return t;
 
