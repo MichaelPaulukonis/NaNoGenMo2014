@@ -88,11 +88,9 @@ var func8 = {
 // TODO: this needs to be accessible somewhere else...
 // should this be reduced back down to a 0..31 array?
 
-var proppFunctions = {};
+var resetProppFunctions = function() {
 
-var resetProppFunctions = function(propp) {
-
-    propp = {
+    var propp = {
 
         "func0": { active: false, templates: [] },
         "func1": { active: false, templates: [] },
@@ -131,6 +129,8 @@ var resetProppFunctions = function(propp) {
 
     return propp;
 };
+
+var proppFunctions = resetProppFunctions();
 
 
 // generates a random number

@@ -28,17 +28,17 @@ var nTemplates = function(propp) {
 
         // TODO: some way to track missing, and set this up
         // TODO: track the death
-
+        var t = [];
         var templates = [
             '<%= victim.name %> goes missing.',
             '<%= victim.name %> unexpectedly dies, leaving <%= hero.name %> devastated.'
         ];
 
-        var t = pick(templates);
+        t.push(pick(templates));
 
-        t += ' ' + world.converse(world.hero);
+        t.push(world.converse(world.hero));
 
-        return t;
+        return t.join('\n');
 
     };
     // Interdiction: hero is warned

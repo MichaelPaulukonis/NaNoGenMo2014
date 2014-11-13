@@ -3,83 +3,71 @@ var gui = function() {
     // TODO: these are information popups
     // grab the information from the original, or rewrite
     var popup = function(url) {
-	window.open(url+".html", "win", "toolbar=0,location=0,directories=0,status=0,menubar=1,scrollbars=1,resizable=1,width=300,height=300");
+        window.open(url+".html", "win", "toolbar=0,location=0,directories=0,status=0,menubar=1,scrollbars=1,resizable=1,width=300,height=300");
     };
 
     var popup2 = function(url) {
-	window.open(url+".html", "win", "toolbar=0,location=0,directories=0,status=0,menubar=1,scrollbars=1,resizable=1,width=350,height=400");
+        window.open(url+".html", "win", "toolbar=0,location=0,directories=0,status=0,menubar=1,scrollbars=1,resizable=1,width=350,height=400");
     };
 
     return {
-	popup: popup,
-	popup2: popup2
+        popup: popup,
+        popup2: popup2
     };
 
 }();
 
+var preset = function(propp, presets) {
+
+    for (var i = 0; i < presets.length; i++) {
+        propp[presets[i]].active = true;
+    }
+
+    return propp;
+};
+
+var presets = {
+
+    cinderella: ['func1', 'func8', 'func8a', 'func14', 'func19', 'func23', 'func27', 'func31'],
+    hansel: ['func6', 'func7', 'func8', 'func8a', 'func16', 'func18', 'func20'],
+    swhite: ['func1', 'func5', 'func6', 'func7', 'func11', 'func21', 'func30', 'func31'],
+    lrrh: ['func4', 'func5', 'func6', 'func7', 'func8', 'func9', 'func10', 'func16', 'func18'],
+    juniper:  ['func6', 'func7', 'func8', 'func11', 'func12', 'func13', 'func14', 'func20', 'func30']
+
+};
+
 // TODO: these all need to be changed for post func8!!!
 function cinderella() {
-    window.document.myform.func1.checked = true;
-    window.document.myform.func8.checked = true;
-    window.document.myform.func8a.checked = true;
-    window.document.myform.func14.checked = true;
-    window.document.myform.func19.checked = true;
-    window.document.myform.func23.checked = true;
-    window.document.myform.func27.checked = true;
-    window.document.myform.func31.checked = true;
+    preset(proppFunctions, presets.cinderella);
+    pushSettingsToGui(proppFunctions);
 }
 
 function hansel(){
-    window.document.myform.func6.checked = true;
-    window.document.myform.func7.checked = true;
-    window.document.myform.func8.checked = true;
-    window.document.myform.func8a.checked = true;
-    window.document.myform.func16.checked = true;
-    window.document.myform.func18.checked = true;
-    window.document.myform.func20.checked = true;
+    preset(proppFunctions, presets.hansel);
+    pushSettingsToGui(proppFunctions);
 }
 
 function swhite(){
-    window.document.myform.func1.checked = true;
-    window.document.myform.func5.checked = true;
-    window.document.myform.func6.checked = true;
-    window.document.myform.func7.checked = true;
-    window.document.myform.func11.checked = true;
-    window.document.myform.func21.checked = true;
-    window.document.myform.func30.checked = true;
-    window.document.myform.func31.checked = true;
+    preset(proppFunctions, presets.swhite);
+    pushSettingsToGui(proppFunctions);
 }
 
 function lrrh(){
-    window.document.myform.func4.checked = true;
-    window.document.myform.func5.checked = true;
-    window.document.myform.func6.checked = true;
-    window.document.myform.func7.checked = true;
-    window.document.myform.func8.checked = true;
-    window.document.myform.func9.checked = true;
-    window.document.myform.func10.checked = true;
-    window.document.myform.func16.checked = true;
-    window.document.myform.func18.checked = true;
+    preset(proppFunctions, presets.lrrh);
+    pushSettingsToGui(proppFunctions);
 }
 
 function juniper(){
-    window.document.myform.func6.checked = true;
-    window.document.myform.func7.checked = true;
-    window.document.myform.func8.checked = true;
-    window.document.myform.func11.checked = true;
-    window.document.myform.func12.checked = true;
-    window.document.myform.func13.checked = true;
-    window.document.myform.func14.checked = true;
-    window.document.myform.func20.checked = true;
-    window.document.myform.func30.checked = true;
+    preset(proppFunctions, presets.juniper);
+    pushSettingsToGui(proppFunctions);
 }
 
 
 var pushSettingsToGui = function(proppFunctions) {
 
-   for (var index in proppFunctions) {
-       window.document.myform[index].checked = proppFunctions[index].active;
-   }
+    for (var index in proppFunctions) {
+        window.document.myform[index].checked = proppFunctions[index].active;
+    }
 
     // set the radios
     // http://stackoverflow.com/questions/871063/how-to-set-radio-option-checked-onload-with-jquery
@@ -95,7 +83,7 @@ var getFunctionsFromGui = function() {
     // propp.js should be able to function w/o the GUI, however...
     proppFunctions = resetProppFunctions(proppFunctions);
     for (var index in proppFunctions) {
-	proppFunctions[index].active = window.document.myform[index].checked;
+        proppFunctions[index].active = window.document.myform[index].checked;
     }
 
     var herog = $('input[name=herogender][type=radio]:checked').val();
@@ -128,21 +116,21 @@ var guiGet = function() {
 
     var theme = {};
     switch(selectedTheme) {
-        case 'office':
+    case 'office':
         theme = {
-          bank: businessbank,
-          templates: businessTemplates
+            bank: businessbank,
+            templates: businessTemplates
         };
         break;
 
-        case 'test':
+    case 'test':
         theme = {
             bank: defaultbank,
             templates: nTemplates
         };
         break;
 
-        case 'original':
+    case 'original':
         theme = {
             bank: defaultbank, // although it won't be used...
             templates: defaultTemplates
