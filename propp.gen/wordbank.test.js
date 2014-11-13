@@ -28,6 +28,7 @@ defaultbank.nation = ['the Monastic State of the Teutonic Knights', 'Prussia', '
 
 defaultbank.magicalitem = ['Singing Telegram', 'Singing Sword', 'Magic Accordion', 'pair of Air Jordans', 'Mad Skillz', '#SWAG'];
 
+// some can be premade; goal is to have a generator make things "like" this...
 defaultbank.magicalitems = [
     {
         item: 'Singing Telegram',
@@ -59,6 +60,16 @@ defaultbank.punish = ['brought to justice', 'hung, drawn, and quartered', 'given
 
 defaultbank.ascension = ['is made king', 'becomes a god', 'becomes filled with knowledge'];
 
+// TODO: mark the verbs, so they can be conjugated
+// well need these in the infinitive
+// nlp.verb(vb).conjugate() :=
+// { present: 'dates',
+//   gerund: 'dating',
+//   past: 'dated',
+//   infinitive: 'date',
+//   doer: 'dater' }
+// uh, the passive?
+// defaultbank.marries = ['marry', 'is given keys to the city', 'has parking tickets forgiven', 'date for a few years, but decide to remain single' ];
 defaultbank.marries = ['marries', 'is given keys to the city', 'has parking tickets forgiven', 'dates for a few years, but decides to remain single' ];
 
 defaultbank.adjectives = adjectives;

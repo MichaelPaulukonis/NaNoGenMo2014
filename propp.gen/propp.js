@@ -88,11 +88,9 @@ var func8 = {
 // TODO: this needs to be accessible somewhere else...
 // should this be reduced back down to a 0..31 array?
 
-var proppFunctions = {};
+var resetProppFunctions = function() {
 
-var resetProppFunctions = function(propp) {
-
-    propp = {
+    var propp = {
 
         "func0": { active: false, templates: [] },
         "func1": { active: false, templates: [] },
@@ -131,6 +129,8 @@ var resetProppFunctions = function(propp) {
 
     return propp;
 };
+
+var proppFunctions = resetProppFunctions();
 
 
 // generates a random number
@@ -217,7 +217,9 @@ var world = function(settings, wordbank) {
         var adjs = (aspct === aspect.good ? bank.adjectives.personal : bank.adjectives.negative);
         var descr = [pick(adjs), pick(adjs)];
         var name = pickRemove(bank.names[gndr]);
+
         // alt: two adjs in front, two-ads in back: "Big Bad Joan" or "Joan the Big and Bad"
+        // WAY ALT: His Serene Highness Prince Robert Michael Nicolaus Georg Bassaraba von Brancovan von Badische, Marquis of Hermosilla, Count of Cabo St. Eugenio, Seventy-fourth Grand Master of the Knights of Malta,
         var nick = (coinflip() ? name + ' the ' + capitalize(pick(descr)) : capitalize(pick(descr)) + ' ' + name);
 
         return { name: name,
@@ -301,19 +303,28 @@ var world = function(settings, wordbank) {
     };
 
     var possessive = function(gndr) {
+        // if character is passed in, reduce it to the target gender
+        if (gndr && gndr.gender) { gndr = gndr.gender; }
         return (gndr === gender.male ? 'his' : (gndr === gender.female ? 'her' : 'its'));
+    };
+
+    // third-person
+    var pronoun = function(gndr) {
+        // if character is passed in, reduce it to the target gender
+        if (gndr && gndr.gender) { gndr = gndr.gender; }
+        return (gndr === gender.male ? 'him' : (gndr === gender.female ? 'her' : 'them'));
     };
 
     // calculate the speaking tone
     // VERY PRELIMINARY
     var tone = function(p1, p2) {
-// comparison of alignment or other characteristics
-// friendly - good <-> good | bad <-> bad
-// love - hero <->bride[groom]
-// dislike
-// hatred
-// mourning - person.alive -> person.dead
-// the latter suggests a post-mortem tone in the other direction. let's leave that for now?
+        // comparison of alignment or other characteristics
+        // friendly - good <-> good | bad <-> bad
+        // love - hero <->bride[groom]
+        // dislike
+        // hatred
+        // mourning - person.alive -> person.dead
+        // the latter suggests a post-mortem tone in the other direction. let's leave that for now?
     };
 
     // not really sure where this is going.
@@ -334,7 +345,7 @@ var world = function(settings, wordbank) {
     // so, each char has a "knows" list of characters.
     // ugh. this will get recursive, and can't be serialized
     // should just be names, I suppose. more overhead, but serialization is kept. yes?
-     // see also https://github.com/dariusk/corpora/blob/master/data/words/proverbs.json
+    // see also https://github.com/dariusk/corpora/blob/master/data/words/proverbs.json
     // dialogue
     var converse = function(p1, p2, tone) {
         var c = [];
@@ -470,15 +481,19 @@ var world = function(settings, wordbank) {
         marriage: cache.marries,
         converse: converse,
         cache: cache, // hunh. exposing this?????
-        pick: pick,
         or: or,
         list: list,
         possessive: possessive,
+        pronoun: pronoun,
+        // ooop. what's the difference?!!!
+        pick: pick,
         select: select,
+        coinflip: coinflip, // currently a global. ugh!
         dump: dump,
         interdictionType: interdictionType,
         location: location,
-        wordbank: bank
+        wordbank: bank,
+        nlp: nlp // this is also a global. But.... won't be in node
 
     };
 

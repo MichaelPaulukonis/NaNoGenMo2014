@@ -10,11 +10,35 @@ var nTemplates = function(propp) {
     // aaaand: Milan are known to Natalie.
     propp['func0'].exec = function(world) {
 
-        var template = '<%= hero.nickname %> lives in a <%= hero.home.residence %> near <%= hero.home.location %> in <%= hero.home.nation %>. ';
-        template += '<%= hero.name %> lives with <%= list(hero.family, "nickname") %>. ';
-        template += '<%= list(hero.acquaintances, "nickname") %> are <%= select("friends of", "known to") %> <%= hero.name %>.';
+        // do we need an "introduction" flag?
+        // if the intro is skipped, how do we get this info across?
+        // ALT: if we start in-media-res, and come BACK to this, skip the "a long time ago" nonsense.
+        // or, if we are doing it a SECOND time (re: brothers killed by dragon; new baby born, story starts again)
 
-        return template;
+        // something like this
+        var intros = ['A long time ago,', 'Some years before you were born,', 'In the time when your parents\' parent\'s were but small babies,', 'Once upon a time,'];
+
+        // In a certain village there lived a husband and wife - lived happily, lovingly, peaceably. All their neighbors envied them; the sight of them gave pleasure to honest folks.
+
+        // TODO: hero could use nickname OR adj + adj and name. Or something.
+
+        var near = world.select("in", "near", "close to", "not far from", "just on the verge of", "within a days walk of");
+        var nationType = world.select("country", "province", "kingdom", "nation", "city-state") ;
+
+        var templates = [
+            '<%= hero.nickname %> lived in a <%= hero.home.residence %> {{NEAR}} <%= hero.home.location %> in the {{NT}} <%= hero.home.nation %>. ',
+            'in the distant {{NT}} of <%= hero.home.nation %>, <%= hero.nickname %> lived in a <%= hero.home.residence %> {{NEAR}} <%= hero.home.location %>. ',
+            '{{NEAR}} <%= hero.home.location %> in the {{NT}} <%= hero.home.nation %>, there was a <%= hero.home.residence %> where <%= hero.nickname %> lived. '
+        ];
+
+        var t = [];
+        var intro = (world.coinflip() ? world.pick(intros) + ' ' : '');
+        t.push(intro + world.pick(templates).replace('{{NT}}', nationType).replace('{{NEAR}}', near));
+        // TODO: list regular name or nickname at random
+        t.push('', '<%= hero.name %> lived with <%= list(hero.family, "nickname") %>.');
+        t.push('', '<%= list(hero.acquaintances, "nickname") %> were <%= select("friends of", "known to") %> <%= hero.name %>.');
+
+        return t.join('\n');
 
     };
 
@@ -28,17 +52,18 @@ var nTemplates = function(propp) {
 
         // TODO: some way to track missing, and set this up
         // TODO: track the death
-
+        var t = [];
         var templates = [
-            '<%= victim.name %> goes missing.',
-            '<%= victim.name %> unexpectedly dies, leaving <%= hero.name %> devastated.'
+            '<%= victim.name %> went missing.',
+            '<%= victim.name %> unexpectedly died, leaving <%= hero.name %> devastated.',
+            'Sooner or later, <%= victim.name %> died. It happens to everyone eventually. It happened to <%= pronoun(victim) %> sooner.'
         ];
 
-        var t = pick(templates);
+        t.push(pick(templates));
 
-        t += '\n\n' + world.converse(world.hero);
+        t.push('', world.converse(world.hero).replace('!', '?'));
 
-        return t;
+        return t.join('\n');
 
     };
     // Interdiction: hero is warned
@@ -47,13 +72,6 @@ var nTemplates = function(propp) {
     // TODO: rework the d**n interdiction template-function
     // this is now just a proof-of-concept of executing larger functions to deal with templates
     propp['func2'].exec = function(world) {
-        // world is not actually used here (now)...
-        // return '<%= interdiction().text %>.';
-
-        // the reason you'd build the entire thing above HERE
-        // is that THIS is the template
-        // texts should be built here. otherwise... what's the point?
-        // building here means text is 'unique' per template, not shared amongst all.
 
         var loc;
         var person;
@@ -436,7 +454,20 @@ var nTemplates = function(propp) {
     propp['func29'].templates.push('<%= hero.name %> is given a new appearance.');
 
     // Punishment: Villain is punished
-    propp['func30'].templates.push('<%= villain.name %> is <%= punished %> by <%= hero.name %>.');
+    propp['func30'].exec = function(world) {
+
+        var templates = ['<%= villain.nickname %> is <%= punished %> by <%= hero.nickname %>.'
+                        ];
+
+        var t = [ pick(templates)];
+
+        if (world.coinflip()) {
+            t.push('God evidently did it to punish <%= villain.name %> for <%= possessive(villain) %> great greediness.');
+        };
+
+        return t.join(' ');
+
+    };
 
     // Wedding: hero marries and ascends the throne
     propp['func31'].exec = function(world, subFunc) {
@@ -446,10 +477,10 @@ var nTemplates = function(propp) {
             '<%= hero.name %> <%= select(marriage, ascension) %>. It\'s a good life.',
             '<%= hero.name %> <%= marriage %> and <%= ascension %>.',
             '<%= hero.name %> settles down and <%= select(marriage, ascension) %>.',
-            'Everything works out for <%= hero.name %>, who <%= select(marriage, ascension) %>.',
+            // 'Everything works out for <%= hero.name %>, who <%= select(marriage, ascension) %>.',
             // TODO: verb tense DOES NOT WORK here
-            // TODO: posession DOES NOT WORK here
-            '<%= select(marriage, ascension) %>, <%= hero.name %> retires to <%= select("a life of farming", "write memoirs", "live in peace", "pine for days of adventure") %>.'
+            // this is the... what tense? past would work.
+            '<%= select(marriage, ascension) %>, <%= hero.name %> retires to ' + world.select("a life of farming", "write <%= possessive(hero) %> memoirs", "live in peace", "pine for days of adventure")  + '.'
         ];
 
         var dead = [];
@@ -465,6 +496,8 @@ var nTemplates = function(propp) {
             var sent = '<%= hero.name %> still mourns the stinging loss of ' + world.list(dead) + '.';
             t += ' ' + sent;
         };
+
+        // 'And from that time forward they knew neither sorrow nor separation, but they all lived together long and happily.'
 
         return t;
 
