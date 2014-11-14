@@ -161,10 +161,8 @@ var coinflip = function(chance) {
 };
 
 
-
-// TODO: you know, this should probably be part of the templates
-// and not even in here
-var world = function(settings, wordbank) {
+// this function creates things that are common to all template-worlds
+var god  = function(settings, wordbank) {
 
 
     var bank = _.deepClone(wordbank);
@@ -349,6 +347,11 @@ var world = function(settings, wordbank) {
     var converse = function(p1, p2, tone) {
         var c = [];
 
+        // TODO: various greetings, fair and foul in the wordbank := greetings: { fair: [], foul: [] }
+
+        // "Don't go bragging like that!" says a rich merchant
+        // after somebody says something _about themselves_
+
         if (p1 && p2) {
             // TODO: gah, who knows!
             c.push('"Hello there, ' + p1.name + '" said ' + p2.name + '.');
@@ -464,7 +467,7 @@ var world = function(settings, wordbank) {
         }
     }(settings);
 
-    // world return
+    // got return
     return {
         init: init,
         advisor: cache.advisor,
@@ -526,9 +529,13 @@ var sentence = function(func, helper) {
             // because I've set up module && module.exports
             // nlp thinks it's running in node.js....
             // can make a global switch.....
-            // var past = nlp.verb(verb).to_past();
-            // var past = nlp.verb(verb).to_present();
-            f = f.replace(tag[0], past);
+            var tense;
+            if (true) {
+                tense = nlp.verb(verb).to_past();
+            } else {
+                tense = nlp.verb(verb).to_present();
+            }
+            f = f.replace(tag[0], tense);
         }
 
         f = capitalize(f);
@@ -549,7 +556,9 @@ function generate(settings, theme){
 
         var tale = [];
 
-        storyGen.helper = world(storyGen.settings, theme.bank);
+        // the world is the things that have been created. no?
+        // possibly not. since creation is called alla time again...
+        storyGen.world = god(storyGen.settings, theme.bank);
 
         // this doesn't handle recursive stories (this is the one I'm particularly interested in)
         // multiple tasks
@@ -558,7 +567,7 @@ function generate(settings, theme){
         // TODO: also not reset - we just add each different template to the mix...
         for (var index in storyGen.proppFunctions) {
             // console.log(index);
-            var s = sentence(storyGen.proppFunctions[index], storyGen.helper);
+            var s = sentence(storyGen.proppFunctions[index], storyGen.world);
             if (s) {
                 tale.push(s);
             }
@@ -594,7 +603,8 @@ var enforceRules = function(propp) {
 
 };
 
-storyGen.world = world;
+// wait: aren't these set elsewhere, as well?????
+// storyGen.god = god;
 storyGen.settings = settings;
 storyGen.enforceRules = enforceRules;
 storyGen.random = random;
@@ -602,5 +612,5 @@ storyGen.sentence = sentence;
 storyGen.generate = generate;
 
 
-// var module = module || {};
-// module.exports = storyGen;
+module = module || {};
+module.exports = storyGen;

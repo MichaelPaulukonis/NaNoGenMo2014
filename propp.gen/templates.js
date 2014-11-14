@@ -2,6 +2,29 @@ var nTemplates = function(propp) {
 
     var blankLine = '';
 
+    var journey = function(p1, destination) {
+
+        var t = [];
+
+        // walk, run, ramble, travel
+        // time-period
+        // random amount
+        // random sights?
+
+        // Next day Petrusha set off on his visit to the Devil. He walked and
+        // walked, for three whole days did he walk, and then he reached a great
+        // forest, dark and dense - impossible even to see the sky from within it!
+        // And in that forest there stood a rich palace. Well, he entered the
+        // palace, and a fair maiden caught sight of him. She had been stolen
+        // from a certain village by the evil spirit. And when she caught sight
+        // of him she cried:
+
+
+        return t.join('\n'); // or something like that. need to improve paragraphization
+
+    };
+
+
     // TODO: VERB TENSE STANDARDIZATION - s/b past in all places. OR .... ???
     // TODO: verb tense DOES NOT WORK here
     // this is the... what tense? past would work.
@@ -23,11 +46,20 @@ var nTemplates = function(propp) {
         // or, if we are doing it a SECOND time (re: brothers killed by dragon; new baby born, story starts again)
 
         // something like this
+        // In the olden years, long long ago,
         var intros = ['A long time ago,', 'Some years before you were born,', 'In the time when your parents\' parents were but small babies,', 'Once upon a time,'];
 
         // In a certain village there lived a husband and wife - lived happily, lovingly, peaceably. All their neighbors envied them; the sight of them gave pleasure to honest folks.
+        // There once lived an old couple who had one son called Ivashko;[207] no one can tell how fond they were of him!
+
+        // TODO: also need to get an approximate "age" for the hero -
+        // In [country] there is a legend about a [adjective] and [adjective] [gender- man, woman, boy, girl depending]
 
         // TODO: hero could use nickname OR adj + adj and name. Or something.
+
+        // age of person plus one adjective. or we add a NEW adjective as PRIMARY DESCRIPTION ???
+        // Once there was an old man who was such an awful drunkard as passes all description.
+        // A certain woman was very bumptious.
 
         var near = world.select("in", "near", "close to", "not far from", "just on the verge of", "within a days walk of");
         var nationType = world.select("country", "province", "kingdom", "nation", "city-state") ;
@@ -59,6 +91,18 @@ var nTemplates = function(propp) {
 
         // TODO: some way to track missing, and set this up
         // TODO: track the death
+
+        // [blah blah] and there was an end of him.
+
+// example without introdcution that takes place PRIOR to hero intro
+// A certain priest's daughter went strolling in the forest one day,
+// without having obtained leave from her father or her mother - and she
+// disappeared utterly. Three years went by. Now in the village in which
+// her parents dwelt there lived a bold hunter, who went daily roaming
+// through the thick woods with his dog and his gun. One day he was going
+// through the forest; all of a sudden his dog began to bark, and the
+// hair of its back bristled up.
+
         var t = [];
         var templates = [
             '<%= victim.name %> went missing.',
@@ -270,6 +314,17 @@ var nTemplates = function(propp) {
         case 'casting into body of water':
             // TODO: hero has to get out of the water.
             // I guess that's part of the template?
+            // OR NO. HERO DIES. THAT'S AN ENDING AS WELL!
+
+// Once there was an old man who was such an awful drunkard as passes all
+// description. Well, one day he went to a kabak, intoxicated himself
+// with liquor, and then went staggering home blind drunk. Now his way
+// happened to lie across a river. When he came to the river, he didn't
+// stop long to consider, but kicked off his boots, hung them round his
+// neck, and walked into the water. Scarcely had he got half-way across
+// when he tripped over a stone, tumbled into the water - and there was an
+// end of him.
+
             var water = world.select("a small stream", "a local lake", "the murky pond", "the well");
             world.hero.location = water;
             template = '<%= villain.name %> threw <%= hero.name %> into <%= hero.location %>.';
@@ -473,6 +528,18 @@ var nTemplates = function(propp) {
             t.push('God evidently did it to punish <%= villain.name %> for <%= possessive(villain) %> great greediness.');
         };
 
+        // TODO: various deathly punishments or summations.
+        // But the Bad Wife sits to this day in the pit - in Tartarus.
+        // The journeyman disappeared, and was never seen again.
+        // Then the King was wroth with those sons, and punished them as he thought best.
+        // But as for the Witch-Snake, she remained down below on earth.
+
+        // punishment and conclusion
+        // Woe slipped into the wheel; the merchant caught up the oaken wedge,
+        // and drove it into the axle-box from the other side. Then he seized the
+        // wheel and flung it, with Woe in it, into the river. Woe was drowned,
+        // and the merchant began to live again as he had been wont to do of old.
+
         return t.join(' ');
 
     };
@@ -482,21 +549,21 @@ var nTemplates = function(propp) {
 
         // marriage/ascension are arrays in the wordbank
         var templates = [
-            '<%= hero.name %> <%= select(marriage, ascension) %>. It was a good life.',
+            '<%= hero.name %> <%= select(marriage, ascension) %>. It {{was}} a good life.',
             '<%= hero.name %> <%= marriage %> and <%= ascension %>.',
             '<%= hero.name %> {{settles}} down and <%= select(marriage, ascension) %>.',
-            'Everything worked out for <%= hero.name %>, who <%= select(marriage, ascension) %>.',
+            'Everything {{worked}} out for <%= hero.name %>, who <%= select(marriage, ascension) %>.',
             // TODO: verb tense DOES NOT WORK here
             // this is the... what tense? past would work.
             // if ALL verb ar infinitive and appear as {{verb}}, then we do a global pull, conjugate, replace prior to template parsing. or after. whatever.
-            '<%= select(marriage, ascension) %>, <%= hero.name %> retired to ' + world.select("a life of farming", "write <%= possessive(hero) %> memoirs", "live in peace", "pine for days of adventure")  + '.'
+            '<%= select(marriage, ascension) %>, <%= hero.name %> {{retired}} to ' + world.select("a life of farming", "write <%= possessive(hero) %> memoirs", "live in peace", "pine for days of adventure")  + '.'
         ];
 
-// yeah, so THIS doesn't work. DANG
-// had parking tickets forgiven, Morgan retired to pine for days of adventure.
+        // yeah, so THIS doesn't work. DANG
+        // had parking tickets forgiven, Morgan retired to pine for days of adventure.
 
-// this version needs to be in the infinitive....
-// Dated for a few years, but decided to remain single, Kaitlyn retired to write her memoirs.
+        // this version needs to be in the infinitive....
+        // Dated for a few years, but decided to remain single, Kaitlyn retired to write her memoirs.
 
         var dead = [];
         var living = [];
@@ -504,21 +571,31 @@ var nTemplates = function(propp) {
         for (var i = 0; i < people.length; i++) {
             var dora = (people[i].health == healthLevel.dead ? dead : living);
             dora.push(people[i]);
-            // if (people[i].health == healthLevel.dead) {dead.push(people[i]); }
         }
 
         var t = pick(templates);
 
         // this a proof-of-concept
         if (dead.length > 0) {
-            var sent = 'Years {{pass}}, but <%= hero.name %> still {{mourns}} the stinging loss of ' + world.list(dead) + '.';
+            // Years passes, but Lauren still mourns the stinging loss of Megan.
+            // passed needs to be in the infinitive, here. need to pass this as something extra.
+            var sent = 'Years {{passed}}, but <%= hero.name %> still {{mourns}} the stinging loss of ' + world.list(dead) + '.';
             t += ' ' + sent;
         };
 
         // if single, can't be they
         // TODO: earlier bride business....
         // 'And from that time forward they knew neither sorrow nor separation, but they all lived together long and happily.'
+        // From that time forward they lived together in all happiness and prosperity.
+        // But he and his daughter lived on and flourished, and everything went well with them.
 
+        // The old people were delighted, and asked their boy about everything that had happened. And after that he and they lived on happily together.
+        //
+        // From that time forward the Smith gave up spitting at the Demon and
+        // striking him with his hammer. The journeyman disappeared, and was
+        // never seen again. But the seigneur and his lady entered upon a
+        // prosperous course of life, and if they haven't died, they're living
+        // still.
 
         // where would THIS go ????
         // 'All of this took place long before you were born, so it's not surprising if you don't remember it. But it happened, and people speak of it still.'
@@ -541,5 +618,5 @@ var nTemplates = function(propp) {
 
 
 
-// var module = module || {};
-// module.exports = nTemplates;
+module = module || {};
+module.exports = nTemplates;

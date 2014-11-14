@@ -266,5 +266,5 @@ defaultbank.itemGenerator = function() {
 
 // TODO: this is not working for node yet. have to clean this all up. the output of words.js needs to be passed in, here.
 
-// var module = module || {};
-// module.exports = defaultbank;
+module = module || {};
+module.exports = defaultbank;
