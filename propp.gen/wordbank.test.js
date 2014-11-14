@@ -9,6 +9,12 @@ defaultbank.location = ['Hobbiton', 'New Haven', 'East Lansing', 'Madchester', '
 // this should more be country. 'Nation' is short-hand.
 defaultbank.nation = ['the Monastic State of the Teutonic Knights', 'Prussia', 'East Germany', 'Middle Earth', 'Orange County', 'Northern California', 'Talexico'];
 
+// not sure how to handle punctuation
+// put it in here?
+defaultbank.greetings = { good: ['Hello', 'Hello there', 'Hail and well met', 'Greetings', 'Ahoy', 'Salutations', 'Welcome', 'Well, look who this is', 'Nice to meet you'],
+                          bad: ['Oh', 'Oh, it\'s you', 'Oh, hello', 'Oh, dear', 'Ugh', 'Well, look who this is', 'I\'ll see you in Hell']
+                        };
+
 // TODO: things must also have properties
 // this is a proposal...
 // var thing = {
@@ -72,6 +78,8 @@ defaultbank.ascension = ['{{is}} made king', '{{becomes}} a god', '{{becomes}} f
 // defaultbank.marries = ['marry', 'is given keys to the city', 'has parking tickets forgiven', 'date for a few years, but decide to remain single' ];
 defaultbank.marries = ['{{marry}}', '{{is}} given keys to the city', '{{has}} parking tickets forgiven', '{{dates}} for a few years, but {{decides}} to remain single' ];
 
+
+
 defaultbank.adjectives = words.adjectives;
 defaultbank.interjections = words.interjections;
 
@@ -85,94 +93,11 @@ defaultbank.names = {
 	   'Jonathan', 'Noah', 'Brandon', 'Christian', 'Dylan', 'Samuel',
 	   'Benjamin', 'Nathan'],
 
-    female: ['Brienne of Tarth', 'Joan of Arc', 'Holly Shiftwell',
-	     'Lauren', 'Chloe', 'Natalie', 'Kayla', 'Jessica', 'Anna',
-	     'Victoria', 'Mia', 'Hailey', 'Sydney', 'Jasmine', 'Julia',
-	     'Morgan', 'Destiny', 'Rachel', 'Ella', 'Kaitlyn', 'Megan',
-	     'Katherine', 'Savannah', 'Jennifer', 'Alexandra', 'Allison',
-	     'Haley', 'Maria', 'Kaylee', 'Lily', 'Makayla'],
+    female: ['Brienne of Tarth', 'Joan of Arc', 'Holly Shiftwell', 'Lauren', 'Chloe', 'Natalie', 'Kayla', 'Jessica', 'Anna', 'Victoria', 'Mia', 'Hailey', 'Sydney', 'Jasmine', 'Julia', 'Morgan', 'Destiny', 'Rachel', 'Ella', 'Kaitlyn', 'Megan', 'Katherine', 'Savannah', 'Jennifer', 'Alexandra', 'Allison', 'Haley', 'Maria', 'Kaylee', 'Lily', 'Makayla'],
 
     // could also be "unisex"
     // see also http://en.wikipedia.org/wiki/Unisex_name
-    neuter: [
-	'the Easter Bunny',
-	'TIAMAT',
-	'the Spirit of 1776',
-	'DEATH',
-	'Pat',
-	'Chris',
-	'Leslie',
-	'Alexis',
-	'Amari',
-	'Angel',
-	'Ariel',
-	'Armani',
-	'Avery',
-	'Blake',
-	'Cameron',
-	'Camryn',
-	'Carter',
-	'Casey',
-	'Charlie',
-	'Dakota',
-	'Dallas',
-	'Dylan',
-	'Eden',
-	'Elliot',
-	'Elliott',
-	'Emerson',
-	'Emery',
-	'Emory',
-	'Finley',
-	'Harley',
-	'Harper',
-	'Hayden',
-	'Hunter',
-	'Jamie',
-	'Jayden',
-	'Jaylin',
-	'Jessie',
-	'Jordan',
-	'Jordyn',
-	'Justice',
-	'Kai',
-	'Kamryn',
-	'Kayden',
-	'Kendall',
-	'Lennon',
-	'Logan',
-	'London',
-	'Lyric',
-	'Marley',
-	'Micah',
-	'Milan',
-	'Morgan',
-	'Oakley',
-	'Parker',
-	'Payton',
-	'Peyton',
-	'Phoenix',
-	'Quinn',
-	'Reagan',
-	'Reese',
-	'Riley',
-	'River',
-	'Rory',
-	'Rowan',
-	'Ryan',
-	'Rylan',
-	'Rylee',
-	'Sage',
-	'Sawyer',
-	'Sidney',
-	'Skylar',
-	'Skyler',
-	'Sydney',
-	'Tatum',
-	'Taylor',
-	'Teagan',
-	'Zion'
-    ]
+    neuter: [ 'the Easter Bunny', 'TIAMAT', 'the Spirit of 1776', 'DEATH', 'Pat', 'Chris', 'Leslie', 'Alexis', 'Amari', 'Angel', 'Ariel', 'Armani', 'Avery', 'Blake', 'Cameron', 'Camryn', 'Carter', 'Casey', 'Charlie', 'Dakota', 'Dallas', 'Dylan', 'Eden', 'Elliot', 'Elliott', 'Emerson', 'Emery', 'Emory', 'Finley', 'Harley', 'Harper', 'Hayden', 'Hunter', 'Jamie', 'Jayden', 'Jaylin', 'Jessie', 'Jordan', 'Jordyn', 'Justice', 'Kai', 'Kamryn', 'Kayden', 'Kendall', 'Lennon', 'Logan', 'London', 'Lyric', 'Marley', 'Micah', 'Milan', 'Morgan', 'Oakley', 'Parker', 'Payton', 'Peyton', 'Phoenix', 'Quinn', 'Reagan', 'Reese', 'Riley', 'River', 'Rory', 'Rowan', 'Ryan', 'Rylan', 'Rylee', 'Sage', 'Sawyer', 'Sidney', 'Skylar', 'Skyler', 'Sydney', 'Tatum', 'Taylor', 'Teagan', 'Zion' ]
 
 };
 
@@ -181,62 +106,8 @@ defaultbank.names = {
 // based on list from
 // http://webcache.googleusercontent.com/search?q=cache:hHHDD1u3puMJ:www.ironwolfgames.com/2011/09/17/fun-with-science-fiction-buzzwords/&client=firefox-a&hl=en&gl=us&strip=1
 defaultbank.itembank = {
-
-    adjectives: [
-	'auxiliary',
-	'alternate',
-	'automatic',
-	'dynamic',
-	'electron',
-	'external',
-	'finite',
-	'humanoid',
-	'infinite',
-	'internal',
-	'kinetic',
-	'linear',
-	'multi-phase',
-	'neural',
-	'organic',
-	'phase',
-	'pneumatic',
-	'positron',
-	'primary',
-	'quantum',
-	'static',
-	'sub-light',
-	'sub-space',
-	'temporal'
-	// ,'trans-'
-    ],
-
-    nouns: [
-	'amplitude',
-	'buffer',
-	'conduit',
-	'coordinates',
-	'core',
-	'data',
-	'deflector',
-	'drive',
-	'emitter',
-	'event horizon',
-	'field',
-	'fluctuation',
-	'generator',
-	'hull integrity',
-	'matrix',
-	'parameter',
-	'particle',
-	'plasma',
-	'relay',
-	'rift',
-	'rupture',
-	'shield',
-	'singularity',
-	'system',
-	'theory'
-    ]
+    adjectives: [ 'auxiliary', 'alternate', 'automatic', 'dynamic', 'electron', 'external', 'finite', 'humanoid', 'infinite', 'internal', 'kinetic', 'linear', 'multi-phase', 'neural', 'organic', 'phase', 'pneumatic', 'positron', 'primary', 'quantum', 'static', 'sub-light', 'sub-space', 'temporal' ],
+    nouns: [ 'amplitude', 'buffer', 'conduit', 'coordinates', 'core', 'data', 'deflector', 'drive', 'emitter', 'event horizon', 'field', 'fluctuation', 'generator', 'hull integrity', 'matrix', 'parameter', 'particle', 'plasma', 'relay', 'rift', 'rupture', 'shield', 'singularity', 'system', 'theory' ]
 };
 
 

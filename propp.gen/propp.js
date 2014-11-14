@@ -186,7 +186,7 @@ var storyGen = function() {
 
 
     // this function creates things that are common to all template-worlds
-    var god  = function(settings, wordbank) {
+    var god = function(settings, wordbank) {
 
         var bank = _.deepClone(wordbank);
         if (wordbank && wordbank.itemGenerator) {
@@ -345,6 +345,11 @@ var storyGen = function() {
             // hatred
             // mourning - person.alive -> person.dead
             // the latter suggests a post-mortem tone in the other direction. let's leave that for now?
+            var t;
+            if (p1 && p1.alignment && p2 && p2.alignment) {
+                t = ((p1.alignment == p2.alignment) ? 'good' : 'bad');
+            }
+            return t;
         };
 
         // not really sure where this is going.
@@ -367,7 +372,7 @@ var storyGen = function() {
         // should just be names, I suppose. more overhead, but serialization is kept. yes?
         // see also https://github.com/dariusk/corpora/blob/master/data/words/proverbs.json
         // dialogue
-        var converse = function(p1, p2, tone) {
+        var converse = function(p1, p2) {
             var c = [];
 
             // TODO: various greetings, fair and foul in the wordbank := greetings: { fair: [], foul: [] }
@@ -375,17 +380,26 @@ var storyGen = function() {
             // "Don't go bragging like that!" says a rich merchant
             // after somebody says something _about themselves_
 
+            var t = tone(p1, p2);
+
             if (p1 && p2) {
                 // TODO: gah, who knows!
-                c.push('"Hello there, ' + p1.name + '" said ' + p2.name + '.');
-                c.push('"Hello there, yourself, ' + p2.name + '" replied ' + p1.name + '.');
-                c.push('"Well, you certainly are ' + p1.description[0] + '," remarked ' + p2.name + '.');
-                c.push('"Yes, I am," conceded ' + p1.name + '. "But it\'s been said that I\'m also ' + p1.description[1] + '!"');
+                c.push('"{{GG}}, ' + p1.name + '" {{said}} ' + p2.name + '.');
+                c.push('"{{GG}}, ' + p2.name + '" {{replied}} ' + p1.name + '.');
+                c.push('"Well, you certainly are ' + p1.description[0] + '," {{remarked}} ' + p2.name + '.');
+                c.push('"Yes, I am," {{conceded}} ' + p1.name + '. "But it\'s been said that I\'m also ' + p1.description[1] + '!"');
 
             } else if (p1 && !p2) {
-                c.push('"' + capitalize(pick(bank.interjections)) + '!" said ' + p1.name + ' to nobody in particular.');
+                c.push('"' + capitalize(pick(bank.interjections)) + '!" {{said}} ' + p1.name + ' to nobody in particular.');
             }
 
+            // not applicable to solo "conversations"
+            // so far.
+            if (t) {
+                for (var i = 0; i < c.length; i++) {
+                    c[i] = c[i].replace('{{GG}}', pick(bank.greetings[t]));
+                }
+            }
             return c.join('\n');
         };
 
@@ -505,6 +519,7 @@ var storyGen = function() {
             ascension: cache.ascension,
             marriage: cache.marries,
             converse: converse,
+            tone: tone,
             cache: cache, // hunh. exposing this?????
             or: or,
             list: list,
@@ -595,7 +610,7 @@ var storyGen = function() {
         try {
 
             this.settings = settings;
-            this.proppFunctions = theme.templates(settings.functions);
+            var story = theme.templates(settings.functions);
 
             var tale = [];
 
@@ -607,10 +622,12 @@ var storyGen = function() {
             // multiple tasks
             // or going back to a previous point in the chain
             // :-(
-            // TODO: also not reset - we just add each different template to the mix...
-            for (var index in this.proppFunctions) {
+            // TODO: get a new iterator
+            // it will be an array that is BUILT
+            // aaaand, let's presume that it has been passed in as part of SETTINGS
+            for (var index in story) {
                 // console.log(index);
-                var s = this.sentence(this.proppFunctions[index], storyGen.world);
+                var s = this.sentence(story[index], storyGen.world);
                 if (s) {
                     tale.push(s);
                 }

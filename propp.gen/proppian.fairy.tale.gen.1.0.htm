@@ -57,8 +57,6 @@
                 <!-- <input name='theme' type='radio' value=''>random</input> -->
               </ul>
 
-
-
 	      <br />
 	      <ul>
 		<li>links:</li>
@@ -84,8 +82,7 @@
 		<li><input name="func7" type="checkbox" /><a href="javascript:gui.popup('func7')">complicity</a></li>
 	      </ul>
 	      <ul class='sphere' id='storybody'>
-		<!-- NOTE: in the original (?) framework 8&9 are combined; this explains 32 funcs in this version, as opposed to Propps 31 functions -->
-		<li><input name="func8" type="checkbox" checked /><a href="javascript:gui.popup('func8')">villainy</a></li>
+		<li><input name="func8" type="checkbox" checked='checked' /><a href="javascript:gui.popup('func8')">villainy</a></li>
 		<li><input name="func8a" type="checkbox" /><a href="javascript:gui.popup('func8a')">lack</a></li>
 		<li><input name="func9" type="checkbox" /><a href="javascript:gui.popup('func9')">mediation</a></li>
 		<li><input name="func10" type="checkbox" /><a href="javascript:gui.popup('func10')">beginning counteraction</a></li>
@@ -157,11 +154,11 @@
           <tr>
 	    <td colspan="2">
 	      <br />
-	      <input value="generate" onclick="javascript:guiGet();" align="middle" type="submit" accesskey="g" />
-	      <input value="clear" align="middle" type="reset" />
+	      <input value="generate" onclick="javascript:guiGet();" type="submit" accesskey="g" />
+	      <input value="clear" type="reset" />
 	      <br />
 	      <br />
-	      <textarea id="output" cols="35" rows="20" wrap="true" name="fairytale"> </textarea>
+	      <textarea id="output" cols="35" rows="20" name="fairytale"> </textarea>
             </td>
 	    <td>
 	    </td>
