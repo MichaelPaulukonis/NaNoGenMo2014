@@ -16,6 +16,7 @@
 "use strict";
 
 var _ = _ || require('underscore');
+// var nlp = nlp || require('nlp_compromise');
 
 // http://blog.elliotjameschong.com/2012/10/10/underscore-js-deepclone-and-deepextend-mix-ins/
 // in case it is not clear, deepClone clones everything that can JSON-ified
@@ -503,27 +504,7 @@ var capitalize = function(str) {
 
 // populate template
 // which may contain multiple sentences.
-var sentence = function(index, helper) {
-
-    var f = '';
-    var func = proppFunctions[index];
-    if (func && func.active) {
-        if (func.exec) {
-            f = func.exec(helper);
-        } else {
-            f = func.templates[random(func.templates.length)];
-        }
-        console.log(f);
-        var t = _.template(f);
-        f = t(helper);
-        f = capitalize(f);
-    }
-
-    return f;
-
-};
-
-var sentence2 = function(func, helper) {
+var sentence = function(func, helper) {
 
     var f = '';
     if (func && func.active) {
@@ -532,10 +513,26 @@ var sentence2 = function(func, helper) {
         } else {
             f = func.templates[random(func.templates.length)];
         }
-        console.log(f);
         var t = _.template(f);
         f = t(helper);
+
+        // handle non-template transforms.
+        var tag,
+            re = /\{{.*?\}}/g,
+            sentence = f;
+        while((tag = re.exec(f)) !== null) {
+            var verb = tag[0].replace(/\{|\}/g, '');
+            console.log(verb);
+            // because I've set up module && module.exports
+            // nlp thinks it's running in node.js....
+            // can make a global switch.....
+            // var past = nlp.verb(verb).to_past();
+            // var past = nlp.verb(verb).to_present();
+            f = f.replace(tag[0], past);
+        }
+
         f = capitalize(f);
+
     }
 
     return f;
@@ -560,8 +557,8 @@ function generate(settings, theme){
         // :-(
         // TODO: also not reset - we just add each different template to the mix...
         for (var index in storyGen.proppFunctions) {
-            console.log(index);
-            var s = sentence2(storyGen.proppFunctions[index], storyGen.helper);
+            // console.log(index);
+            var s = sentence(storyGen.proppFunctions[index], storyGen.helper);
             if (s) {
                 tale.push(s);
             }
@@ -605,5 +602,5 @@ storyGen.sentence = sentence;
 storyGen.generate = generate;
 
 
-var module = module || {};
-module.exports = storyGen;
+// var module = module || {};
+// module.exports = storyGen;

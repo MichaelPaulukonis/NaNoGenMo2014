@@ -66,7 +66,7 @@ var nTemplates = function(propp) {
             'Sooner or later, <%= victim.name %> died. It happens to everyone eventually. It happened to <%= pronoun(victim) %> sooner.'
         ];
 
-        t.push(pick(templates));
+        t.push(world.pick(templates));
 
         t.push(blankLine, world.converse(world.hero).replace('!', '?'));
 
@@ -169,7 +169,7 @@ var nTemplates = function(propp) {
         case interdictionType.speak:
 
             var t = 'As soon as <%= hero.interdiction.advisor.name %> was gone, <%= hero.name %> '
-            + 'ran off to find <%= villain.name %> and had an interesting conversation.';
+                + 'ran off to find <%= villain.name %> and had an interesting conversation.';
             text.push(t);
             break;
         }
@@ -216,6 +216,7 @@ var nTemplates = function(propp) {
         var template = '';
 
         subFunc = 'causes sudden disappearance'; // for testing
+        subFunc = 'commits murder';
 
         switch(subFunc) {
         case 'kidnapping of person':
@@ -483,13 +484,19 @@ var nTemplates = function(propp) {
         var templates = [
             '<%= hero.name %> <%= select(marriage, ascension) %>. It was a good life.',
             '<%= hero.name %> <%= marriage %> and <%= ascension %>.',
-            '<%= hero.name %> settled down and <%= select(marriage, ascension) %>.',
+            '<%= hero.name %> {{settles}} down and <%= select(marriage, ascension) %>.',
             'Everything worked out for <%= hero.name %>, who <%= select(marriage, ascension) %>.',
             // TODO: verb tense DOES NOT WORK here
             // this is the... what tense? past would work.
             // if ALL verb ar infinitive and appear as {{verb}}, then we do a global pull, conjugate, replace prior to template parsing. or after. whatever.
             '<%= select(marriage, ascension) %>, <%= hero.name %> retired to ' + world.select("a life of farming", "write <%= possessive(hero) %> memoirs", "live in peace", "pine for days of adventure")  + '.'
         ];
+
+// yeah, so THIS doesn't work. DANG
+// had parking tickets forgiven, Morgan retired to pine for days of adventure.
+
+// this version needs to be in the infinitive....
+// Dated for a few years, but decided to remain single, Kaitlyn retired to write her memoirs.
 
         var dead = [];
         var living = [];
@@ -504,7 +511,7 @@ var nTemplates = function(propp) {
 
         // this a proof-of-concept
         if (dead.length > 0) {
-            var sent = 'Years passed, but <%= hero.name %> still mourned the stinging loss of ' + world.list(dead) + '.';
+            var sent = 'Years {{pass}}, but <%= hero.name %> still {{mourns}} the stinging loss of ' + world.list(dead) + '.';
             t += ' ' + sent;
         };
 
@@ -531,3 +538,8 @@ var nTemplates = function(propp) {
     return propp;
 
 };
+
+
+
+// var module = module || {};
+// module.exports = nTemplates;

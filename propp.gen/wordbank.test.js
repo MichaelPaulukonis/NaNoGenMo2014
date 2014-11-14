@@ -58,7 +58,7 @@ defaultbank.task = ['walk the dog', 'retrieve the Crown Jewels', 'find a hammer'
 
 defaultbank.punish = ['brought to justice', 'hung, drawn, and quartered', 'given a tongue-lashing'];
 
-defaultbank.ascension = ['is made king', 'becomes a god', 'becomes filled with knowledge'];
+defaultbank.ascension = ['{{is}} made king', '{{becomes}} a god', '{{becomes}} filled with knowledge'];
 
 // TODO: mark the verbs, so they can be conjugated
 // well need these in the infinitive
@@ -70,11 +70,10 @@ defaultbank.ascension = ['is made king', 'becomes a god', 'becomes filled with k
 //   doer: 'dater' }
 // uh, the passive?
 // defaultbank.marries = ['marry', 'is given keys to the city', 'has parking tickets forgiven', 'date for a few years, but decide to remain single' ];
-defaultbank.marries = ['marries', 'is given keys to the city', 'has parking tickets forgiven', 'dates for a few years, but decides to remain single' ];
+defaultbank.marries = ['{{marry}}', '{{is}} given keys to the city', '{{has}} parking tickets forgiven', '{{dates}} for a few years, but {{decides}} to remain single' ];
 
-defaultbank.adjectives = adjectives;
-defaultbank.interjections = interjections;
-
+defaultbank.adjectives = words.adjectives;
+defaultbank.interjections = words.interjections;
 
 defaultbank.names = {
 
@@ -264,3 +263,8 @@ defaultbank.itemGenerator = function() {
     return itemGenerator(defaultbank.itembank);
 
 };
+
+// TODO: this is not working for node yet. have to clean this all up. the output of words.js needs to be passed in, here.
+
+// var module = module || {};
+// module.exports = defaultbank;
