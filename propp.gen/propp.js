@@ -130,8 +130,6 @@ var resetProppFunctions = function() {
     return propp;
 };
 
-var proppFunctions = resetProppFunctions();
-
 
 // generates a random number
 var random = function(limit){
@@ -264,7 +262,7 @@ var world = function(settings, wordbank) {
         c.family = createCharacters(settings.peoplegender, aspct);
         c.acquaintances = createCharacters(settings.peoplegender, aspct);
         c.home = location();
-        c.location = c.residence;
+        c.location = c.home.residence;
         if (item) { c.possessions.push(item); }
 
         return c;
@@ -525,15 +523,32 @@ var sentence = function(index, helper) {
 
 };
 
+var sentence2 = function(func, helper) {
+
+    var f = '';
+    if (func && func.active) {
+        if (func.exec) {
+            f = func.exec(helper);
+        } else {
+            f = func.templates[random(func.templates.length)];
+        }
+        console.log(f);
+        var t = _.template(f);
+        f = t(helper);
+        f = capitalize(f);
+    }
+
+    return f;
+
+};
 
 // generate the fairy tale
 function generate(settings, theme){
 
     try {
-        storyGen.settings = settings;
-        storyGen.proppFunctions = proppFunctions;
 
-        proppFunctions = theme.templates(proppFunctions);
+        storyGen.settings = settings;
+        storyGen.proppFunctions = theme.templates(settings.functions);
 
         var tale = [];
 
@@ -544,9 +559,9 @@ function generate(settings, theme){
         // or going back to a previous point in the chain
         // :-(
         // TODO: also not reset - we just add each different template to the mix...
-        for (var index in proppFunctions) {
+        for (var index in storyGen.proppFunctions) {
             console.log(index);
-            var s = sentence(index, storyGen.helper);
+            var s = sentence2(storyGen.proppFunctions[index], storyGen.helper);
             if (s) {
                 tale.push(s);
             }

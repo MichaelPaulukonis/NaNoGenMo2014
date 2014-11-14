@@ -83,23 +83,23 @@ var getFunctionsFromGui = function() {
     // this is an external dependency to the GUI
     // to the extant that without that file, the GUI has no purpose
     // propp.js should be able to function w/o the GUI, however...
-    proppFunctions = resetProppFunctions(proppFunctions);
-    for (var index in proppFunctions) {
-        proppFunctions[index].active = window.document.myform[index].checked;
+    var funcs = resetProppFunctions();
+    for (var index in funcs) {
+        funcs[index].active = window.document.myform[index].checked;
     }
 
     var herog = $('input[name=herogender][type=radio]:checked').val();
     var villaing = $('input[name=villaingender][type=radio]:checked').val();
     var peopleg = $('input[name=peoplegender][type=radio]:checked').val();
 
-    proppFunctions = storyGen.enforceRules(proppFunctions);
-    pushSettingsToGui(proppFunctions);
+    funcs = storyGen.enforceRules(funcs);
+    pushSettingsToGui(funcs);
 
     return {
         herogender: herog,
         villaingender: villaing,
         peoplegender: peopleg,
-        functions: proppFunctions
+        functions: funcs
     };
 
 };
