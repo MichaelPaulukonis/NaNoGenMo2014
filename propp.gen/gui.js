@@ -115,6 +115,7 @@ var guiGet = function() {
     var settings = getFunctionsFromGui();
 
     var selectedTheme = $('input[name=theme][type=radio]:checked').val();
+    settings.verbtense = $('input[name=tense][type=radio]:checked').val();
 
     var theme = {};
     switch(selectedTheme) {
@@ -139,7 +140,7 @@ var guiGet = function() {
         };
     };
 
-    var tale = generate(settings, theme);
+    var tale = storyGen.generate(settings, theme);
     shoveToGui(tale);
 };
 

@@ -1,4 +1,4 @@
-var nTemplates = function(propp) {
+var nTemplates = function(story) {
 
     var blankLine = '';
 
@@ -38,7 +38,7 @@ var nTemplates = function(propp) {
     // since that only works on the first letter of the template-output (erroneously called 'sentence' in the code).
     // TODO: what about "lives alone." how would THAT be figured out???
     // aaaand: Milan are known to Natalie.
-    propp['func0'].exec = function(world) {
+    story['func0'].exec = function(world) {
 
         // do we need an "introduction" flag?
         // if the intro is skipped, how do we get this info across?
@@ -65,17 +65,17 @@ var nTemplates = function(propp) {
         var nationType = world.select("country", "province", "kingdom", "nation", "city-state") ;
 
         var templates = [
-            '<%= hero.nickname %> lived in a <%= hero.home.residence %> {{NEAR}} <%= hero.home.location %> in the {{NT}} <%= hero.home.nation %>. ',
-            'in the distant {{NT}} of <%= hero.home.nation %>, <%= hero.nickname %> lived in a <%= hero.home.residence %> {{NEAR}} <%= hero.home.location %>. ',
-            '{{NEAR}} <%= hero.home.location %> in the {{NT}} <%= hero.home.nation %>, there was a <%= hero.home.residence %> where <%= hero.nickname %> lived. '
+            '<%= hero.nickname %> {{lived}} in a <%= hero.home.residence %> {{NEAR}} <%= hero.home.location %> in the {{NT}} <%= hero.home.nation %>. ',
+            'in the distant {{NT}} of <%= hero.home.nation %>, <%= hero.nickname %> {{lived}} in a <%= hero.home.residence %> {{NEAR}} <%= hero.home.location %>. ',
+            '{{NEAR}} <%= hero.home.location %> in the {{NT}} <%= hero.home.nation %>, there {{was}} a <%= hero.home.residence %> where <%= hero.nickname %> {{lived}}. '
         ];
 
         var t = [];
         var intro = (world.coinflip() ? world.pick(intros) + ' ' : '');
         t.push(intro + world.pick(templates).replace('{{NT}}', nationType).replace('{{NEAR}}', near));
         // TODO: list regular name or nickname at random
-        t.push(blankLine, '<%= hero.name %> lived with <%= list(hero.family, "nickname") %>.');
-        t.push(blankLine, '<%= list(hero.acquaintances, "nickname") %> were <%= select("friends of", "known to") %> <%= hero.name %>.');
+        t.push(blankLine, '<%= hero.name %> {{lived}} with <%= list(hero.family, "nickname") %>.');
+        t.push(blankLine, '<%= list(hero.acquaintances, "nickname") %> {{were}} <%= select("friends of", "known to") %> <%= hero.name %>.');
 
         return t.join('\n');
 
@@ -87,7 +87,7 @@ var nTemplates = function(propp) {
     // so we\'d have to have more logic to cover this
     // TODO: also need to define the action, so it can be dealt with in Resolution (func20) and elsewhere...
     // people have a location; if the location is xs"unknown" we can process this elsewhere...
-    propp['func1'].exec = function(world, subFunc) {
+    story['func1'].exec = function(world, subFunc) {
 
         // TODO: some way to track missing, and set this up
         // TODO: track the death
@@ -106,8 +106,8 @@ var nTemplates = function(propp) {
         var t = [];
         var templates = [
             '<%= victim.name %> went missing.',
-            '<%= victim.name %> unexpectedly died, leaving <%= hero.name %> devastated.',
-            'Sooner or later, <%= victim.name %> died. It happens to everyone eventually. It happened to <%= pronoun(victim) %> sooner.'
+            '<%= victim.name %> unexpectedly {{died}}, leaving <%= hero.name %> devastated.',
+            'Sooner or later, <%= victim.name %> {{died}}. It happens to everyone eventually. It happened to <%= pronoun(victim) %> sooner.'
         ];
 
         t.push(world.pick(templates));
@@ -118,11 +118,11 @@ var nTemplates = function(propp) {
 
     };
     // Interdiction: hero is warned
-    // propp['func2'].templates.push('<%= hero.name %> is warned.');
+    // story['func2'].templates.push('<%= hero.name %> is warned.');
     // TODO: introduction of personage from interdiction
     // TODO: rework the d**n interdiction template-function
     // this is now just a proof-of-concept of executing larger functions to deal with templates
-    propp['func2'].exec = function(world) {
+    story['func2'].exec = function(world) {
 
         var loc;
         var person;
@@ -135,7 +135,7 @@ var nTemplates = function(propp) {
         //     speak: 'speakwith'
         // };
 
-        var ptype = randomProperty(interdictionType);
+        var ptype = world.randomProperty(interdictionType);
         var advisor = world.advisor;
         var hero = world.hero;
 
@@ -191,7 +191,7 @@ var nTemplates = function(propp) {
     };
 
     // Violation of Interdiction
-    propp['func3'].exec = function(world) {
+    story['func3'].exec = function(world) {
 
         var text = [];
         var interdiction = world.hero.interdiction;
@@ -212,7 +212,7 @@ var nTemplates = function(propp) {
 
         case interdictionType.speak:
 
-            var t = 'As soon as <%= hero.interdiction.advisor.name %> was gone, <%= hero.name %> '
+            var t = 'As soon as <%= hero.interdiction.advisor.name %> {{was}} gone, <%= hero.name %> '
                 + 'ran off to find <%= villain.name %> and had an interesting conversation.';
             text.push(t);
             break;
@@ -222,7 +222,7 @@ var nTemplates = function(propp) {
         text.push(world.converse(world.villain, world.hero));
 
         // find a way to integrate this
-        //     propp['func3'].templates.push('<%= violation() %> <%= list(villain.family) %> are in league with <%= villain.name %>.');
+        //     story['func3'].templates.push('<%= violation() %> <%= list(villain.family) %> are in league with <%= villain.name %>.');
 
 
         return text.join('\n');
@@ -230,25 +230,25 @@ var nTemplates = function(propp) {
 
     };
     // Reconnaissance: Villain seeks something
-    propp['func4'].templates.push('<%= villain.name %> paid a visit to <%= hero.home.location %>.');
-    propp['func4'].templates.push('<%= hero.home.location %> played host to <%= villain.name %>.');
+    story['func4'].templates.push('<%= villain.name %> paid a visit to <%= hero.home.location %>.');
+    story['func4'].templates.push('<%= hero.home.location %> played host to <%= villain.name %>.');
 
     // Delivery: The villain gains information
-    propp['func5'].templates.push('<%= villain.name %> gained information.');
-    propp['func5'].templates.push('After a chat with <%= pick(hero.family).name %>, <%= villain.name %> learned some interesting news.');
-    propp['func5'].templates.push('While skulking about <%= hero.home.residence %>, <%= villain.name %> overheard some gossip about <%= hero.name %>.');
+    story['func5'].templates.push('<%= villain.name %> gained information.');
+    story['func5'].templates.push('After a chat with <%= pick(hero.family).name %>, <%= villain.name %> learned some interesting news.');
+    story['func5'].templates.push('While skulking about <%= hero.home.residence %>, <%= villain.name %> overheard some gossip about <%= hero.name %>.');
 
     // Trickery: Villain attempts to deceive victim.
-    propp['func6'].templates.push('<%= villain.name %> attempted to deceive victim.');
+    story['func6'].templates.push('<%= villain.name %> attempted to deceive victim.');
 
     // Complicity: Unwitting helping of the enemy
-    propp['func7'].templates.push('<%= hero.name %> unwittingly helped <%= villain.name %>.');
+    story['func7'].templates.push('<%= hero.name %> unwittingly helped <%= villain.name %>.');
 
     // 2nd Sphere: The Body of the story
     // 8A - Villainy: The need is identified (Villainy)
     // function 8 (and/or 8a) is always present in tale
     // antagonist(s) causes harm or injury to victim(s)/member of protagonist's family = villainy - A
-    propp['func8'].exec = function(world, subFunc) {
+    story['func8'].exec = function(world, subFunc) {
 
         // this needs to be picked AHEAD OF TIME
         // since some of these require other creations earlier
@@ -256,7 +256,7 @@ var nTemplates = function(propp) {
         // the bride should have been introduced earlier....
 
         // if not picked ahead of time, pick a sub-function at random
-        subFunc = subFunc || randomProperty(func8);
+        subFunc = subFunc || world.randomProperty(func8);
         var template = '';
 
         subFunc = 'causes sudden disappearance'; // for testing
@@ -276,7 +276,7 @@ var nTemplates = function(propp) {
             break;
 
         case 'pillaging or ruining of crops':
-            template = 'The harvest was destroyed by <%= villain.name %>. All in <%= hero.nation %> began to feel the pangs of hunger.';
+            template = 'The harvest {{was}} destroyed by <%= villain.name %>. All in <%= hero.nation %> began to feel the pangs of hunger.';
             break;
 
         case 'theft of daylight':
@@ -300,7 +300,7 @@ var nTemplates = function(propp) {
 
         case 'bride is forgotten':
             // doesn't this have to be known AHEAD of time, so there is a bride function prepped earlier???
-            template = '<%= hero.name %>\'s bride was forgotten after <%= villain.name %> cast a spell.';
+            template = '<%= hero.name %>\'s bride {{was}} forgotten after <%= villain.name %> cast a spell.';
             break;
 
         case 'demand for delivery or enticement, abduction':
@@ -308,7 +308,7 @@ var nTemplates = function(propp) {
             break;
 
         case 'expulsion':
-            template = '<%= hero.name %> was driven from <%= possessive(hero.gender) %> <%= hero.home.residence %>.';
+            template = '<%= hero.name %> {{was}} driven from <%= possessive(hero.gender) %> <%= hero.home.residence %>.';
             break;
 
         case 'casting into body of water':
@@ -331,22 +331,22 @@ var nTemplates = function(propp) {
             break;
 
         case 'casting of a spell, transformation':
-            template = 'There was a casting of a spell, a transformation. The effects were simply amazing. Words could not do them justice.';
+            template = 'There {{was}} a casting of a spell, a transformation. The effects {{were}} simply amazing. Words could not do them justice.';
             break;
 
         case 'false substitution':
             // TODO: posession needs to be tracked
             // so item now "belongs" to villain (or hench-person)
-            template = 'A false substitution was perpretrated by <%= villain.name %>.';
+            template = 'A false substitution {{was}} perpretrated by <%= villain.name %>.';
             break;
 
         case 'issues order to kill [requires proof]':
-            template = '<%= villain.name %> issued an order to kill. It requires proof. THIS WAS CRUEL.';
+            template = '<%= villain.name %> issued an order to kill. It requires proof. THIS {{WAS}} CRUEL.';
             break;
 
         case 'commits murder':
 
-            var murdervictim = pick(world.hero.family.concat(world.hero.acquaintances));
+            var murdervictim = world.pick(world.hero.family.concat(world.hero.acquaintances));
             murdervictim.health = healthLevel.dead;
             // TODO: need to store this somewhere....
             // the _person_ is marked as dead, but we need to "remember" that a murder was perpetrated...
@@ -367,15 +367,15 @@ var nTemplates = function(propp) {
             break;
 
         case 'threat of cannibalism':
-            template = 'There was a threat of cannibalism.';
+            template = 'There {{was}} a threat of cannibalism.';
             break;
 
         case 'threat of cannibalism among relatives':
-            template = 'Thanks to the ravages <%= villain.name %>\'s predations had left on the land, there was the threat of cannibalism among the relatives of <%= hero.name %>\'s family. <%= list(hero.family) %> eyed each other hungrily.';
+            template = 'Thanks to the ravages <%= villain.name %>\'s predations had left on the land, there {{was}} the threat of cannibalism among the relatives of <%= hero.name %>\'s family. <%= list(hero.family) %> eyed each other hungrily.';
             break;
 
         case 'tormenting at night (visitaion, vampirism)':
-            template = '<%= hero.name %> was tormented at night by <%= pick(villain.family).name %>.';
+            template = '<%= hero.name %> {{was}} tormented at night by <%= pick(villain.family).name %>.';
             break;
 
         case 'declaration of war':
@@ -394,7 +394,7 @@ var nTemplates = function(propp) {
     // TODO: push this into an exec function
     // pick one of the following, and store the object
     // or.... figure out a better way to accomplish this...
-    propp['func8a'].exec = function(world, subFunc) {
+    story['func8a'].exec = function(world, subFunc) {
 
         var lacks = ['needed a bride, friend, or an individual.',
                      'needed a helper or magical agent.',
@@ -407,8 +407,8 @@ var nTemplates = function(propp) {
         // if this function isn't executed
         // the lack does not exist for the NEXT function to call it
         // DANG DANG DANG DANG
-        var lack = pick(lacks);
-        var person = pick(world.hero.family);
+        var lack = world.pick(lacks);
+        var person = world.pick(world.hero.family);
         world.cache.lack = {
             lack: lack,
             person: person
@@ -420,7 +420,7 @@ var nTemplates = function(propp) {
     };
 
     // Mediation: hero discovers the lack
-    propp['func9'].exec = function(world) {
+    story['func9'].exec = function(world) {
         // TODO: if lack has not previously been created, this is an issue
         // aaaaand, 8a is not required for 9. WTF?
         return '<%= hero.name %> discovered that ' + world.cache.lack.person.name + ' ' + world.cache.lack.lack;
@@ -428,21 +428,21 @@ var nTemplates = function(propp) {
 
     // Counteraction: hero chooses positive action
     // TODO: positiveaction()
-    propp['func10'].templates.push('<%= hero.name %> chose positive action (just like in all those self-help books).');
+    story['func10'].templates.push('<%= hero.name %> chose positive action (just like in all those self-help books).');
 
     // Departure: hero leave on mission
     // TODO: journey() function
-    propp['func11'].templates.push('<%= hero.name %> left <%= hero.location %> to <%= task %>.');
+    story['func11'].templates.push('<%= hero.name %> left <%= hero.location %> to <%= task %>.');
 
     // 3rd Sphere: The Donor Sequence
     // Testing: hero is challenged to prove heroic qualities
-    propp['func12'].templates.push('<%= hero.name %> was challenged to prove heroic qualities.');
+    story['func12'].templates.push('<%= hero.name %> {{was}} challenged to prove heroic qualities.');
 
     // Reaction: hero responds to test
-    propp['func13'].templates.push('<%= hero.name %> responded to this test.');
+    story['func13'].templates.push('<%= hero.name %> responded to this test.');
 
     //  Acquisition: hero gains magical item
-    propp['func14'].exec = function(world, item) {
+    story['func14'].exec = function(world, item) {
 
         item = item || world.magicalitem;
         world.hero.possessions.push(item);
@@ -456,73 +456,73 @@ var nTemplates = function(propp) {
 
     // Guidance: hero reaches destination
     // TODO: destination is related to task
-    propp['func15'].templates.push('<%= hero.name %> reached destination.');
+    story['func15'].templates.push('<%= hero.name %> reached destination.');
 
     // Struggle: hero and villain do battle
     // TODO: battle() function
-    propp['func16'].templates.push('<%= hero.name %> and <%= villain.name %> engaged in battle.');
+    story['func16'].templates.push('<%= hero.name %> and <%= villain.name %> engaged in battle.');
 
     // Branding: hero is branded
-    propp['func17'].templates.push('<%= hero.name %> was changed by the encounter.');
-    propp['func17'].templates.push('<%= hero.name %> was scarred internally.');
-    propp['func17'].templates.push('This day would never be forgotten by <%= hero.name %>.');
-    propp['func17'].templates.push('<%= hero.name %> received a stylish scarf as a souvenir of the encounter!');
-    propp['func17'].templates.push('<%= villain.name %>\'s head popped off, and was scavenged by <%= hero.name %>.');
+    story['func17'].templates.push('<%= hero.name %> {{was}} changed by the encounter.');
+    story['func17'].templates.push('<%= hero.name %> {{was}} scarred internally.');
+    story['func17'].templates.push('This day would never be forgotten by <%= hero.name %>.');
+    story['func17'].templates.push('<%= hero.name %> received a stylish scarf as a souvenir of the encounter!');
+    story['func17'].templates.push('<%= villain.name %>\'s head popped off, and {{was}} scavenged by <%= hero.name %>.');
 
     // Victory: Villain is defeated
-    propp['func18'].templates.push('Through deft use of the <%= magicalitem %>, <%= villain.name %> was defeated.');
-    propp['func18'].templates.push('<%= hero.name %> <%= select("deployed", "used", "manipulated") %> the <%= magicalitem %> to <%= select("defeat", "trounce", "vanquish", "annoy") %> <%= villain.name %>.');
+    story['func18'].templates.push('Through deft use of the <%= magicalitem %>, <%= villain.name %> {{was}} defeated.');
+    story['func18'].templates.push('<%= hero.name %> <%= select("deployed", "used", "manipulated") %> the <%= magicalitem %> to <%= select("defeat", "trounce", "vanquish", "annoy") %> <%= villain.name %>.');
 
     // Resolution: Initial misfortune or lack is resolved
-    propp['func19'].templates.push('Initial misfortune or lack was resolved.');
+    story['func19'].templates.push('Initial misfortune or lack {{was}} resolved.');
 
     // 4th Sphere: The hero\'s return
     // In the final (and often optional) phase of the storyline, the hero returns home, hopefully uneventfully and to a hero\'s welcome, although this may not always be the case.
 
     // Return: hero sets out for home
     // TODO: how could I write something like hero.home.residence.possess and get "her home" or "his shed" ?
-    propp['func20'].templates.push('<%= hero.name %> set out for <%= hero.home.residence %> in <%= hero.home.location %>.');
+    story['func20'].templates.push('<%= hero.name %> set out for <%= hero.home.residence %> in <%= hero.home.location %>.');
 
     // Pursuit: hero is chased
     // TODO: character/thing that chases
     // TODO: chase() function
-    propp['func21'].templates.push('<%= hero.name %> was chased.');
+    story['func21'].templates.push('<%= hero.name %> {{was}} chased.');
 
     // Rescue: pursuit ends
     // TODO: template to end the above
-    propp['func22'].templates.push('the pursuit ended.');
+    story['func22'].templates.push('the pursuit ended.');
 
     // Arrival: hero arrives unrecognized
-    propp['func23'].templates.push('<%= hero.name %> arrived in <%= hero.home.location %> but was unrecognized.');
+    story['func23'].templates.push('<%= hero.name %> arrived in <%= hero.home.location %> but {{was}} unrecognized.');
 
     // Claim: False hero makes unfounded claims
-    propp['func24'].templates.push('<%= falsehero.name %> made unfounded claims.');
+    story['func24'].templates.push('<%= falsehero.name %> made unfounded claims.');
 
     // Task: Difficult task proposed to the <%= hero.name %>
-    propp['func25'].templates.push('<%= advisor.name %> charged <%= hero.name %> to <%= task %>.');
+    story['func25'].templates.push('<%= advisor.name %> charged <%= hero.name %> to <%= task %>.');
 
     // Solution: Task is resolved
-    propp['func26'].templates.push('<%= task %> was completed.');
-    propp['func26'].templates.push('<%= task %> was completed by <%= hero.name %>.');
-    propp['func26'].templates.push('<%= hero.name %> finishes off <%= task %>.');
+    story['func26'].templates.push('<%= task %> {{was}} completed.');
+    story['func26'].templates.push('<%= task %> {{was}} completed by <%= hero.name %>.');
+    story['func26'].templates.push('<%= hero.name %> finishes off <%= task %>.');
 
     // Recognition: hero is recognised
-    propp['func27'].templates.push('<%= hero.name %> was recognized.');
+    story['func27'].templates.push('<%= hero.name %> {{was}} recognized.');
 
     // Exposure: False hero is exposed
-    propp['func28'].templates.push('<%= falsehero.name %> was exposed.');
+    story['func28'].templates.push('<%= falsehero.name %> {{was}} exposed.');
 
     // Transfiguration: hero is given a new appearance
     // TODO: character description, associated adjectives ???
-    propp['func29'].templates.push('<%= hero.name %> was given a new appearance.');
+    story['func29'].templates.push('<%= hero.name %> {{was}} given a new appearance.');
 
     // Punishment: Villain is punished
-    propp['func30'].exec = function(world) {
+    story['func30'].exec = function(world) {
 
-        var templates = ['<%= villain.nickname %> was <%= punished %> by <%= hero.nickname %>.'
+        var templates = ['<%= villain.nickname %> {{was}} <%= punished %> by <%= hero.nickname %>.'
                         ];
 
-        var t = [ pick(templates)];
+        var t = [world.pick(templates)];
 
         if (world.coinflip()) {
             t.push('God evidently did it to punish <%= villain.name %> for <%= possessive(villain) %> great greediness.');
@@ -530,14 +530,14 @@ var nTemplates = function(propp) {
 
         // TODO: various deathly punishments or summations.
         // But the Bad Wife sits to this day in the pit - in Tartarus.
-        // The journeyman disappeared, and was never seen again.
-        // Then the King was wroth with those sons, and punished them as he thought best.
+        // The journeyman disappeared, and {{was}} never seen again.
+        // Then the King {{was}} wroth with those sons, and punished them as he thought best.
         // But as for the Witch-Snake, she remained down below on earth.
 
         // punishment and conclusion
         // Woe slipped into the wheel; the merchant caught up the oaken wedge,
         // and drove it into the axle-box from the other side. Then he seized the
-        // wheel and flung it, with Woe in it, into the river. Woe was drowned,
+        // wheel and flung it, with Woe in it, into the river. Woe {{was}} drowned,
         // and the merchant began to live again as he had been wont to do of old.
 
         return t.join(' ');
@@ -545,7 +545,7 @@ var nTemplates = function(propp) {
     };
 
     // Wedding: hero marries and ascends the throne
-    propp['func31'].exec = function(world, subFunc) {
+    story['func31'].exec = function(world, subFunc) {
 
         // marriage/ascension are arrays in the wordbank
         var templates = [
@@ -573,7 +573,7 @@ var nTemplates = function(propp) {
             dora.push(people[i]);
         }
 
-        var t = pick(templates);
+        var t = world.pick(templates);
 
         // this a proof-of-concept
         if (dead.length > 0) {
@@ -594,7 +594,7 @@ var nTemplates = function(propp) {
         // From that time forward the Smith gave up spitting at the Demon and
         // striking him with his hammer. The journeyman disappeared, and was
         // never seen again. But the seigneur and his lady entered upon a
-        // prosperous course of life, and if they haven't died, they're living
+        // prosperous course of life, and if they haven't {{died}}, they're living
         // still.
 
         // where would THIS go ????
@@ -612,7 +612,7 @@ var nTemplates = function(propp) {
 
     };
 
-    return propp;
+    return story;
 
 };
 

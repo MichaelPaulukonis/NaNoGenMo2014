@@ -240,27 +240,9 @@ defaultbank.itembank = {
 };
 
 
-
-// ugh. capitalize is defined in propp.js
-// bank { adjective: [], verbs: [] }
-var itemGenerator = function(bank) {
-
-    var adjCount = random(4) + 1;
-    var adjs = [];
-
-    for (var i = 0; i < adjCount; i++) {
-	adjs.push(capitalize(pick(bank.adjectives)));
-    };
-
-    var thing = capitalize(pick(bank.nouns));
-
-    return adjs.join('-') + ' ' + thing;
-
-};
-
 defaultbank.itemGenerator = function() {
 
-    return itemGenerator(defaultbank.itembank);
+    return storyGen.itemGenerator(defaultbank.itembank);
 
 };
 
