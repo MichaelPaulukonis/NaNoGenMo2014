@@ -543,11 +543,15 @@ var storyGen = function() {
 
     // populate template
     // which may contain multiple sentences.
+    // hrm. how about just doing functions, now...
     var sentence = function(func, helper) {
 
         var f = '';
-        if (func && func.active) {
-            if (func.exec) {
+        var isFunc = (typeof func === 'function');
+        if (func && func.active || func && isFunc) {
+           if (isFunc) {
+               f = func(helper);
+           } else if (func.exec) {
                 f = func.exec(helper);
             } else {
                 f = func.templates[random(func.templates.length)];
@@ -617,6 +621,12 @@ var storyGen = function() {
             // the world is the things that have been created. no?
             // possibly not. since creation is called alla time again...
             this.world = god(storyGen.settings, theme.bank);
+            tale.push(this.sentence(story.intro, storyGen.world));
+            for (var i = 0; i < settings.funcs.length; i++) {
+                var s2 = this.sentence(story[settings.funcs[i]], storyGen.world);
+                if (s2) { tale.push(s2); }
+            }
+            tale.push(this.sentence(story.outro, storyGen.world));
 
             // this doesn't handle recursive stories (this is the one I'm particularly interested in)
             // multiple tasks
@@ -625,13 +635,13 @@ var storyGen = function() {
             // TODO: get a new iterator
             // it will be an array that is BUILT
             // aaaand, let's presume that it has been passed in as part of SETTINGS
-            for (var index in story) {
-                // console.log(index);
-                var s = this.sentence(story[index], storyGen.world);
-                if (s) {
-                    tale.push(s);
-                }
-            }
+            // for (var index in story) {
+            //     // console.log(index);
+            //     var s = this.sentence(story[index], storyGen.world);
+            //     if (s) {
+            //         tale.push(s);
+            //     }
+            // }
 
             return tale.join('\n\n');
         } catch(ex) {

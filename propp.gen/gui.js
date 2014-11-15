@@ -84,8 +84,10 @@ var getFunctionsFromGui = function() {
     // to the extant that without that file, the GUI has no purpose
     // propp.js should be able to function w/o the GUI, however...
     var funcs = resetProppFunctions();
+    var f = [];
     for (var index in funcs) {
         funcs[index].active = window.document.myform[index].checked;
+        if (window.document.myform[index].checked) { f.push(index); }
     }
 
     var herog = $('input[name=herogender][type=radio]:checked').val();
@@ -99,7 +101,8 @@ var getFunctionsFromGui = function() {
         herogender: herog,
         villaingender: villaing,
         peoplegender: peopleg,
-        functions: funcs
+        functions: funcs,
+        funcs: f
     };
 
 };

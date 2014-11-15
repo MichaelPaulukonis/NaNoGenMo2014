@@ -24,6 +24,14 @@ var nTemplates = function(story) {
 
     };
 
+    story.intro = function(world) {
+
+        var intros = ['This is the way the world begins.', 'A long time ago,', 'Some years before you were born,', 'In the time when your parents\' parents were but small babies,', 'Once upon a time,'];
+
+        // TODO: if blank, don't output the empty lines before the first paragraph.
+        var intro = (world.coinflip() ? world.pick(intros): '');
+        return intro;
+    };
 
     // TODO: VERB TENSE STANDARDIZATION - s/b past in all places. OR .... ???
     // TODO: verb tense DOES NOT WORK here
@@ -44,10 +52,6 @@ var nTemplates = function(story) {
         // if the intro is skipped, how do we get this info across?
         // ALT: if we start in-media-res, and come BACK to this, skip the "a long time ago" nonsense.
         // or, if we are doing it a SECOND time (re: brothers killed by dragon; new baby born, story starts again)
-
-        // something like this
-        // In the olden years, long long ago,
-        var intros = ['A long time ago,', 'Some years before you were born,', 'In the time when your parents\' parents were but small babies,', 'Once upon a time,'];
 
         // In a certain village there lived a husband and wife - lived happily, lovingly, peaceably. All their neighbors envied them; the sight of them gave pleasure to honest folks.
         // There once lived an old couple who had one son called Ivashko;[207] no one can tell how fond they were of him!
@@ -71,8 +75,7 @@ var nTemplates = function(story) {
         ];
 
         var t = [];
-        var intro = (world.coinflip() ? world.pick(intros) + ' ' : '');
-        t.push(intro + world.pick(templates).replace('{{NT}}', nationType).replace('{{NEAR}}', near));
+        t.push(world.pick(templates).replace('{{NT}}', nationType).replace('{{NEAR}}', near));
         // TODO: list regular name or nickname at random
         t.push(blankLine, '<%= hero.name %> {{lived}} with <%= list(hero.family, "nickname") %>.');
         t.push(blankLine, '<%= list(hero.acquaintances, "nickname") %> {{were}} <%= select("friends of", "known to") %> <%= hero.name %>.');
@@ -94,14 +97,14 @@ var nTemplates = function(story) {
 
         // [blah blah] and there was an end of him.
 
-// example without introdcution that takes place PRIOR to hero intro
-// A certain priest's daughter went strolling in the forest one day,
-// without having obtained leave from her father or her mother - and she
-// disappeared utterly. Three years went by. Now in the village in which
-// her parents dwelt there lived a bold hunter, who went daily roaming
-// through the thick woods with his dog and his gun. One day he was going
-// through the forest; all of a sudden his dog began to bark, and the
-// hair of its back bristled up.
+        // example without introdcution that takes place PRIOR to hero intro
+        // A certain priest's daughter went strolling in the forest one day,
+        // without having obtained leave from her father or her mother - and she
+        // disappeared utterly. Three years went by. Now in the village in which
+        // her parents dwelt there lived a bold hunter, who went daily roaming
+        // through the thick woods with his dog and his gun. One day he was going
+        // through the forest; all of a sudden his dog began to bark, and the
+        // hair of its back bristled up.
 
         var t = [];
         var templates = [
@@ -316,14 +319,14 @@ var nTemplates = function(story) {
             // I guess that's part of the template?
             // OR NO. HERO DIES. THAT'S AN ENDING AS WELL!
 
-// Once there was an old man who was such an awful drunkard as passes all
-// description. Well, one day he went to a kabak, intoxicated himself
-// with liquor, and then went staggering home blind drunk. Now his way
-// happened to lie across a river. When he came to the river, he didn't
-// stop long to consider, but kicked off his boots, hung them round his
-// neck, and walked into the water. Scarcely had he got half-way across
-// when he tripped over a stone, tumbled into the water - and there was an
-// end of him.
+            // Once there was an old man who was such an awful drunkard as passes all
+            // description. Well, one day he went to a kabak, intoxicated himself
+            // with liquor, and then went staggering home blind drunk. Now his way
+            // happened to lie across a river. When he came to the river, he didn't
+            // stop long to consider, but kicked off his boots, hung them round his
+            // neck, and walked into the water. Scarcely had he got half-way across
+            // when he tripped over a stone, tumbled into the water - and there was an
+            // end of him.
 
             var water = world.select("a small stream", "a local lake", "the murky pond", "the well");
             world.hero.location = water;
@@ -565,21 +568,23 @@ var nTemplates = function(story) {
         // this version needs to be in the infinitive....
         // Dated for a few years, but decided to remain single, Kaitlyn retired to write her memoirs.
 
-        var dead = [];
-        var living = [];
-        var people = world.hero.family.concat(world.hero.acquaintances);
-        for (var i = 0; i < people.length; i++) {
-            var dora = (people[i].health == healthLevel.dead ? dead : living);
-            dora.push(people[i]);
-        }
+        // var dead = [];
+        // var living = [];
+        // var people = world.hero.family.concat(world.hero.acquaintances);
+        // for (var i = 0; i < people.length; i++) {
+        //     var dora = (people[i].health == healthLevel.dead ? dead : living);
+        //     dora.push(people[i]);
+        // }
+
+        var lod = story.latd(world.hero);
 
         var t = world.pick(templates);
 
         // this a proof-of-concept
-        if (dead.length > 0) {
+        if (lod.dead.length > 0) {
             // Years passes, but Lauren still mourns the stinging loss of Megan.
             // passed needs to be in the infinitive, here. need to pass this as something extra.
-            var sent = 'Years {{passed}}, but <%= hero.name %> still {{mourns}} the stinging loss of ' + world.list(dead) + '.';
+            var sent = 'Years {{passed}}, but <%= hero.name %> still {{mourns}} the stinging loss of ' + world.list(lod.dead) + '.';
             t += ' ' + sent;
         };
 
@@ -597,18 +602,49 @@ var nTemplates = function(story) {
         // prosperous course of life, and if they haven't {{died}}, they're living
         // still.
 
+
+
+        return t;
+
+    };
+
+    // from person, separate out the living and the dead
+    story.latd = function(person) {
+
+        var dead = [];
+        var living = [];
+        var people = person.family.concat(person.acquaintances);
+        for (var i = 0; i < people.length; i++) {
+            var dora = (people[i].health == healthLevel.dead ? dead : living);
+            dora.push(people[i]);
+        }
+
+        return {
+            living: living,
+            dead: dead
+        };
+
+    };
+
+    story.outro = function(god) {
+
         // where would THIS go ????
         // 'All of this took place long before you were born, so it's not surprising if you don't remember it. But it happened, and people speak of it still.'
         // 'This may sound fantastic, but it all happened exactly as I have told you.'
 
+
+        var hero = god.hero;
+        var ld = story.latd(hero);
+        var t = [];
         // this could get convoluted (Which is good!) "and I tell you this story as you can tell your children"
         // 'and I tell you this story as I told your mother  [or father] and her mother before her' [or father as the case may be].
-        if (living.length > 0) {
-            var narr = world.pick(world.hero.acquaintances).name;
-            t += '\n\nThis may sound fantastic, but in all the world there is nothing stranger than the truth, and it all happened exactly as I have told you, for I was there, as sure as my name is ' + narr + '.';
+
+        if (god.coinflip() && ld.living.length > 0) {
+            var narr = god.pick(ld.living).name;
+            t.push('This may sound fantastic, but in all the world there is nothing stranger than the truth, and it all happened exactly as I have told you, for I was there, as sure as my name is ' + narr + '.');
         }
 
-        return t;
+        return t.join('\n');
 
     };
 
