@@ -525,6 +525,7 @@ var storyGen = function() {
             falsehero: cache.falsehero,
             hero: cache.hero,
             villain: cache.villain,
+            createMagicalitem: createMagicalitem,
             magicalitem: cache.magicalitem, // this remains the same EACH LOOP
             // either we give a new magicalitem, or we skip the donation sequence
             magicalhelper: cache.magicalhelper,
@@ -655,6 +656,7 @@ var storyGen = function() {
                         // we run out of names, because new villains have both family and acquaintances
                         // AND USE THEM ALL UP
                         this.world.villain = this.world.createVillain();
+                        this.world.cache.magicalitem = this.world.createMagicalitem();
                         i = restartVillainy - 1; // one less, since it will be incremented on loop
                     } else {
                         restartVillainy = -1;

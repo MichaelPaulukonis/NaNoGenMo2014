@@ -454,7 +454,7 @@ var nTemplates = function(story) {
         world.hero.possessions.push(item);
 
         // TODO: make this into conversation with a goal?
-        var t = '<%= advisor.name %> gave <%= hero.name %> ' + item + '.';
+        var t = '<%= advisor.name %> gave <%= hero.name %> the ' + item + '.';
 
         return t;
 

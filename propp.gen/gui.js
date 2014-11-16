@@ -35,7 +35,8 @@ var presets = {
     hansel: ['func6', 'func7', 'func8', 'func8a', 'func16', 'func18', 'func20'],
     swhite: ['func1', 'func5', 'func6', 'func7', 'func11', 'func21', 'func30', 'func31'],
     lrrh: ['func4', 'func5', 'func6', 'func7', 'func8', 'func9', 'func10', 'func16', 'func18'],
-    juniper:  ['func6', 'func7', 'func8', 'func11', 'func12', 'func13', 'func14', 'func20', 'func30']
+    juniper:  ['func6', 'func7', 'func8', 'func11', 'func12', 'func13', 'func14', 'func20', 'func30'],
+    barebones: ['func0', 'func8', 'func14', 'func16', 'func18', 'func30', 'func31']
 
 };
 
@@ -64,6 +65,10 @@ function juniper(){
     pushSettingsToGui(proppFunctions);
 }
 
+function barebones() {
+    var story = preset(presets.barebones);
+    pushSettingsToGui(story);
+}
 
 var pushSettingsToGui = function(proppFunctions) {
 
