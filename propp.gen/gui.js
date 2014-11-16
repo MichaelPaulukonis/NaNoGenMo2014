@@ -93,6 +93,7 @@ var getFunctionsFromGui = function() {
     var herog = $('input[name=herogender][type=radio]:checked').val();
     var villaing = $('input[name=villaingender][type=radio]:checked').val();
     var peopleg = $('input[name=peoplegender][type=radio]:checked').val();
+    var bossmode = window.document.myform.bossmode.checked;
 
     funcs = storyGen.enforceRules(funcs);
     pushSettingsToGui(funcs);
@@ -102,7 +103,8 @@ var getFunctionsFromGui = function() {
         villaingender: villaing,
         peoplegender: peopleg,
         functions: funcs,
-        funcs: f
+        funcs: f,
+        bossmode: bossmode
     };
 
 };

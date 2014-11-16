@@ -240,6 +240,8 @@ var storyGen = function() {
 
             // alt: two adjs in front, two-ads in back: "Big Bad Joan" or "Joan the Big and Bad"
             // WAY ALT: His Serene Highness Prince Robert Michael Nicolaus Georg Bassaraba von Brancovan von Badische, Marquis of Hermosilla, Count of Cabo St. Eugenio, Seventy-fourth Grand Master of the Knights of Malta,
+            // another model is "Brienne of Tarth" - have some sort of origin location
+            // we would NOT do this for "family", however.... so, some flag to pass in. :::sigh:::
             var nick = (coinflip() ? name + ' the ' + capitalize(pick(descr)) : capitalize(pick(descr)) + ' ' + name);
 
             return { name: name,
@@ -252,12 +254,8 @@ var storyGen = function() {
                    };
         };
 
-        var createCharacters = function(gndr, aspct) {
-            var members = random(12) + 1; // must always have at least one?
-            // or... lives alone???
-            // that would take some other sort of coding.
-            // and change to the template
-            // and make sure that the victim would be the hero, or some random person....
+        var createCharacters = function(gndr, aspct, count) {
+            var members = count || random(12) + 1;
             var acqs = [];
             for (var i = 0; i < members; i++) {
                 var g = (!gndr || gndr === 'random' ? randomProperty(gender) : gndr);
@@ -285,10 +283,26 @@ var storyGen = function() {
             c.acquaintances = createCharacters(settings.peoplegender, aspct);
             c.home = location();
             c.location = c.home.residence;
+            c.introduced = false;
             if (item) { c.possessions.push(item); }
 
             return c;
 
+        };
+
+        // differs from here in that there are no acquaintances
+        // and only creates minions if a number is passed in
+        var createVillain = function(g, aspct, item, minionCount) {
+            var c = createCharacter(g, aspct);
+            if (minionCount) {
+                c.family = createCharacters(settings.peoplegender, aspct, minionCount);
+            }
+            c.home = location();
+            c.location = c.home.residence;
+            c.introduced = false; // introduced in story
+            if (item) { c.possessions.push(item); }
+
+            return c;
         };
 
         var createHome = function() {
@@ -487,7 +501,7 @@ var storyGen = function() {
                 cache.magicalhelper = createMagicalHelper();
                 cache.punished = createPunished();
                 cache.task = pick(bank.task);
-                cache.villain = createHero(settings.villaingender, aspect.bad, createMagicalitem());
+                cache.villain = createVillain(settings.villaingender, aspect.bad, createMagicalitem(), 2);
                 cache.victim = pick(cache.hero.family);
                 cache.ascension = pick(bank.ascension);
                 cache.marries = pick(bank.marries);
@@ -511,8 +525,8 @@ var storyGen = function() {
             falsehero: cache.falsehero,
             hero: cache.hero,
             villain: cache.villain,
-            punished: cache.punished,
-            magicalitem: cache.magicalitem,
+            magicalitem: cache.magicalitem, // this remains the same EACH LOOP
+            // either we give a new magicalitem, or we skip the donation sequence
             magicalhelper: cache.magicalhelper,
             task: cache.task,
             victim: cache.victim,
@@ -534,7 +548,10 @@ var storyGen = function() {
             interdictionType: interdictionType,
             location: location,
             wordbank: bank,
-            nlp: nlp // this is also a global. But.... won't be in node
+            nlp: nlp,// this is also a global. But.... won't be in node
+            createVillain: createVillain,
+            createHero: createHero,
+            punished: function() { return pick(bank.punish); }
 
         };
 
@@ -565,7 +582,6 @@ var storyGen = function() {
                 sentence = f;
             while((tag = re.exec(f)) !== null) {
                 var verb = tag[0].replace(/\{|\}/g, '');
-                console.log(verb);
                 // because I've set up module && module.exports
                 // nlp thinks it's running in node.js....
                 // can make a global switch.....
@@ -607,6 +623,15 @@ var storyGen = function() {
 
     };
 
+    // takes an array of function names
+    // returns the index of villainy (if found)
+    // or -1 (not found)
+    var findVillainy = function(storyFuncs) {
+        for (var i = 0; i < storyFuncs.length; i++) {
+            if (storyFuncs[i] === 'func8') return i;
+        }
+        return -1;
+    };
 
     // generate the fairy tale
     var generate = function(settings, theme){
@@ -615,16 +640,26 @@ var storyGen = function() {
 
             this.settings = settings;
             var story = theme.templates(settings.functions);
+            var restartVillainy = this.findVillainy(settings.funcs);
 
             var tale = [];
 
             // the world is the things that have been created. no?
             // possibly not. since creation is called alla time again...
             this.world = god(storyGen.settings, theme.bank);
-            tale.push(this.sentence(story.intro, storyGen.world));
             for (var i = 0; i < settings.funcs.length; i++) {
                 var s2 = this.sentence(story[settings.funcs[i]], storyGen.world);
                 if (s2) { tale.push(s2); }
+                if (settings.bossmode && this.world.villain.health == 'dead' && restartVillainy >= 0) {
+                    if (this.world.coinflip()) {
+                        // we run out of names, because new villains have both family and acquaintances
+                        // AND USE THEM ALL UP
+                        this.world.villain = this.world.createVillain();
+                        i = restartVillainy - 1; // one less, since it will be incremented on loop
+                    } else {
+                        restartVillainy = -1;
+                    }
+                }
             }
             tale.push(this.sentence(story.outro, storyGen.world));
 
@@ -661,6 +696,7 @@ var storyGen = function() {
         random: random,
         coinflip: coinflip,
         enforceRules: enforceRules,
+        findVillainy: findVillainy,
         generate: generate,
         god: god,
         itemGenerator: itemGenerator,

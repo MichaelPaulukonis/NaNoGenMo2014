@@ -29,7 +29,7 @@ var nTemplates = function(story) {
         var intros = ['This is the way the world begins.', 'A long time ago,', 'Some years before you were born,', 'In the time when your parents\' parents were but small babies,', 'Once upon a time,'];
 
         // TODO: if blank, don't output the empty lines before the first paragraph.
-        var intro = (world.coinflip() ? world.pick(intros): '');
+        var intro = world.pick(intros);
         return intro;
     };
 
@@ -73,9 +73,8 @@ var nTemplates = function(story) {
             'in the distant {{NT}} of <%= hero.home.nation %>, <%= hero.nickname %> {{lived}} in a <%= hero.home.residence %> {{NEAR}} <%= hero.home.location %>. ',
             '{{NEAR}} <%= hero.home.location %> in the {{NT}} <%= hero.home.nation %>, there {{was}} a <%= hero.home.residence %> where <%= hero.nickname %> {{lived}}. '
         ];
-
         var t = [];
-        t.push(world.pick(templates).replace('{{NT}}', nationType).replace('{{NEAR}}', near));
+        t.push((world.coinflip(world) ? story.intro() + ' ' : '' ) + world.pick(templates).replace('{{NT}}', nationType).replace('{{NEAR}}', near));
         // TODO: list regular name or nickname at random
         t.push(blankLine, '<%= hero.name %> {{lived}} with <%= list(hero.family, "nickname") %>.');
         t.push(blankLine, '<%= list(hero.acquaintances, "nickname") %> {{were}} <%= select("friends of", "known to") %> <%= hero.name %>.');
@@ -260,58 +259,62 @@ var nTemplates = function(story) {
 
         // if not picked ahead of time, pick a sub-function at random
         subFunc = subFunc || world.randomProperty(func8);
-        var template = '';
+        var template = [];
+
+        if (!world.villain.introduced) {
+            template.push('There came into the region of <%= hero.home.location %> a very <%= pick(villain.description) %> person known as <%= villain.nickname %>.');
+        }
 
         subFunc = 'causes sudden disappearance'; // for testing
         subFunc = 'commits murder';
 
         switch(subFunc) {
         case 'kidnapping of person':
-            template = '<%= villain.name %> kidnapped <%= pick(select(hero.family, hero.acquaintances)).name %>.';
+            template.push('<%= villain.name %> kidnapped <%= pick(select(hero.family, hero.acquaintances)).name %>.');
             break;
 
         case 'seizure of magical agent or helper':
-            template = '<%= villain.name %> <%= select("forcibly seized", "kidnapped", "made off with") %> <%= magicalhelper.name %>.';
+            template.push('<%= villain.name %> <%= select("forcibly seized", "kidnapped", "made off with") %> <%= magicalhelper.name %>.');
             break;
 
         case 'forcible seizure of magical helper':
-            template = '<%= villain.name %> <%= select("forcibly seized", "kidnapped", "makde off with") %> <%= magicalhelper.name %>.';
+            template.push('<%= villain.name %> <%= select("forcibly seized", "kidnapped", "makde off with") %> <%= magicalhelper.name %>.');
             break;
 
         case 'pillaging or ruining of crops':
-            template = 'The harvest {{was}} destroyed by <%= villain.name %>. All in <%= hero.nation %> began to feel the pangs of hunger.';
+            template.push('The harvest {{was}} destroyed by <%= villain.name %>. All in <%= hero.nation %> began to feel the pangs of hunger.');
             break;
 
         case 'theft of daylight':
-            template = 'Suddenly, it became as night. <%= villain.name %> had stolen the daylight!';
+            template.push('Suddenly, it became as night. <%= villain.name %> had stolen the daylight!');
             break;
 
         case 'plundering in other forms':
-            template = '<%= villain.name %> engaged in plundering in ... other forms.';
+            template.push('<%= villain.name %> engaged in plundering in ... other forms.');
             break;
 
         case 'bodily injury, maiming, mutilation':
-            template = '<%= villain.name %> caused bodily injury, maiming, mutilation. Oh!';
+            template.push('<%= villain.name %> caused bodily injury, maiming, mutilation. Oh!');
             break;
 
         case 'causes sudden disappearance':
             // TODO: thing or person
             // people have a location; if the location is "unknown" we can process this elsewhere...
-            template = '<%= villain.name %> caused a sudden disappearance.';
+            template.push('<%= villain.name %> caused a sudden disappearance.');
             if (world.coinflip()) { template += ' ' + world.converse(world.villain); }
             break;
 
         case 'bride is forgotten':
             // doesn't this have to be known AHEAD of time, so there is a bride function prepped earlier???
-            template = '<%= hero.name %>\'s bride {{was}} forgotten after <%= villain.name %> cast a spell.';
+            template.push('<%= hero.name %>\'s bride {{was}} forgotten after <%= villain.name %> cast a spell.');
             break;
 
         case 'demand for delivery or enticement, abduction':
-            template = '<%= villain.name %> made a demand for delivery or enticement, abduction. Something like that.';
+            template.push('<%= villain.name %> made a demand for delivery or enticement, abduction. Something like that.');
             break;
 
         case 'expulsion':
-            template = '<%= hero.name %> {{was}} driven from <%= possessive(hero.gender) %> <%= hero.home.residence %>.';
+            template.push('<%= hero.name %> {{was}} driven from <%= possessive(hero.gender) %> <%= hero.home.residence %>.');
             break;
 
         case 'casting into body of water':
@@ -330,21 +333,21 @@ var nTemplates = function(story) {
 
             var water = world.select("a small stream", "a local lake", "the murky pond", "the well");
             world.hero.location = water;
-            template = '<%= villain.name %> threw <%= hero.name %> into <%= hero.location %>.';
+            template.push('<%= villain.name %> threw <%= hero.name %> into <%= hero.location %>.');
             break;
 
         case 'casting of a spell, transformation':
-            template = 'There {{was}} a casting of a spell, a transformation. The effects {{were}} simply amazing. Words could not do them justice.';
+            template.push('There {{was}} a casting of a spell, a transformation. The effects {{were}} simply amazing. Words could not do them justice.');
             break;
 
         case 'false substitution':
             // TODO: posession needs to be tracked
             // so item now "belongs" to villain (or hench-person)
-            template = 'A false substitution {{was}} perpretrated by <%= villain.name %>.';
+            template.push('A false substitution {{was}} perpretrated by <%= villain.name %>.');
             break;
 
         case 'issues order to kill [requires proof]':
-            template = '<%= villain.name %> issued an order to kill. It requires proof. THIS {{WAS}} CRUEL.';
+            template.push('<%= villain.name %> issued an order to kill. It requires proof. THIS {{WAS}} CRUEL.');
             break;
 
         case 'commits murder':
@@ -353,41 +356,41 @@ var nTemplates = function(story) {
             murdervictim.health = healthLevel.dead;
             // TODO: need to store this somewhere....
             // the _person_ is marked as dead, but we need to "remember" that a murder was perpetrated...
-            template = '<%= villain.name %> killed ' + murdervictim.name + '.';
-            template += '\n\n<%= converse(villain) %>';
+            template.push('<%= villain.name %> killed ' + murdervictim.name + '.');
+            template.push('<%= converse(villain) %>');
             break;
 
         case 'imprisonment, detention':
-            template = 'Imprisonment, detention of <%= hero.name %>.';
+            template.push('Imprisonment, detention of <%= hero.name %>.');
             break;
 
         case 'threat of forced matrimony':
-            template = '<%= villain.name %> threatened to marry <%= pick(hero.family).name %>.';
+            template.push('<%= villain.name %> threatened to marry <%= pick(hero.family).name %>.');
             break;
 
         case 'threat of forced matrimony between relatives':
-            template = '<%= villain.name %> <%= select("insinuated", "suggested", "mused") %> that <%= list(hero.family) %> could be forced into a marriage of convenience.';
+            template.push('<%= villain.name %> <%= select("insinuated", "suggested", "mused") %> that <%= list(hero.family) %> could be forced into a marriage of convenience.');
             break;
 
         case 'threat of cannibalism':
-            template = 'There {{was}} a threat of cannibalism.';
+            template.push('There {{was}} a threat of cannibalism.');
             break;
 
         case 'threat of cannibalism among relatives':
-            template = 'Thanks to the ravages <%= villain.name %>\'s predations had left on the land, there {{was}} the threat of cannibalism among the relatives of <%= hero.name %>\'s family. <%= list(hero.family) %> eyed each other hungrily.';
+            template.push('Thanks to the ravages <%= villain.name %>\'s predations had left on the land, there {{was}} the threat of cannibalism among the relatives of <%= hero.name %>\'s family. <%= list(hero.family) %> eyed each other hungrily.');
             break;
 
         case 'tormenting at night (visitaion, vampirism)':
-            template = '<%= hero.name %> {{was}} tormented at night by <%= pick(villain.family).name %>.';
+            template.push('<%= hero.name %> {{was}} tormented at night by <%= pick(villain.family).name %>.');
             break;
 
         case 'declaration of war':
-            template = '<%= villain.name %> declared war on <%= hero.name %>.';
+            template.push('<%= villain.name %> declared war on <%= hero.name %>.');
             break;
 
         };
 
-        return template;
+        return template.join('\n\n');
 
     };
 
@@ -522,8 +525,9 @@ var nTemplates = function(story) {
     // Punishment: Villain is punished
     story['func30'].exec = function(world) {
 
-        var templates = ['<%= villain.nickname %> {{was}} <%= punished %> by <%= hero.nickname %>.'
+        var templates = ['<%= villain.nickname %> {{was}} <%= punished() %> by <%= hero.nickname %>.'
                         ];
+        world.villain.health = 'dead';
 
         var t = [world.pick(templates)];
 
