@@ -248,8 +248,17 @@ var nTemplates = function(story) {
     story['func7'].templates.push('<%= hero.name %> unwittingly helped <%= villain.name %>.');
 
     story.introduceVillain = function(god) {
+        var time = god.select('one morning', 'one evening', 'one night', 'one day', 'in the middle of the night', 'when nobody was paying attention');
+        var person = god.select('person', 'individual');
+
+        var A = 'came into the region of <%= hero.home.location %>';
+        var B = 'a very <%= pick(villain.description) %> ' + person + ' known as <%= villain.nickname %>';
+
         var templates = [
-            'There came into the region of <%= hero.home.location %> a very <%= pick(villain.description) %> person known as <%= villain.nickname %>.'
+            time + ', there ' + A + ' ' + B + '.',
+            'There ' + A + ' ' + B + '.',
+            B + ' ' + A + '.',
+            B + ' ' + A + ' ' + time + '.'
             ];
 
         return god.pick(templates);
@@ -458,15 +467,41 @@ var nTemplates = function(story) {
     story['func13'].templates.push('<%= hero.name %> responded to this test.');
 
     //  Acquisition: hero gains magical item
-    story['func14'].exec = function(world, item) {
+    story['func14'].exec = function(god, item) {
 
-        item = item || world.createMagicalitem();
-        world.hero.possessions.push(item);
+        var t = [];
+
+        item = item || god.createMagicalitem();
+        // but we never get rid of the previous item.....
+        god.hero.possessions.push(item);
+
+        if (!god.advisor.introduced) {
+            t.push(god.converse(god.advisor, god.hero), blankLine);
+        }
+
+        var hn = '<%= select(hero.name, hero.nickname) %>';
+        var an = '<%= select(advisor.name, advisor.nickname) %>';
+        var met = '<%= select("met", "encountered", "came across", "found", "was found by", "bumped into") %>';
+
+        var templates = [
+            (god.advisor.introduced ? '{{HN}} {{MET}} {{AN}} again.\n\n'  : '') + '"Here," said {{AN}}, "you\'ll need this," and gave {{HN}} the {{IT}}.'
+            ];
 
         // TODO: make this into conversation with a goal?
-        var t = '<%= advisor.name %> gave <%= hero.name %> the ' + item + '.';
+        t.push(god.pick(templates));
+        t.push('"What\'s this?" asked {{HN}}.');
+        // TODO: magical items will have propeties that can be enumerated, here....
+        t.push('"What does it look like?" replied {{AN}}. "It\'s a special, magical {{IT}}."');
+        // TODO: greatfully, thankfully - which require
+        if (god.coinflip()) {
+            t.push('"Thanks!" said a <%= select("grateful", "thankful") %> {{HN}}'
+                   + (god.coinflip() ? god.select(' gratefully', ' thankfully') : '') + '.'); }
 
-        return t;
+        god.advisor.introduced = true;
+
+        var para = t.join('\n').replace(/{{HN}}/g, hn).replace(/{{AN}}/g, an).replace(/{{IT}}/g, item).replace(/{{MET}}/g, met);
+
+        return para;
 
     };
 
@@ -476,6 +511,7 @@ var nTemplates = function(story) {
 
     // Struggle: hero and villain do battle
     // TODO: battle() function
+    // TODO: if villain and hero have not met, they must converse
     story['func16'].templates.push('<%= hero.name %> and <%= villain.name %> engaged in battle.');
 
     // Branding: hero is branded
@@ -489,7 +525,7 @@ var nTemplates = function(story) {
     story['func18'].exec = function(world) {
         var templates = [];
         // TODO: if there is no magical item, this can't happen...
-        templates.push('Through deft use of the <%= hero.possessions[0] %>, <%= villain.name %> {{was}} defeated.');
+        templates.push('Through deft use of the <%= hero.possessions[hero.possessions.length-1] %>, <%= villain.name %> {{was}} defeated.');
         // templates.push('<%= hero.name %> <%= select("deployed", "used", "manipulated") %> the <%= magicalitem %> to <%= select("defeat", "trounce", "vanquish", "annoy") %> <%= villain.name %>.');
 
         return world.pick(templates);
@@ -552,7 +588,6 @@ var nTemplates = function(story) {
         if (true) {
             var tmpl2 = [
                 // TODO: come up with another word for punish
-                // which is it -- pick or select that is for strings?
                 'God <%= (coinflip() ? "evidently " : "")%>did it to punish <%= villain.name %> for <%= possessive(villain) %><%= (coinflip() ? " great" : "")%> <%= nlp.adjective(pick(villain.description)).conjugate().noun %>.',
                 '<%= (coinflip() ? "But " : "")%><%= villain.name %> sits to this day in the pit - in Tartarus.',
                 '<%= villain.name %> <%= select("disappeared", "vanished") %>, and {{was}} never seen again.'

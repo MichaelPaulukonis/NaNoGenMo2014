@@ -251,7 +251,8 @@ var storyGen = function() {
                      possessions: [],
                      health: healthLevel.alive,
                      description: descr,
-                     knows: [] // people known to character (identifier, not object-reference, so we don't get all circular)
+                     knows: [], // people known to character (identifier, not object-reference, so we don't get all circular)
+                     id: storyGen.uid.toString()
                    };
         };
 
@@ -317,7 +318,11 @@ var storyGen = function() {
         };
 
         var createMagicalitem = function() {
-            return pickRemove(bank.magicalitem);
+            // pick REMOVE
+            // which means we run of of the durned things.
+            // why not just create them here AS NEEDED
+            var item = (bank.magicalitem && bank.magicalitem.length > 0 ? pickRemove(bank.magicalitem) : bank.itemGenerator());
+            return item;
         };
 
 
@@ -497,7 +502,9 @@ var storyGen = function() {
                 cache.hero = createHero(settings.herogender, aspect.good);
                 // TODO: magical item starts as a posession of the advisor, no?
                 // NO: it could just be... lying about.
+                // TODO: advisor gender could be a setting, so we can all-female stories.
                 cache.advisor = createCharacter(null, aspect.good);
+                cache.advisor.introduced = false; // ugh.
                 cache.magicalitem = createMagicalitem();
                 cache.magicalhelper = createMagicalHelper();
                 cache.punished = createPunished();
@@ -554,7 +561,6 @@ var storyGen = function() {
             createVillain: createVillain,
             createHero: createHero,
             punished: function() { return pick(bank.punish); }
-
         };
 
     };
@@ -568,9 +574,9 @@ var storyGen = function() {
         var f = '';
         var isFunc = (typeof func === 'function');
         if (func && func.active || func && isFunc) {
-           if (isFunc) {
-               f = func(helper);
-           } else if (func.exec) {
+            if (isFunc) {
+                f = func(helper);
+            } else if (func.exec) {
                 f = func.exec(helper);
             } else {
                 f = func.templates[random(func.templates.length)];
@@ -722,6 +728,15 @@ var storyGen = function() {
 // wait: aren't these set elsewhere, as well?????
 // storyGen.god = god;
 storyGen.settings = settings;
+
+// http://stackoverflow.com/questions/3231459/create-unique-id-with-javascript
+storyGen.uid = new function () {
+    var u = 0;
+    this.toString = function () {
+        return 'id_' + u++;
+    };
+};
+
 // storyGen.enforceRules = enforceRules;
 // storyGen.random = random;
 // storyGen.sentence = sentence;
