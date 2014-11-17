@@ -4,6 +4,9 @@ var defaultbank = {};
 defaultbank.residence = ['grass hut', 'small house', 'barn', 'hovel', 'stately manor', 'decayed mansion', 'shack', 'shed', 'house'];
 
 // the vicinity of the home
+// the ones with articles are problematic....
+// how can we refer to them definitively?
+// this has to be an object, I guess, with some sort of indicator
 defaultbank.location = ['Hobbiton', 'New Haven', 'East Lansing', 'Madchester', 'Oblivion', 'a valley', 'a small village', 'a lonely intersection'];
 
 // this should more be country. 'Nation' is short-hand.

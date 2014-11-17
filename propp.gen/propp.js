@@ -250,7 +250,8 @@ var storyGen = function() {
                      gender: gndr,
                      possessions: [],
                      health: healthLevel.alive,
-                     description: descr
+                     description: descr,
+                     knows: [] // people known to character (identifier, not object-reference, so we don't get all circular)
                    };
         };
 
@@ -526,7 +527,7 @@ var storyGen = function() {
             hero: cache.hero,
             villain: cache.villain,
             createMagicalitem: createMagicalitem,
-            magicalitem: cache.magicalitem, // this remains the same EACH LOOP
+            // magicalitem: cache.magicalitem, // this remains the same EACH LOOP
             // either we give a new magicalitem, or we skip the donation sequence
             magicalhelper: cache.magicalhelper,
             task: cache.task,
@@ -614,6 +615,12 @@ var storyGen = function() {
             story['func3'].active = true;
         }
 
+        // magical item must be given to hero in order to be used
+        // the obverse is not true (can be given but never used; pointless, but: whatever!)
+        if (story['func18'].active) {
+            story['func14'].active = true;
+        }
+
         // if returning, must depart
         // converse is not true
         if (story['func21'].active) {
@@ -652,7 +659,7 @@ var storyGen = function() {
                 var s2 = this.sentence(story[settings.funcs[i]], storyGen.world);
                 if (s2) { tale.push(s2); }
                 if (settings.bossmode && this.world.villain.health == 'dead' && restartVillainy >= 0) {
-                    if (this.world.coinflip()) {
+                    if (this.world.coinflip(0.8)) {
                         // we run out of names, because new villains have both family and acquaintances
                         // AND USE THEM ALL UP
                         this.world.villain = this.world.createVillain();

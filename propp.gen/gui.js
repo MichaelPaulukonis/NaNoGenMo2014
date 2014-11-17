@@ -20,6 +20,7 @@ var gui = function() {
 // TODO: we don't need a global anymore....
 var preset = function(presets) {
 
+    // reset should not be global.
     var propp = resetProppFunctions();
 
     for (var i = 0; i < presets.length; i++) {
@@ -29,6 +30,9 @@ var preset = function(presets) {
     return propp;
 };
 
+// make this part of propp.js
+// also... need a randomizer
+// although... that's not really a preset...
 var presets = {
 
     cinderella: ['func1', 'func8', 'func8a', 'func14', 'func19', 'func23', 'func27', 'func31'],
@@ -92,7 +96,7 @@ var getFunctionsFromGui = function() {
     var f = [];
     for (var index in funcs) {
         funcs[index].active = window.document.myform[index].checked;
-        if (window.document.myform[index].checked) { f.push(index); }
+        // if (window.document.myform[index].checked) { f.push(index); }
     }
 
     var herog = $('input[name=herogender][type=radio]:checked').val();
@@ -100,8 +104,14 @@ var getFunctionsFromGui = function() {
     var peopleg = $('input[name=peoplegender][type=radio]:checked').val();
     var bossmode = window.document.myform.bossmode.checked;
 
+    // TOO LATE - not in the array, which has to be in order. DANG.
     funcs = storyGen.enforceRules(funcs);
     pushSettingsToGui(funcs);
+
+    // this is awkward....
+    for (index in funcs) {
+        if (window.document.myform[index].checked) { f.push(index); }
+    }
 
     return {
         herogender: herog,

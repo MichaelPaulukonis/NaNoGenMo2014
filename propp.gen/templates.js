@@ -220,6 +220,7 @@ var nTemplates = function(story) {
             break;
         }
 
+        world.villain.introduced = true;
         text.push(blankLine);
         text.push(world.converse(world.villain, world.hero));
 
@@ -246,6 +247,15 @@ var nTemplates = function(story) {
     // Complicity: Unwitting helping of the enemy
     story['func7'].templates.push('<%= hero.name %> unwittingly helped <%= villain.name %>.');
 
+    story.introduceVillain = function(god) {
+        var templates = [
+            'There came into the region of <%= hero.home.location %> a very <%= pick(villain.description) %> person known as <%= villain.nickname %>.'
+            ];
+
+        return god.pick(templates);
+
+    };
+
     // 2nd Sphere: The Body of the story
     // 8A - Villainy: The need is identified (Villainy)
     // function 8 (and/or 8a) is always present in tale
@@ -262,7 +272,7 @@ var nTemplates = function(story) {
         var template = [];
 
         if (!world.villain.introduced) {
-            template.push('There came into the region of <%= hero.home.location %> a very <%= pick(villain.description) %> person known as <%= villain.nickname %>.');
+            template.push(story.introduceVillain(world));
         }
 
         subFunc = 'causes sudden disappearance'; // for testing
@@ -450,7 +460,7 @@ var nTemplates = function(story) {
     //  Acquisition: hero gains magical item
     story['func14'].exec = function(world, item) {
 
-        item = item || world.magicalitem;
+        item = item || world.createMagicalitem();
         world.hero.possessions.push(item);
 
         // TODO: make this into conversation with a goal?
@@ -476,8 +486,15 @@ var nTemplates = function(story) {
     story['func17'].templates.push('<%= villain.name %>\'s head popped off, and {{was}} scavenged by <%= hero.name %>.');
 
     // Victory: Villain is defeated
-    story['func18'].templates.push('Through deft use of the <%= magicalitem %>, <%= villain.name %> {{was}} defeated.');
-    story['func18'].templates.push('<%= hero.name %> <%= select("deployed", "used", "manipulated") %> the <%= magicalitem %> to <%= select("defeat", "trounce", "vanquish", "annoy") %> <%= villain.name %>.');
+    story['func18'].exec = function(world) {
+        var templates = [];
+        // TODO: if there is no magical item, this can't happen...
+        templates.push('Through deft use of the <%= hero.possessions[0] %>, <%= villain.name %> {{was}} defeated.');
+        // templates.push('<%= hero.name %> <%= select("deployed", "used", "manipulated") %> the <%= magicalitem %> to <%= select("defeat", "trounce", "vanquish", "annoy") %> <%= villain.name %>.');
+
+        return world.pick(templates);
+
+    };
 
     // Resolution: Initial misfortune or lack is resolved
     story['func19'].templates.push('Initial misfortune or lack {{was}} resolved.');
@@ -531,8 +548,16 @@ var nTemplates = function(story) {
 
         var t = [world.pick(templates)];
 
-        if (world.coinflip()) {
-            t.push('God evidently did it to punish <%= villain.name %> for <%= possessive(villain) %> great greediness.');
+        // if (world.coinflip()) {
+        if (true) {
+            var tmpl2 = [
+                // TODO: come up with another word for punish
+                // which is it -- pick or select that is for strings?
+                'God <%= (coinflip() ? "evidently " : "")%>did it to punish <%= villain.name %> for <%= possessive(villain) %><%= (coinflip() ? " great" : "")%> <%= nlp.adjective(pick(villain.description)).conjugate().noun %>.',
+                '<%= (coinflip() ? "But " : "")%><%= villain.name %> sits to this day in the pit - in Tartarus.',
+                '<%= villain.name %> <%= select("disappeared", "vanished") %>, and {{was}} never seen again.'
+            ];
+            t.push(world.pick(tmpl2));
         };
 
         // TODO: various deathly punishments or summations.
@@ -632,10 +657,11 @@ var nTemplates = function(story) {
 
     story.outro = function(god) {
 
-        // where would THIS go ????
-        // 'All of this took place long before you were born, so it's not surprising if you don't remember it. But it happened, and people speak of it still.'
-        // 'This may sound fantastic, but it all happened exactly as I have told you.'
-
+        var templates = [
+            'All of this took place long before you were born, so it\'s not surprising that you don\'t remember it. But it happened, and people speak of it still.',
+            'This may sound fantastic, but it all happened exactly as I have told you.',
+            'Wether you believe it or not, this is what happened, for what I tell you is true.'
+            ];
 
         var hero = god.hero;
         var ld = story.latd(hero);
@@ -643,9 +669,11 @@ var nTemplates = function(story) {
         // this could get convoluted (Which is good!) "and I tell you this story as you can tell your children"
         // 'and I tell you this story as I told your mother  [or father] and her mother before her' [or father as the case may be].
 
-        if (god.coinflip() && ld.living.length > 0) {
+        if (god.coinflip(0.2) && ld.living.length > 0) {
             var narr = god.pick(ld.living).name;
             t.push('This may sound fantastic, but in all the world there is nothing stranger than the truth, and it all happened exactly as I have told you, for I was there, as sure as my name is ' + narr + '.');
+        } else {
+            t.push(god.pick(templates));
         }
 
         return t.join('\n');
