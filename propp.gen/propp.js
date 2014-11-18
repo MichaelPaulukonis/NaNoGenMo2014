@@ -163,6 +163,8 @@ var storyGen = function() {
 
 
     var capitalize = function(str) {
+        // how about regex on start of each line w/in the string????
+        return str.replace(/^[a-z]/mg, function(m) { return m.toUpperCase(); });
         return str.slice(0,1).toUpperCase() + str.slice(1);
     };
 
@@ -252,7 +254,8 @@ var storyGen = function() {
                      health: healthLevel.alive,
                      description: descr,
                      knows: [], // people known to character (identifier, not object-reference, so we don't get all circular)
-                     id: storyGen.uid.toString()
+                     id: storyGen.uid.toString(),
+                     getCharacter: getCharacter
                    };
         };
 
@@ -268,12 +271,21 @@ var storyGen = function() {
         };
 
         var location = function() {
-            // return pickRemove(bank.home);
+            // don't need to do a pick-remove
+            // but we should probably store all locations
+            // and make sure we never duplicate....
             return {
-                residence: pickRemove(bank.residence),
-                location: pickRemove(bank.location),
-                nation: pickRemove(bank.nation)
+                residence: pick(bank.residence),
+                location: pick(bank.location),
+                nation: pick(bank.nation)
             };
+        };
+
+        var getCharacter = function(uid) {
+            if (typeof uid === 'object') { return uid; }
+            var c;
+            if (cache.characters[uid]) { c = cache.characters[uid]; }
+            return c;
         };
 
         // hero or villain
@@ -281,8 +293,24 @@ var storyGen = function() {
             // oooooh, we just want to ADD properties to the character
             // so we d on't repeat the name, gender, posessions, etc....
             var c = createCharacter(g, aspct);
-            c.family = createCharacters(settings.peoplegender, aspct);
-            c.acquaintances = createCharacters(settings.peoplegender, aspct);
+            var family = createCharacters(settings.peoplegender, aspct);
+            var acquaintances = createCharacters(settings.peoplegender, aspct);
+            c.family = [];
+            c.acquaintances = [];
+            c.knows = [];
+
+            for (var i = 0; i < family.length; i++) {
+                c.family.push(family[i].id);
+                c.knows.push(family[i].id);
+                cache.characters[family[i].id] = family[i];
+            }
+
+            for (i = 0; i < acquaintances.length; i++) {
+                c.acquaintances.push(acquaintances[i].id);
+                c.knows.push(acquaintances[i].id);
+                cache.characters[acquaintances[i].id] = acquaintances[i];
+            }
+
             c.home = location();
             c.location = c.home.residence;
             c.introduced = false;
@@ -336,9 +364,13 @@ var storyGen = function() {
             return pick(bank.punish);
         };
 
+        // hrm. we are now storing people as string-ids. OUCH
         var getName = function(thing, property) {
-            if (property && thing[property]) { return thing[property]; }
-            var elem = (typeof thing === 'string' ? thing : thing.name);
+            if (property && thing[property]) { return getCharacter(thing)[property]; }
+            // if thing starts with "id_" then it is a character reference
+            // or another sort of reference. hrm.
+            if (thing.indexOf('id_') == 0) { property = property || select('name', 'nickname'); }
+            var elem = (typeof thing === 'string' && thing.indexOf('id_') == -1 ? thing : getCharacter(thing)[property]);
             return elem;
         };
 
@@ -349,11 +381,18 @@ var storyGen = function() {
         };
 
         // third-person
-        var pronoun = function(gndr) {
+        var pronounobject = function(gndr) {
             // if character is passed in, reduce it to the target gender
             if (gndr && gndr.gender) { gndr = gndr.gender; }
             return (gndr === gender.male ? 'him' : (gndr === gender.female ? 'her' : 'them'));
         };
+
+        var pronoun = function(gndr) {
+            // if character is passed in, reduce it to the target gender
+            if (gndr && gndr.gender) { gndr = gndr.gender; }
+            return (gndr === gender.male ? 'he' : (gndr === gender.female ? 'she' : 'it'));
+        };
+
 
         // calculate the speaking tone
         // VERY PRELIMINARY
@@ -395,22 +434,31 @@ var storyGen = function() {
         var converse = function(p1, p2) {
             var c = [];
 
-            // TODO: various greetings, fair and foul in the wordbank := greetings: { fair: [], foul: [] }
-
             // "Don't go bragging like that!" says a rich merchant
             // after somebody says something _about themselves_
 
             var t = tone(p1, p2);
+            var p1n = coinflip() ? p1.name : p1.nickname;
+            var p2n = '';
+            // var says = '{{' + select('said', 'remarked', 'noted', 'mused', 'exclaimed', 'ejected', 'rumbled', 'muttered') + '}}';
+            var says = '<%= select("said", "remarked", "noted", "mused", "exclaimed", "ejected", "rumbled", "muttered") %>';
+            var reply = '{{<%= select("replied", "responded", "retorted", "volleyed", "returned", "muttered") %>}}';
 
             if (p1 && p2) {
-                // TODO: gah, who knows!
-                c.push('"{{GG}}, ' + p1.name + '" {{said}} ' + p2.name + '.');
-                c.push('"{{GG}}, ' + p2.name + '" {{replied}} ' + p1.name + '.');
-                c.push('"Well, you certainly are ' + p1.description[0] + '," {{remarked}} ' + p2.name + '.');
-                c.push('"Yes, I am," {{conceded}} ' + p1.name + '. "But it\'s been said that I\'m also ' + p1.description[1] + '!"');
+                p2n = coinflip() ? p2.name : p2.nickname;
+                // TODO: still pretty repetitive
+                // and the punctuation is funky
+                // not... interesting enough.
+                c.push('"{{GG}} {{P1N}}" {{SAY}} {{P2N}}.');
+                c.push('"{{GG}} {{P2N}}" {{RPLY}} {{P1N}}.');
+                c.push('"Well, you certainly are ' + p1.description[0] + '," {{SAY}} {{P2N}}.');
+                c.push('"Yes, I am," {{conceded}} {{P1N}}. "But it\'s been said that I\'m also ' + p1.description[1] + '!"');
 
             } else if (p1 && !p2) {
-                c.push('"' + capitalize(pick(bank.interjections)) + '!" {{said}} ' + p1.name + ' to nobody in particular.');
+                var punct = function() { return select('!', '.', '?'); };
+                c.push('"' + capitalize(pick(bank.interjections))
+                       + select('!', ',') + '" {{SAY}} {{P1N}}' + (coinflip() ? ' to nobody in particular.' : '.')
+                       + (coinflip() ? '' : ' "' + capitalize(pick(bank.interjections)) + punct() + '"'));
             }
 
             // not applicable to solo "conversations"
@@ -420,7 +468,8 @@ var storyGen = function() {
                     c[i] = c[i].replace('{{GG}}', pick(bank.greetings[t]));
                 }
             }
-            return c.join('\n');
+            var tmpl = c.join('\n').replace(/{{P1N}}/mg, p1n).replace(/{{P2N}}/mg, p2n).replace(/{{SAY}}/mg, says).replace(/{{RPLY}}/mg, reply);
+            return tmpl;
         };
 
         // battle between two people
@@ -499,6 +548,8 @@ var storyGen = function() {
                 if (!settings.villaingender || settings.villaingender === 'random') { settings.villaingender = randomProperty(gender); }
                 if (!settings.peoplegender || settings.peoplegender === 'random') { settings.peoplegender = randomProperty(gender); }
 
+                cache.characters = {}; // this holds all the people, elsewhere, use a uid to reference individuals
+
                 cache.hero = createHero(settings.herogender, aspect.good);
                 // TODO: magical item starts as a posession of the advisor, no?
                 // NO: it could just be... lying about.
@@ -510,7 +561,8 @@ var storyGen = function() {
                 cache.punished = createPunished();
                 cache.task = pick(bank.task);
                 cache.villain = createVillain(settings.villaingender, aspect.bad, createMagicalitem(), 2);
-                cache.victim = pick(cache.hero.family);
+                // cache.victim = getCharacter(cache.hero);
+                cache.victim = getCharacter(pick(cache.hero.family.concat(cache.hero)));
                 cache.ascension = pick(bank.ascension);
                 cache.marries = pick(bank.marries);
                 cache.falsehero = pick(cache.villain.family);
@@ -547,6 +599,7 @@ var storyGen = function() {
             or: or,
             list: list,
             possessive: possessive,
+            pronounobject: pronounobject,
             pronoun: pronoun,
             // ooop. what's the difference?!!!
             pick: pick,
@@ -560,7 +613,8 @@ var storyGen = function() {
             nlp: nlp,// this is also a global. But.... won't be in node
             createVillain: createVillain,
             createHero: createHero,
-            punished: function() { return pick(bank.punish); }
+            punished: function() { return pick(bank.punish); },
+            getCharacter: getCharacter
         };
 
     };
@@ -581,6 +635,7 @@ var storyGen = function() {
             } else {
                 f = func.templates[random(func.templates.length)];
             }
+            console.log(f);
             var t = _.template(f);
             f = t(helper);
 
@@ -664,6 +719,7 @@ var storyGen = function() {
             for (var i = 0; i < settings.funcs.length; i++) {
                 var s2 = this.sentence(story[settings.funcs[i]], storyGen.world);
                 if (s2) { tale.push(s2); }
+                if (this.world.hero.health === healthLevel.dead) { break; }
                 if (settings.bossmode && this.world.villain.health == 'dead' && restartVillainy >= 0) {
                     if (this.world.coinflip(0.8)) {
                         // we run out of names, because new villains have both family and acquaintances
@@ -736,11 +792,6 @@ storyGen.uid = new function () {
         return 'id_' + u++;
     };
 };
-
-// storyGen.enforceRules = enforceRules;
-// storyGen.random = random;
-// storyGen.sentence = sentence;
-
 
 
 module = module || {};

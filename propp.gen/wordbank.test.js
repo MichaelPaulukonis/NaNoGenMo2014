@@ -14,8 +14,8 @@ defaultbank.nation = ['the Monastic State of the Teutonic Knights', 'Prussia', '
 
 // not sure how to handle punctuation
 // put it in here?
-defaultbank.greetings = { good: ['Hello', 'Hello there', 'Hail and well met', 'Greetings', 'Ahoy', 'Salutations', 'Welcome', 'Well, look who this is', 'Nice to meet you'],
-                          bad: ['Oh', 'Oh, it\'s you', 'Oh, hello', 'Oh, dear', 'Ugh', 'Well, look who this is', 'I\'ll see you in Hell']
+defaultbank.greetings = { good: ['Hello,', 'Hello there,', 'Hail and well met,', 'Greetings,', 'Ahoy!', 'Salutations!', 'Welcome,', 'Well, look who this is, it\s', 'Nice to meet you'],
+                          bad: ['Oh.', 'Oh, it\'s you,', 'Oh, hello,', 'Oh, dear.', 'Ugh. It\s', 'Well, look who this is:', 'I\'ll see you in Hell,']
                         };
 
 // TODO: things must also have properties
