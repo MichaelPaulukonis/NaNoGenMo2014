@@ -7,7 +7,7 @@
     "underscore": "~1.7.0",
     "jquery": "~2.1.1",
     "concept-net": "~0.0.2",
-    "nlp_compromise": "~0.2.0"
+    "nlp_compromise": "~0.2.2"
   },
   "devDependencies": {},
   "scripts": {

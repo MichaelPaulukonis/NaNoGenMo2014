@@ -16,64 +16,62 @@
 "use strict";
 
 var _ = _ || require('underscore');
-// var nlp = nlp || require('nlp_compromise');
+var nlp = nlp || require('nlp_compromise');
 
 // http://blog.elliotjameschong.com/2012/10/10/underscore-js-deepclone-and-deepextend-mix-ins/
 // in case it is not clear, deepClone clones everything that can JSON-ified
 // that means properties NOT FUNCTIONS
 _.mixin({ deepClone: function (o) { return JSON.parse(JSON.stringify(o)); } });
 
+var world = {};
+
 // TODO: THESE are the things that go into something called 'world'
-var aspect = {
+world.aspect = {
     good: 'good',
     bad: 'bad'
 };
 
-var gender = {
+world.gender = {
     female: 'female',
     male: 'male',
     neuter: 'neuter'
 };
 
-var healthLevel = {
+world.healthLevel = {
     alive: 'alive',
     sickly: 'sickly',
     dead: 'dead'
 };
 
 // for interdiction (using two words for this...)
-var interdictionType = {
+world.interdictionType = {
     movement: 'movement',
     action: 'action',
     speak: 'speakwith'
 };
 
-// sub-functions
-var func8 = {
-    '1'   : 'kidnapping of person',
-    '2'   : 'seizure of magical agent or helper',
-    '2b'  : 'forcible seizure of magical helper',
-    '3'   : 'pillaging or ruining of crops',
-    '4'   : 'theft of daylight',
-    '5'   : 'plundering in other forms',
-    '6'   : 'bodily injury, maiming, mutilation',
-    '7'   : 'causes sudden disappearance',
-    '7b'  : 'bride is forgotten',
-    '8'   : 'demand for delivery or enticement, abduction',
-    '9'   : 'expulsion',
-    '10'  : 'casting into body of water',
-    '11'  : 'casting of a spell, transformation',
-    '12'  : 'false substitution',
-    '13'  : 'issues order to kill [requires proof]',
-    '14'  : 'commits murder',
-    '15'  : 'imprisonment, detention',
-    '16'  : 'threat of forced matrimony',
-    '16b' : 'threat of forced matrimony between relatives',
-    '17'  : 'threat of cannibalism',
-    '17b' : 'threat of cannibalism among relatives',
-    '18'  : 'tormenting at night (visitaion, vampirism)',
-    '19'  : 'declaration of war'
+
+// we should have departure/death
+// parents/siblings
+// maybe make it simple: departure/death, familymember
+world.absentationType = {
+    departure: 'departure',
+    death: 'death'
 };
+
+// elder := parents, grand-parents
+// family := siblings and all those people we list.
+world.absentationPerson = {
+    elder: 'elder',
+    elders: 'elders',
+    parent: 'parent',
+    parents: 'parents',
+    sibling: 'sibling',
+    siblings: 'siblings',
+    family: 'family'
+};
+
+world.blankLine = '';
 
 // TODO: this needs to be accessible somewhere else...
 // should this be reduced back down to a 0..31 array?
@@ -162,6 +160,8 @@ var storyGen = function() {
     };
 
 
+    // failing for
+    // This is the way the world begins. just on the verge of Oblivion in the province Prussia, there was a hovel where Angelic Lauren lived.
     var capitalize = function(str) {
         // how about regex on start of each line w/in the string????
         return str.replace(/^[a-z]/mg, function(m) { return m.toUpperCase(); });
@@ -201,31 +201,11 @@ var storyGen = function() {
             }
         }
 
-        var interdictionType = {
-            movement: 'movement',
-            action: 'action',
-            speak: 'speakwith'
-        };
-
-        // we should have departure/death
-        // parents/siblings
-        // maybe make it simple: departure/death, familymember
-        var absentationType = {
-            departure: 'departure',
-            death: 'death'
-        };
-
-        // elder := parents, grand-parents
-        // family := siblings and all those people we list.
-        var absentationPerson = {
-            elder: 'elder',
-            elders: 'elders',
-            parent: 'parent',
-            parents: 'parents',
-            sibling: 'sibling',
-            siblings: 'siblings',
-            family: 'family'
-        };
+        // var interdictionType = {
+        //     movement: 'movement',
+        //     action: 'action',
+        //     speak: 'speakwith'
+        // };
 
         var cache = {};
 
@@ -234,9 +214,9 @@ var storyGen = function() {
             // TODO: what happens when we've used up everything in the bank?
             // SOLUTION: don't worry about it: make the bank bigger than any of our templates
             // for now...
-            gndr = gndr || randomProperty(gender);
-            aspct = aspct || randomProperty(aspect);
-            var adjs = (aspct === aspect.good ? bank.adjectives.personal : bank.adjectives.negative);
+            gndr = gndr || randomProperty(world.gender);
+            aspct = aspct || randomProperty(world.aspect);
+            var adjs = (aspct === world.aspect.good ? bank.adjectives.personal : bank.adjectives.negative);
             var descr = [pick(adjs), pick(adjs)];
             var name = pickRemove(bank.names[gndr]);
 
@@ -251,7 +231,7 @@ var storyGen = function() {
                      alignment: aspct,
                      gender: gndr,
                      possessions: [],
-                     health: healthLevel.alive,
+                     health: world.healthLevel.alive,
                      description: descr,
                      knows: [], // people known to character (identifier, not object-reference, so we don't get all circular)
                      id: storyGen.uid.toString(),
@@ -263,22 +243,29 @@ var storyGen = function() {
             var members = count || random(12) + 1;
             var acqs = [];
             for (var i = 0; i < members; i++) {
-                var g = (!gndr || gndr === 'random' ? randomProperty(gender) : gndr);
-                aspct = aspct || randomProperty(aspect);
+                var g = (!gndr || gndr === 'random' ? randomProperty(world.gender) : gndr);
+                aspct = aspct || randomProperty(world.aspect);
                 acqs.push(createCharacter(g, aspct));
             }
             return acqs;
         };
 
-        var location = function() {
+        var place = function() {
             // don't need to do a pick-remove
-            // but we should probably store all locations
+            // but we should probably store all places
             // and make sure we never duplicate....
             return {
                 residence: pick(bank.residence),
-                location: pick(bank.location),
-                nation: pick(bank.nation)
+                vicinity: pick(bank.location),
+                nation: pick(bank.nation),
+                id: storyGen.uid.toString('pl_') // prefix
             };
+        };
+
+        var getPlace = function(id) {
+            var p;
+            if (cache.places && cache.places[id]) { p = cache.places[id]; }
+            return p;
         };
 
         var getCharacter = function(uid) {
@@ -311,7 +298,7 @@ var storyGen = function() {
                 cache.characters[acquaintances[i].id] = acquaintances[i];
             }
 
-            c.home = location();
+            c.home = place();
             c.location = c.home.residence;
             c.introduced = false;
             if (item) { c.possessions.push(item); }
@@ -327,7 +314,7 @@ var storyGen = function() {
             if (minionCount) {
                 c.family = createCharacters(settings.peoplegender, aspct, minionCount);
             }
-            c.home = location();
+            c.home = place();
             c.location = c.home.residence;
             c.introduced = false; // introduced in story
             if (item) { c.possessions.push(item); }
@@ -336,12 +323,12 @@ var storyGen = function() {
         };
 
         var createHome = function() {
-            return location();
+            return place();
         };
 
         var createFalsehero = function() {
-            var g = randomProperty(gender);
-            var c = createCharacter(g, aspect.bad);
+            var g = randomProperty(world.gender);
+            var c = createCharacter(g, world.aspect.bad);
             return c;
         };
 
@@ -377,20 +364,20 @@ var storyGen = function() {
         var possessive = function(gndr) {
             // if character is passed in, reduce it to the target gender
             if (gndr && gndr.gender) { gndr = gndr.gender; }
-            return (gndr === gender.male ? 'his' : (gndr === gender.female ? 'her' : 'its'));
+            return (gndr === world.gender.male ? 'his' : (gndr === world.gender.female ? 'her' : 'its'));
         };
 
         // third-person
         var pronounobject = function(gndr) {
             // if character is passed in, reduce it to the target gender
             if (gndr && gndr.gender) { gndr = gndr.gender; }
-            return (gndr === gender.male ? 'him' : (gndr === gender.female ? 'her' : 'them'));
+            return (gndr === world.gender.male ? 'him' : (gndr === world.gender.female ? 'her' : 'them'));
         };
 
         var pronoun = function(gndr) {
             // if character is passed in, reduce it to the target gender
             if (gndr && gndr.gender) { gndr = gndr.gender; }
-            return (gndr === gender.male ? 'he' : (gndr === gender.female ? 'she' : 'it'));
+            return (gndr === world.gender.male ? 'he' : (gndr === world.gender.female ? 'she' : 'it'));
         };
 
 
@@ -441,7 +428,7 @@ var storyGen = function() {
             var p1n = coinflip() ? p1.name : p1.nickname;
             var p2n = '';
             // var says = '{{' + select('said', 'remarked', 'noted', 'mused', 'exclaimed', 'ejected', 'rumbled', 'muttered') + '}}';
-            var says = '<%= select("said", "remarked", "noted", "mused", "exclaimed", "ejected", "rumbled", "muttered") %>';
+            var says = '{{<%= select("said", "remarked", "noted", "mused", "exclaimed", "ejected", "rumbled", "muttered") %>}}';
             var reply = '{{<%= select("replied", "responded", "retorted", "volleyed", "returned", "muttered") %>}}';
 
             if (p1 && p2) {
@@ -449,9 +436,9 @@ var storyGen = function() {
                 // TODO: still pretty repetitive
                 // and the punctuation is funky
                 // not... interesting enough.
-                c.push('"{{GG}} {{P1N}}" {{SAY}} {{P2N}}.');
-                c.push('"{{GG}} {{P2N}}" {{RPLY}} {{P1N}}.');
-                c.push('"Well, you certainly are ' + p1.description[0] + '," {{SAY}} {{P2N}}.');
+                c.push('"{{GG}} {{P1N}}" {{SAY}} {{P2N}}.', world.blankLine);
+                c.push('"{{GG}} {{P2N}}" {{RPLY}} {{P1N}}.', world.blankLine);
+                c.push('"Well, you certainly are ' + p1.description[0] + '," {{SAY}} {{P2N}}.', world.blankLine);
                 c.push('"Yes, I am," {{conceded}} {{P1N}}. "But it\'s been said that I\'m also ' + p1.description[1] + '!"');
 
             } else if (p1 && !p2) {
@@ -469,6 +456,7 @@ var storyGen = function() {
                 }
             }
             var tmpl = c.join('\n').replace(/{{P1N}}/mg, p1n).replace(/{{P2N}}/mg, p2n).replace(/{{SAY}}/mg, says).replace(/{{RPLY}}/mg, reply);
+
             return tmpl;
         };
 
@@ -544,24 +532,24 @@ var storyGen = function() {
             if (!bank) { return; }
             try {
 
-                if (!settings.herogender || settings.herogender === 'random') { settings.herogender = randomProperty(gender); }
-                if (!settings.villaingender || settings.villaingender === 'random') { settings.villaingender = randomProperty(gender); }
-                if (!settings.peoplegender || settings.peoplegender === 'random') { settings.peoplegender = randomProperty(gender); }
+                if (!settings.herogender || settings.herogender === 'random') { settings.herogender = randomProperty(world.gender); }
+                if (!settings.villaingender || settings.villaingender === 'random') { settings.villaingender = randomProperty(world.gender); }
+                if (!settings.peoplegender || settings.peoplegender === 'random') { settings.peoplegender = randomProperty(world.gender); }
 
                 cache.characters = {}; // this holds all the people, elsewhere, use a uid to reference individuals
+                cache.places = {}; // holds uid of all places (in-progress)
 
-                cache.hero = createHero(settings.herogender, aspect.good);
+                cache.hero = createHero(settings.herogender, world.aspect.good);
                 // TODO: magical item starts as a posession of the advisor, no?
                 // NO: it could just be... lying about.
                 // TODO: advisor gender could be a setting, so we can all-female stories.
-                cache.advisor = createCharacter(null, aspect.good);
+                cache.advisor = createCharacter(null, world.aspect.good);
                 cache.advisor.introduced = false; // ugh.
                 cache.magicalitem = createMagicalitem();
                 cache.magicalhelper = createMagicalHelper();
                 cache.punished = createPunished();
                 cache.task = pick(bank.task);
-                cache.villain = createVillain(settings.villaingender, aspect.bad, createMagicalitem(), 2);
-                // cache.victim = getCharacter(cache.hero);
+                cache.villain = createVillain(settings.villaingender, world.aspect.bad, createMagicalitem(), 2);
                 cache.victim = getCharacter(pick(cache.hero.family.concat(cache.hero)));
                 cache.ascension = pick(bank.ascension);
                 cache.marries = pick(bank.marries);
@@ -607,8 +595,8 @@ var storyGen = function() {
             coinflip: coinflip, // currently a global. ugh!
             randomProperty: randomProperty,
             dump: dump,
-            interdictionType: interdictionType,
-            location: location,
+            interdictionType: world.interdictionType,
+            location: place,
             wordbank: bank,
             nlp: nlp,// this is also a global. But.... won't be in node
             createVillain: createVillain,
@@ -638,6 +626,13 @@ var storyGen = function() {
             console.log(f);
             var t = _.template(f);
             f = t(helper);
+
+            // DOES NOT WORK if there are multiple sentences inside...
+            // if (this.settings.verbtense == 'past') {
+            //     f = nlp.pos(f)[0].to_past().text();
+            // } else {
+            //     f = nlp.pos(f)[0].to_present().text();
+            // }
 
             // handle non-template transforms.
             var tag,
@@ -715,24 +710,24 @@ var storyGen = function() {
 
             // the world is the things that have been created. no?
             // possibly not. since creation is called alla time again...
-            this.world = god(storyGen.settings, theme.bank);
+            this.universe = god(storyGen.settings, theme.bank);
             for (var i = 0; i < settings.funcs.length; i++) {
-                var s2 = this.sentence(story[settings.funcs[i]], storyGen.world);
+                var s2 = this.sentence(story[settings.funcs[i]], storyGen.universe);
                 if (s2) { tale.push(s2); }
-                if (this.world.hero.health === healthLevel.dead) { break; }
-                if (settings.bossmode && this.world.villain.health == 'dead' && restartVillainy >= 0) {
-                    if (this.world.coinflip(0.8)) {
+                if (this.universe.hero.health === world.healthLevel.dead) { break; }
+                if (settings.bossmode && this.universe.villain.health == 'dead' && restartVillainy >= 0) {
+                    if (this.universe.coinflip(0.8)) {
                         // we run out of names, because new villains have both family and acquaintances
                         // AND USE THEM ALL UP
-                        this.world.villain = this.world.createVillain();
-                        this.world.cache.magicalitem = this.world.createMagicalitem();
+                        this.universe.villain = this.universe.createVillain();
+                        this.universe.cache.magicalitem = this.universe.createMagicalitem();
                         i = restartVillainy - 1; // one less, since it will be incremented on loop
                     } else {
                         restartVillainy = -1;
                     }
                 }
             }
-            tale.push(this.sentence(story.outro, storyGen.world));
+            tale.push(this.sentence(story.outro, storyGen.universe));
 
             // this doesn't handle recursive stories (this is the one I'm particularly interested in)
             // multiple tasks
@@ -786,10 +781,11 @@ var storyGen = function() {
 storyGen.settings = settings;
 
 // http://stackoverflow.com/questions/3231459/create-unique-id-with-javascript
-storyGen.uid = new function () {
+storyGen.uid = new function (prefix) {
     var u = 0;
+    prefix = prefix || 'id_';
     this.toString = function () {
-        return 'id_' + u++;
+        return prefix + u++;
     };
 };
 

@@ -4,9 +4,17 @@ var defaultbank = {};
 defaultbank.residence = ['grass hut', 'small house', 'barn', 'hovel', 'stately manor', 'decayed mansion', 'shack', 'shed', 'house'];
 
 // the vicinity of the home
-// the ones with articles are problematic....
+// the ones with articles are problematic:
+
+// Natural Kayla lived in a small house not far from _a_ small village in the kingdom Talexico.
+// [....]
+// Jasmine paid a visit to _a_ small village.
+
 // how can we refer to them definitively?
 // this has to be an object, I guess, with some sort of indicator
+// oh. an un-named place is first "a", then "the" ???
+// every place should have a name, though.
+// so, let's codify this.....
 defaultbank.location = ['Hobbiton', 'New Haven', 'East Lansing', 'Madchester', 'Oblivion', 'a valley', 'a small village', 'a lonely intersection'];
 
 // this should more be country. 'Nation' is short-hand.
@@ -14,9 +22,10 @@ defaultbank.nation = ['the Monastic State of the Teutonic Knights', 'Prussia', '
 
 // not sure how to handle punctuation
 // put it in here?
-defaultbank.greetings = { good: ['Hello,', 'Hello there,', 'Hail and well met,', 'Greetings,', 'Ahoy!', 'Salutations!', 'Welcome,', 'Well, look who this is, it\s', 'Nice to meet you'],
-                          bad: ['Oh.', 'Oh, it\'s you,', 'Oh, hello,', 'Oh, dear.', 'Ugh. It\s', 'Well, look who this is:', 'I\'ll see you in Hell,']
-                        };
+defaultbank.greetings = {
+    good: ['Hello,', 'Hello there,', 'Hail and well met,', 'Greetings,', 'Ahoy!', 'Salutations!', 'Welcome,', 'Well, look who this is, it\s', 'Nice to meet you'],
+    bad: ['Oh.', 'Oh, it\'s you,', 'Oh, hello,', 'Oh, dear.', 'Ugh. It\s', 'Well, look who this is:', 'I\'ll see you in Hell,']
+};
 
 // TODO: things must also have properties
 // this is a proposal...
@@ -67,19 +76,12 @@ defaultbank.task = ['walk the dog', 'retrieve the Crown Jewels', 'find a hammer'
 
 defaultbank.punish = ['brought to justice', 'hung, drawn, and quartered', 'given a tongue-lashing'];
 
-defaultbank.ascension = ['{{is}} made king', '{{becomes}} a god', '{{becomes}} filled with knowledge'];
+// TODO: more codishness? if kingdom is involved, king plus marriage plus banquet, &c. several such things
+// or find a better way to spin out text from a small premise (HAH HAH HAH)
+// these are passive
+defaultbank.ascension = ['{{is}} made king', '{{becomes}} a god', '{{becomes}} filled with knowledge', '{{is}} given keys to the city', '{{has}} parking tickets forgiven', ];
 
-// TODO: mark the verbs, so they can be conjugated
-// well need these in the infinitive
-// nlp.verb(vb).conjugate() :=
-// { present: 'dates',
-//   gerund: 'dating',
-//   past: 'dated',
-//   infinitive: 'date',
-//   doer: 'dater' }
-// uh, the passive?
-// defaultbank.marries = ['marry', 'is given keys to the city', 'has parking tickets forgiven', 'date for a few years, but decide to remain single' ];
-defaultbank.marries = ['{{marry}}', '{{is}} given keys to the city', '{{has}} parking tickets forgiven', '{{dates}} for a few years, but {{decides}} to remain single' ];
+defaultbank.marries = ['{{marry}}', '{{dates}} for a few years, but {{decides}} to remain single' ];
 
 
 
@@ -96,12 +98,29 @@ defaultbank.names = {
 	   'Jonathan', 'Noah', 'Brandon', 'Christian', 'Dylan', 'Samuel',
 	   'Benjamin', 'Nathan'],
 
-    female: ['Brienne of Tarth', 'Joan of Arc', 'Holly Shiftwell', 'Lauren', 'Chloe', 'Natalie', 'Kayla', 'Jessica', 'Anna', 'Victoria', 'Mia', 'Hailey', 'Sydney', 'Jasmine', 'Julia', 'Morgan', 'Destiny', 'Rachel', 'Ella', 'Kaitlyn', 'Megan', 'Katherine', 'Savannah', 'Jennifer', 'Alexandra', 'Allison', 'Haley', 'Maria', 'Kaylee', 'Lily', 'Makayla'],
+    female: ['Brienne of Tarth', 'Joan of Arc', 'Holly Shiftwell',
+             'Lauren', 'Chloe', 'Natalie', 'Kayla', 'Jessica', 'Anna',
+             'Victoria', 'Mia', 'Hailey', 'Sydney', 'Jasmine',
+             'Julia', 'Morgan', 'Destiny', 'Rachel', 'Ella',
+             'Kaitlyn', 'Megan', 'Katherine', 'Savannah', 'Jennifer',
+             'Alexandra', 'Allison', 'Haley', 'Maria', 'Kaylee',
+             'Lily', 'Makayla'],
 
     // could also be "unisex"
     // see also http://en.wikipedia.org/wiki/Unisex_name
-    neuter: [ 'the Easter Bunny', 'TIAMAT', 'the Spirit of 1776', 'DEATH', 'Pat', 'Chris', 'Leslie', 'Alexis', 'Amari', 'Angel', 'Ariel', 'Armani', 'Avery', 'Blake', 'Cameron', 'Camryn', 'Carter', 'Casey', 'Charlie', 'Dakota', 'Dallas', 'Dylan', 'Eden', 'Elliot', 'Elliott', 'Emerson', 'Emery', 'Emory', 'Finley', 'Harley', 'Harper', 'Hayden', 'Hunter', 'Jamie', 'Jayden', 'Jaylin', 'Jessie', 'Jordan', 'Jordyn', 'Justice', 'Kai', 'Kamryn', 'Kayden', 'Kendall', 'Lennon', 'Logan', 'London', 'Lyric', 'Marley', 'Micah', 'Milan', 'Morgan', 'Oakley', 'Parker', 'Payton', 'Peyton', 'Phoenix', 'Quinn', 'Reagan', 'Reese', 'Riley', 'River', 'Rory', 'Rowan', 'Ryan', 'Rylan', 'Rylee', 'Sage', 'Sawyer', 'Sidney', 'Skylar', 'Skyler', 'Sydney', 'Tatum', 'Taylor', 'Teagan', 'Zion' ]
-
+    neuter: [ 'the Easter Bunny', 'TIAMAT', 'the Spirit of 1776',
+              'DEATH', 'Pat', 'Chris', 'Leslie', 'Alexis', 'Amari', 'Angel',
+              'Ariel', 'Armani', 'Avery', 'Blake', 'Cameron', 'Camryn',
+              'Carter', 'Casey', 'Charlie', 'Dakota', 'Dallas', 'Dylan', 'Eden',
+              'Elliot', 'Elliott', 'Emerson', 'Emery', 'Emory', 'Finley',
+              'Harley', 'Harper', 'Hayden', 'Hunter', 'Jamie', 'Jayden',
+              'Jaylin', 'Jessie', 'Jordan', 'Jordyn', 'Justice', 'Kai',
+              'Kamryn', 'Kayden', 'Kendall', 'Lennon', 'Logan', 'London',
+              'Lyric', 'Marley', 'Micah', 'Milan', 'Morgan', 'Oakley', 'Parker',
+              'Payton', 'Peyton', 'Phoenix', 'Quinn', 'Reagan', 'Reese',
+              'Riley', 'River', 'Rory', 'Rowan', 'Ryan', 'Rylan', 'Rylee',
+              'Sage', 'Sawyer', 'Sidney', 'Skylar', 'Skyler', 'Sydney', 'Tatum',
+              'Taylor', 'Teagan', 'Zion' ]
 };
 
 // magical science items
@@ -109,13 +128,27 @@ defaultbank.names = {
 // based on list from
 // http://webcache.googleusercontent.com/search?q=cache:hHHDD1u3puMJ:www.ironwolfgames.com/2011/09/17/fun-with-science-fiction-buzzwords/&client=firefox-a&hl=en&gl=us&strip=1
 defaultbank.itembank = {
-    adjectives: [ 'auxiliary', 'alternate', 'automatic', 'dynamic', 'electron', 'external', 'finite', 'humanoid', 'infinite', 'internal', 'kinetic', 'linear', 'multi-phase', 'neural', 'organic', 'phase', 'pneumatic', 'positron', 'primary', 'quantum', 'static', 'sub-light', 'sub-space', 'temporal' ],
-    nouns: [ 'amplitude', 'buffer', 'conduit', 'coordinates', 'core', 'data', 'deflector', 'drive', 'emitter', 'event horizon', 'field', 'fluctuation', 'generator', 'hull integrity', 'matrix', 'parameter', 'particle', 'plasma', 'relay', 'rift', 'rupture', 'shield', 'singularity', 'system', 'theory' ]
+    adjectives: [
+        'auxiliary', 'alternate',
+        'automatic', 'dynamic', 'electron', 'external', 'finite',
+        'humanoid', 'infinite', 'internal', 'kinetic', 'linear',
+        'multi-phase', 'neural', 'organic', 'phase', 'pneumatic',
+        'positron', 'primary', 'quantum', 'static', 'sub-light',
+        'sub-space', 'temporal' ],
+
+    nouns: [
+        'amplitude', 'buffer',
+        'conduit', 'coordinates', 'core', 'data', 'deflector', 'drive',
+        'emitter', 'event horizon', 'field', 'fluctuation', 'generator',
+        'hull integrity', 'matrix', 'parameter', 'particle', 'plasma',
+        'relay', 'rift', 'rupture', 'shield', 'singularity', 'system',
+        'theory' ]
 };
 
 
 defaultbank.itemGenerator = function() {
 
+    // TODO since this is a depencency, IT SHOULD BE PASSED IN
     return storyGen.itemGenerator(defaultbank.itembank);
 
 };
