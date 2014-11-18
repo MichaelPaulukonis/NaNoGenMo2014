@@ -26,6 +26,10 @@ var nTemplates = function(story) {
 
     story.introduceVillain = function(god) {
 
+        // A certain woman was very bumptious.
+// There once was a rich merchant named Marko - a stingier fellow never lived!
+
+
         var time = god.select('one morning', 'one evening', 'one night', 'one day', 'in the middle of the night', 'when nobody was paying attention');
         var person = god.select('person', 'individual');
 
@@ -324,8 +328,11 @@ var nTemplates = function(story) {
         }
 
         // subFunc = 'causes sudden disappearance'; // for testing
-        // subFunc = 'commits murder';
+        subFunc = 'commits murder';
         // subFunc = 'casting into body of water';
+
+        // there is a bug... SOMEWHERE.....
+        console.log(subFunc);
 
         switch(subFunc) {
         case 'kidnapping of person':
@@ -390,6 +397,16 @@ var nTemplates = function(story) {
             // when he tripped over a stone, tumbled into the water - and there was an
             // end of him.
 
+// There was once an old woman who had a daughter; and her daughter went
+// down to the pond one day to bathe with the other girls. They all
+// stripped off their shifts, and went into the water. Then there came a
+// snake out of the water, and glided on to the daughte's shift. After a
+// time the girls all came out, and began to put on their shifts, and the
+// old woman's daughter wanted to put on hers, but there was the snake
+// lying on it. She tried to drive him away, but there he stuck and would
+// not move. Then the snake said:
+
+// "To the blue sea," answered the raven. (there's more there, there)
             // if hero has not been introduced, time to do it!
 
             var water = god.select("a small stream", "a local lake", "the murky pond", "the well");
@@ -453,7 +470,7 @@ var nTemplates = function(story) {
             break;
 
         case 'threat of forced matrimony':
-            template.push('<%= villain.name %> {{threatened}} to marry <%= pick(hero.family).name %>.');
+            template.push('<%= villain.name %> {{threatened}} to marry <%= getCharacter(pick(hero.family)).name %>.');
             break;
 
         case 'threat of forced matrimony between relatives':
@@ -469,7 +486,7 @@ var nTemplates = function(story) {
             break;
 
         case 'tormenting at night (visitaion, vampirism)':
-            template.push('<%= hero.name %> {{was}} tormented at night by <%= pick(villain.family).name %>.');
+            template.push('<%= hero.name %> {{was}} tormented at night by <%= getCharacter(pick(villain.family)).name %>.');
             break;
 
         case 'declaration of war':
@@ -682,6 +699,7 @@ var nTemplates = function(story) {
     story['func27'].templates.push('<%= hero.name %> {{was}} recognized.');
 
     // Exposure: False hero is exposed
+// So he regained his wife and went home with her. But as for the false wife, he took a gun and shot her.
     story['func28'].templates.push('<%= falsehero.name %> {{was}} exposed.');
 
     // Transfiguration: hero is given a new appearance
@@ -698,7 +716,8 @@ var nTemplates = function(story) {
 
         var templates = [
             '{{AS}}{{VN}} {{was}} <%= punished() %> by {{HN}}.',
-            '{{AS}}{{HN}} <%= punished() %> {{VN}}.'
+            '{{AS}}{{HN}} <%= punished() %> {{VN}}.',
+            '{{VN}} was completely burnt to cinders. That\'s that.'
                         ];
         god.villain.health = 'dead';
 
@@ -724,6 +743,8 @@ var nTemplates = function(story) {
         // and drove it into the axle-box from the other side. Then he seized the
         // wheel and flung it, with Woe in it, into the river. Woe {{was}} drowned,
         // and the merchant began to live again as he had been wont to do of old.
+
+        // "Into the bottomless pit with you! Out of sight, accursed one!"
 
         return t.join(' ').replace(/{{VN}}/mg, vn).replace(/{{HN}}/mg, hn).replace(/{{AS}}/mg, as).replace(/{{BA}}/mg, ba);
 
@@ -810,6 +831,9 @@ var nTemplates = function(story) {
     };
 
     story.outro = function(god) {
+
+// And then they went home, and there they lived and enjoyed themselves, feasting and revelling, and drinking mead and wine.
+// I was there, too, and had liquor to drink; it didn't go into my mouth, but only ran down my beard
 
         var templates = [
             'All of this took place long before you were born, so it\'s not surprising that you don\'t remember it. But it happened, and people speak of it still.',
