@@ -419,6 +419,9 @@ var storyGen = function(settings) {
             // "Don't go bragging like that!" says a rich merchant
             // after somebody says something _about themselves_
 
+            // "Why do you call me?"
+            // "I didnt call you" replies the old man. "I don't even know who you are."
+
             var t = tone(p1, p2);
             var p1n = coinflip() ? p1.name : p1.nickname;
             var p2n = '';
@@ -592,7 +595,8 @@ var storyGen = function(settings) {
             // ooop. what's the difference?!!!
             pick: pick,
             select: select,
-            coinflip: coinflip, // currently a global. ugh!
+            coinflip: coinflip,
+            capitalize: capitalize,
             randomProperty: randomProperty,
             dump: dump,
             interdictionType: world.interdictionType,

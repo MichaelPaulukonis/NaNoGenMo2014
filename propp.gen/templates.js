@@ -107,12 +107,19 @@ var nTemplates = function(story) {
         var name = god.coinflip() ? person.name : person.nickname;
         var t = [];
 
+        // Remember what his name was.
+        // Long may he be remembered.
+        // Not too many took notice, but those few were hard-pressed to save their tears for another day.
+
         var templates = [
             'It happens to everyone eventually. It {{happened}} to ' + god.pronounobject(person) + ' sooner.',
-            'These things happen. ' + (god.coinflip() ? 'Unfortunately.' : 'It is unfortunate.')
+            'These things happen. ' + (god.coinflip() ? 'Unfortunately.' : 'It is unfortunate.'),
+            'When G-d calls one home, there is never room for argument.',
+            'It was done.'
         ];
         t.push(god.pick(templates));
 
+        // there was no|little solace to their grief.`
         if (god.coinflip()) { t.push('There {{was}} much wailing in ' + god.hero.home.vicinity + '.'); }
 
         return t.join(' ');
@@ -121,7 +128,21 @@ var nTemplates = function(story) {
 
     story.intro = function(god) {
 
-        var intros = ['This is the way the world begins.', 'A long time ago,', 'Some years before you were born,', 'In the time when your parents\' parents were but small babies,', 'Once upon a time,'];
+        // There lived in a certain land an old man of this kind
+
+        // can't use a complete sentence. DANG. because: capitalization
+        // 'This is the way the world begins.',
+        var intros = [
+            'Once upon a time,', 'Once there was, and there wasn\t,',
+            'I\'ve heard it said that once',
+            'A long time ago,', 'Some years before you were born,',
+            'In the time when your parents\' parents were but small babies,',
+            // this is a bit.... long. And invariant.
+            'Once upon a time,', 'We say that we are wise folks, but our old people dispute, '
+                + 'the fact, saying: "No, no, we were wiser than you are." But '
+                + 'stories tell that, before our grandfathers had learnt '
+                + 'anything, before their grandfathers were born,'
+        ];
 
         // TODO: if blank, don't output the empty lines before the first paragraph.
         var intro = god.pick(intros);
@@ -160,14 +181,33 @@ var nTemplates = function(story) {
         // Once there was an old man who was such an awful drunkard as passes all description.
         // A certain woman was very bumptious.
 
+        // Some men are born to good luck: all they do or try to do comes
+        // right all that falls to them is so much gain all their geese are
+        // swans all their cards are trumps toss them which way you will, they
+        // will always, like poor puss, alight upon their legs, and only move on so
+        // much the faster. The world may very likely not always think of them as
+        // they think of themselves, but what care they for the world? what can it
+        // know about the matter?
+        // One of these lucky beings was neighbour Hans.
+
+        // There was once an old castle, that stood in the middle of a deep gloomy wood, and in the castle lived an old fairy.
+
         var near = god.select("in", "near", "close to", "not far from", "just on the verge of", "within a days walk of");
         var nationType = god.select("country", "province", "kingdom", "nation", "city-state") ;
+        var res = '<%= hero.home.residence %>';
+        var vicin = '<%= hero.home.vicinity %>';
+        var hn = '<%= coinflip() ? hero.name : hero.nickname %>';
+        var mw = (god.hero.gender === world.gender.male ? 'man' : 'woman');
 
         var templates = [
-            '<%= hero.nickname %> {{lived}} in a <%= hero.home.residence %> {{NEAR}} <%= hero.home.vicinity %> in the {{NT}} <%= hero.home.nation %>. ',
-            'in the distant {{NT}} of <%= hero.home.nation %>, <%= hero.nickname %> {{lived}} in a <%= hero.home.residence %> {{NEAR}} <%= hero.home.vicinity %>. ',
-            '{{NEAR}} <%= hero.home.vicinity %> in the {{NT}} <%= hero.home.nation %>, there {{was}} a <%= hero.home.residence %> where <%= hero.nickname %> {{lived}}. '
+            'in a certain {{RES}} lived {{HN}}. ',
+            'a certain {{MW}} was very <%= pick(hero.description) %>. ' + (god.coinflip() ? '<%= capitalize(possessive(hero)) %> name {{was}} {{HN}}.' : '{{HN}} <%= possessive(hero) %> name {{was}}.'),
+            'there was once an old {{RES}} that stood in the middle of a deep gloomy {{VCN}}, and in the {{RES}} lived {{HN}}.',
+            '{{HN}} {{lived}} in a {{RES}} {{NEAR}} {{VCN}} in the {{NT}} <%= hero.home.nation %>. ',
+            'in the distant {{NT}} of <%= hero.home.nation %>, {{HN}} {{lived}} in a {{RES}} {{NEAR}} {{VCN}}. ',
+            '{{NEAR}} {{VCN}} in the {{NT}} <%= hero.home.nation %>, there {{was}} a {{RES}} where {{HN}} {{lived}}. '
         ];
+
         var t = [];
         t.push((god.coinflip() ? story.intro(god) + ' ' : '' ) + god.pick(templates).replace('{{NT}}', nationType).replace('{{NEAR}}', near));
         // TODO: list regular name or nickname at random
@@ -176,7 +216,7 @@ var nTemplates = function(story) {
             t.push(blankLine, '<%= list(hero.acquaintances, "nickname") %> {{were}} <%= select("friends of", "known to") %> <%= hero.name %>.');
         }
 
-        return t.join('\n');
+        return t.join('\n').replace(/{{RES}}/gm, res).replace(/{{VCN}}/mg, vicin).replace(/{{HN}}/mg, hn).replace(/{{MW}}/mg, mw);
 
     };
 
@@ -609,6 +649,11 @@ var nTemplates = function(story) {
             // TODO: healthLevel is currently a global (only in browser env);
             murdervictim.health = world.healthLevel.dead;
 
+            // She persuades the murderer to show her the body of her dead love, and weeps over it bitterly.
+            // He is killed, however, by his elder brothers, who cut him into small pieces and scattered the fragments
+            // The Princess died; they placed her in a coffin, and carried it to church
+            // About a year after this one of the young men fell ill and died.
+
             var kill = god.select('kill', 'murder', 'eliminate', 'stilled', 'ate', 'consumed');
             var sudden = god.select('suddenly', 'without warning', 'for reasons unknown', 'just for spite', 'because anything {{was}} possible', 'without explanation', 'since <%= pronoun(villain) %> {{was}} unstoppable');
 
@@ -643,7 +688,7 @@ var nTemplates = function(story) {
             t = [
                 'There {{was}} a threat of cannibalism.',
                 'Hungry and faint, {{HN}} wandered on, walked farther and farther and at last came to where stood the house of {{VN}}. '
-                + 'Round the house were set twelve poles in a circle, and on each of eleven of these poles was stuck a human head, the twelfth alone remained unoccupied.'
+                    + 'Round the house were set twelve poles in a circle, and on each of eleven of these poles was stuck a human head, the twelfth alone remained unoccupied.'
             ];
 
             template.push(god.pick(t));
@@ -884,10 +929,39 @@ var nTemplates = function(story) {
         var as = '<%= coinflip() ? "and " : coinflip() ? "so " : "" %>';
         var ba = '<%= (coinflip() ? "" : coinflip() ? "But " : "And ")%>';
 
+        // Presently Vikhor came flying in, and addressed the Queen angrily.
+        // Prince Vasily remained concealed until his mother gave him a hint to
+        // come forth. This he did, and then greeted Vikhor, and caught hold of
+        // his right little finger. Vikhor tried to shake him off, flying first
+        // about the house and then out of it, but all in vain. At last Vikhor,
+        // after soaring on high, struck the ground, and fell to pieces, becoming
+        // a fine yellow sand. But the little finger remained in the
+        // possession of Prince Vasily, who scraped together the sand and burnt
+        // it in the stove.
+
+        // seeing that Vikhor was perfectly enfeebled, he snatched from him his
+        // keen faulchion, and with a single blow struck off his head. Behind him
+        // voices began to cry:
+
+        // "Strike again! strike again! or he will come to life!"
+
+        // "No," replied the Prince, "a hero's hand does not strike twice, but
+        // finishes its work with a single blow." And straightway he lighted a
+        // fire, burnt the head and the trunk, and scattered the ashes to the
+        // winds.
+
+        // hero and selected acquaintances seize villain (or false hero, I suppose)
+        // bind him, drag him through the town.
+        // Then the servants seized Katoma and dragged him to the palace. He went with them, making no excuses, relying on [Pg 258] himself. They brought him to
+
+        // He is killed, however, by his elder brothers, who cut him into small pieces,
+        //The Princess died; they placed her in a coffin, and carried it to church [not allowed inside? bursts into flames? something]
+
+
         var templates = [
             '{{AS}}{{VN}} {{was}} <%= punished() %> by {{HN}}.',
             '{{AS}}{{HN}} <%= punished() %> {{VN}}.',
-            '{{VN}} was completely burnt to cinders. That\'s that.',
+            (god.coinflip() ? 'Thanks to {{HN}}, ' : '') + '{{VN}} was completely burnt to cinders. That\'s that.',
             // okay. so there's been no mention of a horse. SO IT GOES.
             '{{HN}}\'s horse smote {{VN}} full swing with its hoof, and cracked <%= possessive(villain) %> skull, and {{HN}} made an end of <%= pronounobject(villain) %> with a club. Afterwards {{HN}} heaped up a pile of wood, set fire to it, burnt {{VN}} on the pyre, and scattered <%= possessive(villain) %> ashes to the wind.'
         ];
@@ -917,6 +991,8 @@ var nTemplates = function(story) {
         // and the merchant began to live again as he had been wont to do of old.
 
         // "Into the bottomless pit with you! Out of sight, accursed one!"
+
+
 
         return t.join(' ').replace(/{{VN}}/mg, vn).replace(/{{HN}}/mg, hn).replace(/{{AS}}/mg, as).replace(/{{BA}}/mg, ba);
 
@@ -968,6 +1044,8 @@ var nTemplates = function(story) {
         // never seen again. But the seigneur and his lady entered upon a
         // prosperous course of life, and if they haven't {{died}}, they're living
         // still.
+
+        // After that they both lived long and happily, survived to a great age, and then died peacefully.
 
         return t;
 
