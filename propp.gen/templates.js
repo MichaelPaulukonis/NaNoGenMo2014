@@ -59,6 +59,22 @@ var func8 = {
         // A certain woman was very bumptious.
         // There once was a rich merchant named Marko - a stingier fellow never lived!
 
+        // from springhole.arabian.nights.gen.htm
+        // "After breakfast"
+        // "After receiving a head injury"
+        // "Around lunchtime"
+        // "With nothing else to do"
+        // "In the middle of the night"
+        // "One day"
+        // "One day in <place>"
+        // "One evening"
+        // "One evening in <place>"
+        // "One morning"
+        // "One morning in <place>"
+        // "One night"
+        // "One night in <place>"
+
+
         var time = god.select('one morning', 'one evening', 'one night', 'one day', 'in the middle of the night', 'when nobody was paying attention');
         var person = god.select('person', 'individual');
 
@@ -611,6 +627,7 @@ var func8 = {
 
     // Departure: hero leave on mission
     // TODO: journey() function
+// where is task created?
     story['func11'].templates.push('<%= hero.name %> left <%= hero.location %> to <%= task %>.');
 
     // 3rd Sphere: The Donor Sequence

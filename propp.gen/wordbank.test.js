@@ -72,6 +72,23 @@ defaultbank.magicalitems = [
     // TODO: 'pair of Air Jordans', 'Mad Skillz', '#SWAG'
 ];
 
+// "attend a dance"
+// "break a curse"
+// "defeat a giant"
+// "defeat a tyrant"
+// "save a prince"
+// "save a princess"
+// "slay a monster"
+// "escape an abusive parent"
+// "evade an unwanted lover"
+// "find a magic mirror"
+// "find a magic ring"
+// "outwit a faerie"
+// "outwit a witch"
+// "return home"
+// "solve a mystery"
+// "solve three riddles"
+// "overcome three challenges"
 defaultbank.task = ['walk the dog', 'retrieve the Crown Jewels', 'find a hammer', 'cut down the tallest tree in the forest with a herring'];
 
 defaultbank.punish = ['brought to justice', 'hung, drawn, and quartered', 'given a tongue-lashing'];
@@ -82,8 +99,6 @@ defaultbank.punish = ['brought to justice', 'hung, drawn, and quartered', 'given
 defaultbank.ascension = ['{{is}} made king', '{{becomes}} a god', '{{becomes}} filled with knowledge', '{{is}} given keys to the city', '{{has}} parking tickets forgiven', ];
 
 defaultbank.marries = ['{{marry}}', '{{dates}} for a few years, but {{decides}} to remain single' ];
-
-
 
 defaultbank.adjectives = words.adjectives;
 defaultbank.interjections = words.interjections;
