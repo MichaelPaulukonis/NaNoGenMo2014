@@ -60,40 +60,46 @@ var nTemplates = function(story) {
         // A certain woman was very bumptious.
         // There once was a rich merchant named Marko - a stingier fellow never lived!
 
+        // Koshchei is merely one of the many incarnations of the dark spirit
+        // which takes so many monstrous shapes in the folk-tales of the class
+        // with which we are now dealing. Sometimes he is described as altogether
+        // serpent-like in form; sometimes he seems to be of a mixed nature,
+        // partly human and partly ophidian, but in some of the stories he is
+        // apparently framed after the fashion of a man. His name is by some
+        // mythologists derived from kost, a bone whence comes a verb signifying
+        // to become ossified, petrified, or frozen; either because he is bony of
+        // limb, or because he produces an effect akin to freezing or
+        // petrifaction.
+
+
         // from springhole.arabian.nights.gen.htm
-        // "After breakfast"
-        // "After receiving a head injury"
-        // "Around lunchtime"
         // "With nothing else to do"
-        // "In the middle of the night"
-        // "One day"
         // "One day in <place>"
-        // "One evening"
         // "One evening in <place>"
-        // "One morning"
         // "One morning in <place>"
-        // "One night"
         // "One night in <place>"
 
 
-        var time = god.select('one morning', 'one evening', 'one night', 'one day', 'in the middle of the night', 'when nobody was paying attention');
+        var time = god.select('one morning', 'one evening', 'one night', 'one day', 'in the middle of the night', 'when nobody {{was}} paying attention', 'after breakfast', 'around lunchtime');
         var person = god.select('person', 'individual');
 
         var A = '{{came}} into the region of <%= hero.home.vicinity %>';
         var B = 'a very <%= pick(villain.description) %> ' + person + ' known as <%= villain.nickname %>';
+        var h = '<%= hero.home.vicinity %>';
 
         var templates = [
+            time + ' in {{HH}}, {{B}} {{strides}} in.',
             time + ', there ' + A + ' ' + B + '.',
             'There ' + A + ' ' + B + '.',
             B + ' ' + A + '.',
             B + ' ' + A + ' ' + time + '.',
-            '<%= villain.name %> {{paid}} a visit to <%= hero.home.vicinity %>.',
-            '<%= hero.home.vicinity %> {{played}} host to <%= villain.name %>' + (god.coinflip() ? ' ' + time: '') + '.'
+            '<%= villain.name %> {{paid}} a visit to {{H}}.',
+            '{{HH}} {{plays}} host to <%= villain.name %>' + (god.coinflip() ? ' ' + time: '') + '.'
         ];
 
         god.villain.introduced = true;
 
-        return god.pick(templates);
+        return god.pick(templates).replace(/{{HH}}/mg, h).replace(/{{B}}/mg, B).replace(/{{A}}/mg, A);
 
     };
 
@@ -166,7 +172,9 @@ var nTemplates = function(story) {
         t.push((god.coinflip() ? story.intro(god) + ' ' : '' ) + god.pick(templates).replace('{{NT}}', nationType).replace('{{NEAR}}', near));
         // TODO: list regular name or nickname at random
         t.push(blankLine, '<%= hero.name %> {{lived}} with <%= list(hero.family, "nickname") %>.');
-        t.push(blankLine, '<%= list(hero.acquaintances, "nickname") %> {{were}} <%= select("friends of", "known to") %> <%= hero.name %>.');
+        if (god.hero.acquaintances.length > 0) {
+            t.push(blankLine, '<%= list(hero.acquaintances, "nickname") %> {{were}} <%= select("friends of", "known to") %> <%= hero.name %>.');
+        }
 
         return t.join('\n');
 
@@ -285,19 +293,39 @@ var nTemplates = function(story) {
         text.push(world.blankLine, interdiction.advisor.name + ' introduced ' + god.magicalhelper.name + ' to ' + hero.name);
         text.push(world.blankLine, god.converse(hero, god.magicalhelper));
 
-        text.push(world.blankLine, '<%= magicalhelper.nickname %> {{said}} "I will tell you a story":');
+        text.push(story.subtale(god.magicalhelper, god));
+
+        return text.join('\n');
+
+    };
+
+    story.subtale = function(narrator, god) {
+
+        var text = [];
+
+        text.push(world.blankLine, narrator.name + ' {{said}} "I will tell you a story":');
 
         var setts = {
             herogender: 'male',
             villaingender: 'male',
             peoplegender: 'male',
             functions: resetProppFunctions(),
-            funcs: ['func0', ['func8', 'casting into body of water']],
+            // funcs: ['func0', ['func8', 'casting into body of water']],
+            funcs: [['func8', 'casting into body of water']],
             bossmode: false,
-            verbtense: 'present'
+            verbtense: 'present',
+            narrator: _.deepClone(narrator),
+            // swap them on some key?
+            // unswapped, the hero gets killled
+            // which should shake them up a bit....
+            // TODO: cache.characters not populated in this situation
+            // fix inside of init()
+            // what I don't get is WHY IT WORKED FOR A WHILE
+            hero: _.deepClone(god.hero),
+            villain: _.deepClone(god.villain),
+            characters: _.deepClone(god.cache.characters) // needed for hero and villain
         };
 
-        // what I would like to do is pass in the DEATH BY WATER subFunc
         setts.functions['func0'].active = true;
         setts.functions['func8'].active = true;
 
@@ -306,15 +334,29 @@ var nTemplates = function(story) {
             templates: nTemplates
         };
 
-        // BLARG - THIS OVERWRITES THE PREVIOUS SCOPE
+        // TODO: pass in the narrator, hero, and villain (and other situations, items, etc)
+        // like.... a magical item. or a violated interdiction that goes disastrously
+        // except, interdictions are ALWAYS violated.....
         var sg = new storyGen(setts);
         var tale = sg.generate(setts, theme);
 
         // TODO: indent every line in the inner-story.
         // SOMEHOW
+        // NOT GOOD ENOUGH - doesn't respect word-boundaries.
+        // need something more complicated
+        // respect word-boundaries (incl. punc)
+        // David lives with Nathan the Love-lorn, Sullen Ethan, Clean James, Joyous Tyl
+        // er, Interesting Christopher, Brandon the Steady, Prudent Samuel, Dylan the D
+        // elightful, and Dainty Benjamin.
+
+        // initial space should be deleted:
+        // Whether you believe it or not, this is what happened, for what I tell you is
+        //  true.
+        // tale = tale.replace(/(.{1,76})/mg, '$1\n');
+        // tale = tale.replace(/^/mg, '    ');
         text.push(world.blankLine, tale);
 
-        text.push(world.blankLine, '"And now," {{concluded}} <%= magicalhelper.nickname%>, "my tale is done."');
+        text.push(world.blankLine, '"And now," {{concluded}} ' + narrator.name + ', "my tale is done."');
 
         return text.join('\n');
 
@@ -324,6 +366,9 @@ var nTemplates = function(story) {
     story['func3'].exec = function(god) {
 
         var text = [];
+
+        // TODO: if interdiction is undefined, create it!
+        // which means it needs to be in a function.....
         var interdiction = god.hero.interdiction;
 
         switch (interdiction.type) {
@@ -410,6 +455,8 @@ var nTemplates = function(story) {
         // if not picked ahead of time, pick a sub-function at random
         subFunc = subFunc || god.randomProperty(func8);
         var template = [];
+        var t = [];
+
         var vn = '<%= select(villain.name, villain.nickname) %>';
         var hn = '<%= select(hero.name, hero.nickname) %>';
 
@@ -420,8 +467,9 @@ var nTemplates = function(story) {
         // subFunc = 'causes sudden disappearance'; // for testing
         // subFunc = 'commits murder';
         // subFunc = 'casting into body of water';
+        // subFunc =  'theft of daylight';
+        subFunc =  'threat of cannibalism';
 
-        // there is a bug... SOMEWHERE.....
         console.log(subFunc);
 
         switch(subFunc) {
@@ -442,7 +490,26 @@ var nTemplates = function(story) {
             break;
 
         case 'theft of daylight':
-            template.push('Suddenly, it became as night. {{VN}} had stolen the daylight!');
+            t = [
+                'Suddenly, it became as night. {{VN}} had stolen the daylight!',
+                'Suddenly, it became as night. {{VN}} had the sun, as easily as eating a corn-cake.',
+                'Suddenly the sky was covered by a black cloud; a terrible storm arose.',
+                'The moon came across the sun, turning the landscape a dark, curdled, black-red.',
+                // http://hbar.phys.msu.su/gorm/atext/ginzele.htm
+                'There {{is}} a shroud of darkness drawn over you from head to foot, your cheeks are wet with tears; the air is alive with wailing voices; the walls and roof-beams drip blood; the gate of the cloisters and the court beyond them are full of ghosts trooping down into the night of hell; the sun is blotted out of heaven, and a blighting gloom is over allthe land.',
+                'Sudden strange and unaccountable disorders and alterations took place in the air; the face of the sun was darkened, and the day turned into night, and that, too, no quiet, peaceable night, but with terrible thunderings, and boisterous winds from all quarters.',
+                // TODO: victim disappears...
+                'A violent thunderstorm suddenly arose and enveloped {{VN}} in so dense a cloud that he was quite invisible to the assembly. From that hour Romulus was no longer seen on earth. When the fears of the Roman youth were allayed by the return of bright, calm sunshine after such fearful weather, they saw that the royal seat was vacant.',
+                '{{VN}} has made night out of noonday, hiding the bright sunlight, and . . . fear has come upon mankind. After this, men can believe anything, expect anything. Don\t any of you be surprised in future if land beasts change places with dolphins and go to live in their salty pastures, and get to like the sounding waves of the sea more than the land, while the dolphins prefer the mountains.',
+                'For when the sun suddenly obscured and darkness reigned, and the Athenians were overwhelmed with the greatest terror, Pericles, who was then supreme among his countrymen in influenle, eloquence, and wisdom, is said to have communicated to his fellowcitizens the information he had received from Anaxagoras, whose pupil he had been- that this phenomenon occurs at fixed periods and by inevitable law, whenever the moon passes entirely beneath the orb of the sun, and that therefore, though it does not happen at every new moon, it cannot happen except at certain periods of the new moon. When he had discussed the subject and given the explanation of the phenomenon, the people were freed of their fears',
+                'A cloud, however, overspread the sun and hid it from sight until the inhabitants abandoned their city; and thus it was taken.',
+                'the sun was suddenly darkened in mid sky.',
+                '"The moon shuts off the beams of the sun as it passes across it, and darkens so much of the earth as the breadth of the blue-eyed moon amounts to."',
+                'The sun was darkened and there was darkness over the world. The most learned Phlegon of Athens has written in his work about this darkness as follows, "In the 18th year of the reign of Tiberius Caesar there was a very great eclipse of the sun, greater than any that had been known before. Night prevailed at the sixth hour of the day so that even the stars appeared',
+                'There occurred too a thick succession of portents, which meant nothing. A woman gave birth to a snake, and another was killed by a thunderbolt in her husband\'s embrace. Then the sun was suddenly darkened and the fourteen districts of the city were struck by lightning. All this happened quite without any providential design; so much so, that for many subsequent years {{VN}} prolonged <% possessive(villain) %> reign and <% possessive(villain) %> crimes.',
+                'While {{VN}} was behaving in this way, evil omens occurred. A comet was seen, and the moon, contrary to precedent, appeared to suffer two eclipses, being obscured on the fourth and on the seventh day. Also people saw two suns at once, one in the west weak and pale, and one in the east brilliant and powerful.'
+            ];
+            template.push(god.pick(t));
             break;
 
         case 'plundering in other forms':
@@ -501,7 +568,7 @@ var nTemplates = function(story) {
 
             var water = god.select("a small stream", "a local lake", "the murky pond", "the well");
             god.hero.location = water;
-            template.push('{{VN}} threw {{HN}} into <%= hero.location %>.');
+            template.push('{{VN}} {{threw}} {{HN}} into <%= hero.location %>.');
 
             if (god.coinflip() ) {
                 god.hero.health = world.healthLevel.dead;
@@ -545,13 +612,13 @@ var nTemplates = function(story) {
             var kill = god.select('kill', 'murder', 'eliminate', 'stilled', 'ate', 'consumed');
             var sudden = god.select('suddenly', 'without warning', 'for reasons unknown', 'just for spite', 'because anything {{was}} possible', 'without explanation', 'since <%= pronoun(villain) %> {{was}} unstoppable');
 
-            var ts = [
+            t = [
                 '{{SDN}}, {{VN}} {{{{KL}}}} {{MVN}}.',
                 '{{VN}} {{{{KL}}}} {{MVN}}, {{SDN}}.',
                 '{{VN}}, {{SDN}}, {{{{KL}}}} {{MVN}}.'
             ];
 
-            template.push(god.pick(ts).replace(/{{SDN}}/g, sudden).replace(/{{KL}}/g, kill).replace(/{{MVN}}/mg, mvn));
+            template.push(god.pick(t).replace(/{{SDN}}/g, sudden).replace(/{{KL}}/g, kill).replace(/{{MVN}}/mg, mvn));
             template.push(story.deathResponse(god, murdervictim));
 
             template.push(god.converse(god.villain));
@@ -573,7 +640,14 @@ var nTemplates = function(story) {
             // TODO: a specific person (victim?) should be threatened.
             // both threat and victim must be stored, for later resolution
             // this is true of all of these sub-Funcs, but I could work on it here, I suppose....
-            template.push('There {{was}} a threat of cannibalism.');
+            t = [
+                'There {{was}} a threat of cannibalism.',
+                'Hungry and faint, {{HN}} wandered on, walked farther and farther and at last came to where stood the house of {{VN}}. '
+                + 'Round the house were set twelve poles in a circle, and on each of eleven of these poles was stuck a human head, the twelfth alone remained unoccupied.'
+            ];
+
+            template.push(god.pick(t));
+
             break;
 
         case 'threat of cannibalism among relatives':
@@ -669,7 +743,7 @@ var nTemplates = function(story) {
 
     // Departure: hero leave on mission
     // TODO: journey() function
-// where is task created?
+    // where is task created?
     story['func11'].templates.push('<%= hero.name %> left <%= hero.location %> to <%= task %>.');
 
     // 3rd Sphere: The Donor Sequence
@@ -813,7 +887,9 @@ var nTemplates = function(story) {
         var templates = [
             '{{AS}}{{VN}} {{was}} <%= punished() %> by {{HN}}.',
             '{{AS}}{{HN}} <%= punished() %> {{VN}}.',
-            '{{VN}} was completely burnt to cinders. That\'s that.'
+            '{{VN}} was completely burnt to cinders. That\'s that.',
+            // okay. so there's been no mention of a horse. SO IT GOES.
+            '{{HN}}\'s horse smote {{VN}} full swing with its hoof, and cracked <%= possessive(villain) %> skull, and {{HN}} made an end of <%= pronounobject(villain) %> with a club. Afterwards {{HN}} heaped up a pile of wood, set fire to it, burnt {{VN}} on the pyre, and scattered <%= possessive(villain) %> ashes to the wind.'
         ];
         god.villain.health = 'dead';
 
@@ -867,7 +943,7 @@ var nTemplates = function(story) {
         // this version needs to be in the infinitive....
         // Dated for a few years, but decided to remain single, Kaitlyn retired to write her memoirs.
 
-        var lod = story.latd(god.hero);
+        var lod = story.latd(god.hero, god);
 
         var t = god.pick(templates);
 
@@ -898,13 +974,14 @@ var nTemplates = function(story) {
     };
 
     // from person, separate out the living and the dead
-    story.latd = function(person) {
+    story.latd = function(person, god) {
 
         var dead = [];
         var living = [];
-        var people = person.family.concat(person.acquaintances);
+        var people = person.family;
+        if (person.acquaintances) { people = people.concat(person.acquaintances); }
         for (var i = 0; i < people.length; i++) {
-            var c = person.getCharacter(people[i]);
+            var c = god.getCharacter(people[i]);
             var dora = (c.health == world.healthLevel.dead ? dead : living);
             dora.push(people[i]);
         }
@@ -928,14 +1005,16 @@ var nTemplates = function(story) {
         ];
 
         var hero = god.hero;
-        var ld = story.latd(hero);
+        var ld = story.latd(hero, god);
+        var narr = god.cache.narrator || null;
+
         var t = [];
         // this could get convoluted (Which is good!) "and I tell you this story as you can tell your children"
         // 'and I tell you this story as I told your mother  [or father] and her mother before her' [or father as the case may be].
 
-        if (god.coinflip(0.2) && ld.living.length > 0) {
+        if (narr || (god.coinflip(0.2) && ld.living.length > 0)) {
             var name = god.select('name', 'nickname');
-            var narr = god.getCharacter(god.pick(ld.living))[name];
+            narr = (narr ? narr.name : god.getCharacter(god.pick(ld.living))[name]);
             t.push((god.coinflip() ? 'This may sound fantastic, but ' : '') + 'in all the world there is nothing stranger than the truth, and it all happened exactly as I have told you, for I was there, as sure as my name is ' + narr + '.');
         } else {
             t.push(god.pick(templates));

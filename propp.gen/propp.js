@@ -119,19 +119,7 @@ var resetProppFunctions = function() {
 };
 
 
-var storyGen = function(setts) {
-
-
-
-    var settings = {
-
-        herogender: null,
-        villaingender: null,
-        peoplegender: null,
-        functions: {}
-
-    };
-
+var storyGen = function(settings) {
 
     // generates a random number
     var random = function(limit){
@@ -315,8 +303,11 @@ var storyGen = function(setts) {
         // and only creates minions if a number is passed in
         var createVillain = function(g, aspct, item, minionCount) {
             var c = createCharacter(g, aspct);
+            c.family = [];
+            c.acquaintances = []; // leave blank
             if (minionCount) {
                 c.family = createCharacters(settings.peoplegender, aspct, minionCount);
+                // TODO not in the character cache?
             }
             c.home = place();
             c.location = c.home.residence;
@@ -531,33 +522,38 @@ var storyGen = function(setts) {
             return JSON.stringify(target, null, '\t');
         };
 
+        // TODO: optionally pass in.. anything?
+        // narrator, to start with.
         var init = function() {
             // I don't think this is an issue anymore....
             if (!bank) { return; }
             try {
 
+                cache.characters = settings.characters || {}; // this holds all the people, elsewhere, use a uid to reference individuals
+                cache.places = {}; // holds uid of all places (in-progress)
+
                 if (!settings.herogender || settings.herogender === 'random') { settings.herogender = randomProperty(world.gender); }
                 if (!settings.villaingender || settings.villaingender === 'random') { settings.villaingender = randomProperty(world.gender); }
                 if (!settings.peoplegender || settings.peoplegender === 'random') { settings.peoplegender = randomProperty(world.gender); }
 
-                cache.characters = {}; // this holds all the people, elsewhere, use a uid to reference individuals
-                cache.places = {}; // holds uid of all places (in-progress)
+                if (settings.narrator) { cache.narrator = settings.narrator; }
 
-                cache.hero = createHero(settings.herogender, world.aspect.good);
+                cache.hero = settings.hero || createHero(settings.herogender, world.aspect.good);
+                cache.villain = settings.villain || createVillain(settings.villaingender, world.aspect.bad, createMagicalitem(), 2);
+
                 // TODO: magical item starts as a posession of the advisor, no?
                 // NO: it could just be... lying about.
                 // TODO: advisor gender could be a setting, so we can all-female stories.
-                cache.advisor = createCharacter(null, world.aspect.good);
+                cache.advisor = settings.advisor || createCharacter(null, world.aspect.good);
                 cache.advisor.introduced = false; // ugh.
-                cache.magicalitem = createMagicalitem();
-                cache.magicalhelper = createMagicalHelper();
-                cache.punished = createPunished();
+                cache.magicalitem = settings.magicalitem || createMagicalitem();
+                cache.magicalhelper = settings.magicalhelper || createMagicalHelper();
+                cache.punished = settings.punished || createPunished();
                 cache.task = pick(bank.task);
-                cache.villain = createVillain(settings.villaingender, world.aspect.bad, createMagicalitem(), 2);
-                cache.victim = getCharacter(pick(cache.hero.family.concat(cache.hero)));
+                cache.victim = settings.victim || getCharacter(pick(cache.hero.family.concat(cache.hero)));
                 cache.ascension = pick(bank.ascension);
                 cache.marries = pick(bank.marries);
-                cache.falsehero = pick(cache.villain.family);
+                cache.falsehero = settings.falsehero || pick(cache.villain.family);
 
             } catch(ex) {
                 // the last 3 items are non-standard.....
@@ -781,7 +777,7 @@ var storyGen = function(setts) {
     if (!(this instanceof storyGen)) return new storyGen();
 
     return {
-        settings: setts,
+        settings: settings,
         random: random,
         coinflip: coinflip,
         enforceRules: enforceRules,
