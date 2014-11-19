@@ -146,12 +146,12 @@ defaultbank.itembank = {
 };
 
 
-defaultbank.itemGenerator = function() {
+// defaultbank.itemGenerator = function() {
 
-    // TODO since this is a depencency, IT SHOULD BE PASSED IN
-    return storyGen.itemGenerator(defaultbank.itembank);
+//     // TODO since this is a depencency, IT SHOULD BE PASSED IN
+//     return storyGen.itemGenerator(defaultbank.itembank);
 
-};
+// };
 
 // TODO: this is not working for node yet. have to clean this all up. the output of words.js needs to be passed in, here.
 

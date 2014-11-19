@@ -96,7 +96,6 @@ var getFunctionsFromGui = function() {
     var f = [];
     for (var index in funcs) {
         funcs[index].active = window.document.myform[index].checked;
-        // if (window.document.myform[index].checked) { f.push(index); }
     }
 
     var herog = $('input[name=herogender][type=radio]:checked').val();
@@ -105,7 +104,7 @@ var getFunctionsFromGui = function() {
     var bossmode = window.document.myform.bossmode.checked;
 
     // TOO LATE - not in the array, which has to be in order. DANG.
-    funcs = storyGen.enforceRules(funcs);
+    // funcs = storyGen.enforceRules(funcs);
     pushSettingsToGui(funcs);
 
     // this is awkward....
@@ -117,8 +116,8 @@ var getFunctionsFromGui = function() {
         herogender: herog,
         villaingender: villaing,
         peoplegender: peopleg,
-        functions: funcs,
-        funcs: f,
+        functions: funcs,   // object with [funcn].active
+        funcs: f,           // array-based list
         bossmode: bossmode
     };
 
@@ -160,7 +159,9 @@ var guiGet = function() {
         };
     };
 
-    var tale = storyGen.generate(settings, theme);
+    // STILL EXPECTS THE story['funcn'].active stuff to be present. OUTCH
+    var sg = new storyGen(settings);
+    var tale = sg.generate(settings, theme);
     shoveToGui(tale);
 };
 

@@ -2,34 +2,35 @@ var nTemplates = function(story) {
 
     var blankLine = '';
 
+    story = story || [];
 
-// sub-functions
-// hunh. template only, I would think.....
-var func8 = {
-    '1'   : 'kidnapping of person',
-    '2'   : 'seizure of magical agent or helper',
-    '2b'  : 'forcible seizure of magical helper',
-    '3'   : 'pillaging or ruining of crops',
-    '4'   : 'theft of daylight',
-    '5'   : 'plundering in other forms',
-    '6'   : 'bodily injury, maiming, mutilation',
-    '7'   : 'causes sudden disappearance',
-    '7b'  : 'bride is forgotten',
-    '8'   : 'demand for delivery or enticement, abduction',
-    '9'   : 'expulsion',
-    '10'  : 'casting into body of water',
-    '11'  : 'casting of a spell, transformation',
-    '12'  : 'false substitution',
-    '13'  : 'issues order to kill [requires proof]',
-    '14'  : 'commits murder',
-    '15'  : 'imprisonment, detention',
-    '16'  : 'threat of forced matrimony',
-    '16b' : 'threat of forced matrimony between relatives',
-    '17'  : 'threat of cannibalism',
-    '17b' : 'threat of cannibalism among relatives',
-    '18'  : 'tormenting at night (visitaion, vampirism)',
-    '19'  : 'declaration of war'
-};
+    // sub-functions
+    // hunh. template only, I would think.....
+    var func8 = {
+        '1'   : 'kidnapping of person',
+        '2'   : 'seizure of magical agent or helper',
+        '2b'  : 'forcible seizure of magical helper',
+        '3'   : 'pillaging or ruining of crops',
+        '4'   : 'theft of daylight',
+        '5'   : 'plundering in other forms',
+        '6'   : 'bodily injury, maiming, mutilation',
+        '7'   : 'causes sudden disappearance',
+        '7b'  : 'bride is forgotten',
+        '8'   : 'demand for delivery or enticement, abduction',
+        '9'   : 'expulsion',
+        '10'  : 'casting into body of water',
+        '11'  : 'casting of a spell, transformation',
+        '12'  : 'false substitution',
+        '13'  : 'issues order to kill [requires proof]',
+        '14'  : 'commits murder',
+        '15'  : 'imprisonment, detention',
+        '16'  : 'threat of forced matrimony',
+        '16b' : 'threat of forced matrimony between relatives',
+        '17'  : 'threat of cannibalism',
+        '17b' : 'threat of cannibalism among relatives',
+        '18'  : 'tormenting at night (visitaion, vampirism)',
+        '19'  : 'declaration of war'
+    };
 
 
     var journey = function(p1, destination) {
@@ -268,6 +269,37 @@ var func8 = {
         text.push(world.blankLine, interdiction.advisor.name + ' introduced ' + god.magicalhelper.name + ' to ' + hero.name);
         text.push(world.blankLine, god.converse(hero, god.magicalhelper));
 
+        text.push(world.blankLine, '<%= magicalhelper.nickname %> {{said}} "I will tell you a story":');
+
+        var setts = {
+            herogender: 'male',
+            villaingender: 'male',
+            peoplegender: 'male',
+            functions: resetProppFunctions(),
+            funcs: ['func0', ['func8', 'casting into body of water']],
+            bossmode: false,
+            verbtense: 'present'
+        };
+
+        // what I would like to do is pass in the DEATH BY WATER subFunc
+        setts.functions['func0'].active = true;
+        setts.functions['func8'].active = true;
+
+        var theme = {
+            bank: defaultbank,
+            templates: nTemplates
+        };
+
+        // BLARG - THIS OVERWRITES THE PREVIOUS SCOPE
+        var sg = new storyGen(setts);
+        var tale = sg.generate(setts, theme);
+
+        // TODO: indent every line in the inner-story.
+        // SOMEHOW
+        text.push(world.blankLine, tale);
+
+        text.push(world.blankLine, '"And now," {{concluded}} <%= magicalhelper.nickname%>, "my tale is done."');
+
         return text.join('\n');
 
     };
@@ -327,15 +359,25 @@ var func8 = {
 
 
     // Delivery: The villain gains information
-    story['func5'].templates.push('<%= villain.name %> gained information.');
-    story['func5'].templates.push('After a chat with <%= pick(hero.family).name %>, <%= villain.name %> learned some interesting news.');
-    story['func5'].templates.push('While skulking about <%= hero.home.residence %>, <%= villain.name %> overheard some gossip about <%= hero.name %>.');
+    story['func5'].exec = function(god) {
+
+        var vn = '<%= select(villain.name, villain.nickname) %>';
+
+        var tmpls = [
+            '{{VN}} {{gained}} information.',
+            'After a chat with <%= pick(hero.family).name %>, {{VN}} {{learned}} some interesting news.',
+            'While skulking about <%= hero.home.vicinity %>, {{VN}} {{overheard}} some gossip about <%= hero.name %>.'
+        ];
+
+        return god.pick(tmpls).replace(/{{VN}}/mg, vn);
+
+    };
 
     // Trickery: Villain attempts to deceive victim.
-    story['func6'].templates.push('<%= villain.name %> attempted to deceive victim.');
+    story['func6'].templates.push('<%= villain.name %> {{attempted}} to deceive victim.');
 
     // Complicity: Unwitting helping of the enemy
-    story['func7'].templates.push('<%= hero.name %> unwittingly helped <%= villain.name %>.');
+    story['func7'].templates.push('<%= hero.name %> {{unwittingly}} helped <%= villain.name %>.');
 
 
     // 2nd Sphere: The Body of the story
@@ -360,7 +402,7 @@ var func8 = {
         }
 
         // subFunc = 'causes sudden disappearance'; // for testing
-        subFunc = 'commits murder';
+        // subFunc = 'commits murder';
         // subFunc = 'casting into body of water';
 
         // there is a bug... SOMEWHERE.....

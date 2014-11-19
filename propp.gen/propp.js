@@ -119,7 +119,8 @@ var resetProppFunctions = function() {
 };
 
 
-var storyGen = function() {
+var storyGen = function(setts) {
+
 
 
     var settings = {
@@ -164,6 +165,7 @@ var storyGen = function() {
     // This is the way the world begins. just on the verge of Oblivion in the province Prussia, there was a hovel where Angelic Lauren lived.
     var capitalize = function(str) {
         // how about regex on start of each line w/in the string????
+        if (!str) return null;
         return str.replace(/^[a-z]/mg, function(m) { return m.toUpperCase(); });
         return str.slice(0,1).toUpperCase() + str.slice(1);
     };
@@ -171,41 +173,43 @@ var storyGen = function() {
 
     // ugh. capitalize is defined in propp.js
     // bank { adjective: [], verbs: [] }
-    var itemGenerator = function(bank) {
+    var ig = function(bank) {
 
         var adjCount = random(4) + 1;
         var adjs = [];
 
         for (var i = 0; i < adjCount; i++) {
-            adjs.push(capitalize(pick(bank.adjectives)));
+            adjs.push(capitalize(pick(bank.itembank.adjectives)));
         };
 
-        var thing = capitalize(pick(bank.nouns));
+        var thing = capitalize(pick(bank.itembank.nouns));
 
         return adjs.join('-') + ' ' + thing;
 
     };
 
 
+    // var itemGenerator = function() {
+    //     // TODO since this is a depencency, IT SHOULD BE PASSED IN
+    //     return ig(defaultbank.itembank);
+    // };
+
     // this function creates things that are common to all template-worlds
     var god = function(settings, wordbank) {
 
         var bank = _.deepClone(wordbank);
-        if (wordbank && wordbank.itemGenerator) {
-            bank.itemGenerator = wordbank.itemGenerator;
 
+        var itemGenerator = function() {
+            return ig(bank);
+        };
+
+        if (wordbank) {
             // TODO: this is not enough!
             // need to have these things as adjectives....
             for (var i = 0; i < 10; i++) {
-                bank.magicalitem.push(bank.itemGenerator());
+                bank.magicalitem.push(itemGenerator());
             }
         }
-
-        // var interdictionType = {
-        //     movement: 'movement',
-        //     action: 'action',
-        //     speak: 'speakwith'
-        // };
 
         var cache = {};
 
@@ -234,7 +238,7 @@ var storyGen = function() {
                      health: world.healthLevel.alive,
                      description: descr,
                      knows: [], // people known to character (identifier, not object-reference, so we don't get all circular)
-                     id: storyGen.uid.toString(),
+                     id: uid.toString(),
                      getCharacter: getCharacter
                    };
         };
@@ -258,7 +262,7 @@ var storyGen = function() {
                 residence: pick(bank.residence),
                 vicinity: pick(bank.location),
                 nation: pick(bank.nation),
-                id: storyGen.uid.toString('pl_') // prefix
+                id: uid.toString('pl_') // prefix
             };
         };
 
@@ -611,7 +615,7 @@ var storyGen = function() {
     // populate template
     // which may contain multiple sentences.
     // hrm. how about just doing functions, now...
-    var sentence = function(func, helper) {
+    var sentence = function(func, helper, params) {
 
         var f = '';
         var isFunc = (typeof func === 'function');
@@ -619,7 +623,7 @@ var storyGen = function() {
             if (isFunc) {
                 f = func(helper);
             } else if (func.exec) {
-                f = func.exec(helper);
+                f = func.exec(helper, params);
             } else {
                 f = func.templates[random(func.templates.length)];
             }
@@ -663,7 +667,7 @@ var storyGen = function() {
 
     };
 
-
+    // this is for "old-style" functions. BLARG!
     var enforceRules = function(story) {
 
         if (story['func2'].active || story['func3'].active) {
@@ -710,9 +714,15 @@ var storyGen = function() {
 
             // the world is the things that have been created. no?
             // possibly not. since creation is called alla time again...
-            this.universe = god(storyGen.settings, theme.bank);
+            this.universe = god(this.settings, theme.bank);
             for (var i = 0; i < settings.funcs.length; i++) {
-                var s2 = this.sentence(story[settings.funcs[i]], storyGen.universe);
+                var f = settings.funcs[i];
+                var subFunc;
+                if (typeof f === 'object') {
+                    subFunc = f[1];
+                    f = f[0];
+                }
+                var s2 = this.sentence(story[f], this.universe, subFunc);
                 if (s2) { tale.push(s2); }
                 if (this.universe.hero.health === world.healthLevel.dead) { break; }
                 if (settings.bossmode && this.universe.villain.health == 'dead' && restartVillainy >= 0) {
@@ -727,7 +737,7 @@ var storyGen = function() {
                     }
                 }
             }
-            tale.push(this.sentence(story.outro, storyGen.universe));
+            tale.push(this.sentence(story.outro, this.universe));
 
             // this doesn't handle recursive stories (this is the one I'm particularly interested in)
             // multiple tasks
@@ -758,36 +768,38 @@ var storyGen = function() {
     };
 
 
+    // http://stackoverflow.com/questions/3231459/create-unique-id-with-javascript
+    var uid = new function (prefix) {
+        var u = 0;
+        prefix = prefix || 'id_';
+        this.toString = function () {
+            return prefix + u++;
+        };
+    };
+
+
+    if (!(this instanceof storyGen)) return new storyGen();
+
     return {
+        settings: setts,
         random: random,
         coinflip: coinflip,
         enforceRules: enforceRules,
         findVillainy: findVillainy,
         generate: generate,
         god: god,
-        itemGenerator: itemGenerator,
+        itemGenerator: god.itemGenerator, // TODO: is this even used?
         pick: pick,
         pickRemove: pickRemove,
         randomProperty: randomProperty,
-        sentence: sentence
+        sentence: sentence,
+        uid: uid
     };
 
 
-}();
-
-
-// wait: aren't these set elsewhere, as well?????
-// storyGen.god = god;
-storyGen.settings = settings;
-
-// http://stackoverflow.com/questions/3231459/create-unique-id-with-javascript
-storyGen.uid = new function (prefix) {
-    var u = 0;
-    prefix = prefix || 'id_';
-    this.toString = function () {
-        return prefix + u++;
-    };
 };
+
+
 
 
 module = module || {};
