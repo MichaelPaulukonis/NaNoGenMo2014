@@ -21,9 +21,15 @@ var nlp = nlp || require('nlp_compromise');
 // http://blog.elliotjameschong.com/2012/10/10/underscore-js-deepclone-and-deepextend-mix-ins/
 // in case it is not clear, deepClone clones everything that can JSON-ified
 // that means properties NOT FUNCTIONS
-_.mixin({ deepClone: function (o) { return JSON.parse(JSON.stringify(o)); } });
+_.mixin({ deepClone: function (o) {
+    try {
+        return JSON.parse(JSON.stringify(o));
+    } catch (ex) {
+        console.log(ex.message);
+        console.log(o);
+    }
+}});
 
-// this is a global as far as the browser is concerned....
 var world = {};
 
 // TODO: THESE are the things that go into something called 'world'
@@ -81,39 +87,39 @@ var resetProppFunctions = function() {
 
     var propp = {
 
-        "func0": { active: false, templates: [] },
-        "func1": { active: false, templates: [] },
-        "func2": { active: false, templates: [] },
-        "func3": { active: false, templates: [] },
-        "func4": { active: false, templates: [] },
-        "func5": { active: false, templates: [] },
-        "func6": { active: false, templates: [] },
-        "func7": { active: false, templates: [] },
-        "func8": { active: false, templates: [] },
-        "func8a": { active: false, templates: [] },
-        "func9": { active: false, templates: [] },
-        "func10": { active: false, templates: [] },
-        "func11": { active: false, templates: [] },
-        "func12": { active: false, templates: [] },
-        "func13": { active: false, templates: [] },
-        "func14": { active: false, templates: [] },
-        "func15": { active: false, templates: [] },
-        "func16": { active: false, templates: [] },
-        "func17": { active: false, templates: [] },
-        "func18": { active: false, templates: [] },
-        "func19": { active: false, templates: [] },
-        "func20": { active: false, templates: [] },
-        "func21": { active: false, templates: [] },
-        "func22": { active: false, templates: [] },
-        "func23": { active: false, templates: [] },
-        "func24": { active: false, templates: [] },
-        "func25": { active: false, templates: [] },
-        "func26": { active: false, templates: [] },
-        "func27": { active: false, templates: [] },
-        "func28": { active: false, templates: [] },
-        "func29": { active: false, templates: [] },
-        "func30": { active: false, templates: [] },
-        "func31": { active: false, templates: [] }
+        "func0": { active: true, templates: [] },
+        "func1": { active: true, templates: [] },
+        "func2": { active: true, templates: [] },
+        "func3": { active: true, templates: [] },
+        "func4": { active: true, templates: [] },
+        "func5": { active: true, templates: [] },
+        "func6": { active: true, templates: [] },
+        "func7": { active: true, templates: [] },
+        "func8": { active: true, templates: [] },
+        "func8a": { active: true, templates: [] },
+        "func9": { active: true, templates: [] },
+        "func10": { active: true, templates: [] },
+        "func11": { active: true, templates: [] },
+        "func12": { active: true, templates: [] },
+        "func13": { active: true, templates: [] },
+        "func14": { active: true, templates: [] },
+        "func15": { active: true, templates: [] },
+        "func16": { active: true, templates: [] },
+        "func17": { active: true, templates: [] },
+        "func18": { active: true, templates: [] },
+        "func19": { active: true, templates: [] },
+        "func20": { active: true, templates: [] },
+        "func21": { active: true, templates: [] },
+        "func22": { active: true, templates: [] },
+        "func23": { active: true, templates: [] },
+        "func24": { active: true, templates: [] },
+        "func25": { active: true, templates: [] },
+        "func26": { active: true, templates: [] },
+        "func27": { active: true, templates: [] },
+        "func28": { active: true, templates: [] },
+        "func29": { active: true, templates: [] },
+        "func30": { active: true, templates: [] },
+        "func31": { active: true, templates: [] }
     };
 
     return propp;
@@ -198,7 +204,9 @@ var storyGen = function(settings) {
     // };
 
     // this function creates things that are common to all template-worlds
-    var god = function(settings, wordbank) {
+    var god = function(settings, wordbank, t) {
+
+        var theme = t;
 
         var bank = _.deepClone(wordbank);
 
@@ -314,6 +322,13 @@ var storyGen = function(settings) {
 
         };
 
+        var createMagicalHelper = function(g, aspct) {
+            var person = createCharacter(g, aspct);
+            person.name = capitalize(pick(bank.itembank.adjectives)) + ' ' + person.name;
+            return person;
+        };
+
+
         // differs from here in that there are no acquaintances
         // and only creates minions if a number is passed in
         var createVillain = function(g, aspct, item, minionCount) {
@@ -348,13 +363,6 @@ var storyGen = function(settings) {
             // why not just create them here AS NEEDED
             var item = (bank.magicalitem && bank.magicalitem.length > 0 ? pickRemove(bank.magicalitem) : bank.itemGenerator());
             return item;
-        };
-
-
-        var createMagicalHelper = function() {
-            var person = createCharacter();
-            person.name = capitalize(pick(bank.itembank.adjectives)) + ' ' + person.name;
-            return person;
         };
 
         var createPunished = function() {
@@ -565,7 +573,7 @@ var storyGen = function(settings) {
                 cache.advisor = settings.advisor || createCharacter(null, world.aspect.good);
                 cache.advisor.introduced = false; // ugh.
                 cache.magicalitem = settings.magicalitem || createMagicalitem();
-                cache.magicalhelper = settings.magicalhelper || createMagicalHelper();
+                cache.magicalhelper = settings.magicalhelper || createMagicalHelper(null, world.aspect.good);
                 cache.punished = settings.punished || createPunished();
                 cache.task = pick(bank.task);
                 cache.victim = settings.victim || getCharacter(pick(cache.hero.family.concat(cache.hero)));
@@ -601,6 +609,7 @@ var storyGen = function(settings) {
             marriage: cache.marries,
             converse: converse,
             tone: tone,
+            theme: theme,
             cache: cache, // hunh. exposing this?????
             or: or,
             list: list,
@@ -727,14 +736,14 @@ var storyGen = function(settings) {
         try {
 
             this.settings = settings;
-            var story = theme.templates(settings.functions, world);
+            var story = theme.templates(settings.functions, world, storyGen);
             var restartVillainy = this.findVillainy(settings.funcs);
 
             var tale = [];
 
             // the world is the things that have been created. no?
             // possibly not. since creation is called alla time again...
-            this.universe = god(this.settings, theme.bank);
+            this.universe = god(this.settings, theme.bank, theme);
 
             for (var i = 0; i < settings.funcs.length; i++) {
                 var f = settings.funcs[i];
@@ -811,7 +820,8 @@ var storyGen = function(settings) {
         randomProperty: randomProperty,
         sentence: sentence,
         uid: uid,
-        world: world
+        world: world,
+        deepClone: _.deepClone
     };
 
 

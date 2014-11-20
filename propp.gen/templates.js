@@ -1,4 +1,4 @@
-var nTemplates = function(story, world) {
+var nTemplates = function(story, world, storyGen) {
 
     var blankLine = '';
 
@@ -126,7 +126,8 @@ var nTemplates = function(story, world) {
 
     };
 
-
+    // embedded stories
+    // too much is hard-coded here, and should be passed-it, instead.
     story.subtale = function(narrator, god) {
 
         var text = [];
@@ -140,16 +141,16 @@ var nTemplates = function(story, world) {
             funcs: [['func8', 'casting into body of water'], 'func30'],
             bossmode: true,
             verbtense: 'present',
-            narrator: _.deepClone(narrator),
+            narrator: storyGen().deepClone(narrator),
             // swap them on some key?
             // unswapped, the hero gets killled
             // which should shake them up a bit....
             // TODO: cache.characters not populated in this situation
             // fix inside of init()
             // what I don't get is WHY IT WORKED FOR A WHILE
-            hero: _.deepClone(god.hero),
-            villain: _.deepClone(god.villain),
-            characters: _.deepClone(god.cache.characters) // needed for hero and villain
+            hero: storyGen().deepClone(god.hero),
+            villain: storyGen().deepClone(god.villain),
+            characters: storyGen().deepClone(god.cache.characters) // needed for hero and villain
         };
 
         // OH FOR CRYING IN THE BEER
@@ -157,16 +158,19 @@ var nTemplates = function(story, world) {
         setts.functions['func8'].active = true;
         setts.functions['func30'].active = true;
 
-        var theme = {
-            bank: defaultbank,
-            templates: nTemplates
-        };
+        // TODO: need to re-use, or get access to everything
+        // UGH UGH UGH
+        // NO GLOBALS!!!!!
+        // var theme = {
+        //     bank: defaultbank(), // TROUBLE TROUBLE
+        //     templates: nTemplates
+        // };
 
         // TODO: pass in the narrator, hero, and villain (and other situations, items, etc)
         // like.... a magical item. or a violated interdiction that goes disastrously
         // except, interdictions are ALWAYS violated.....
         var sg = new storyGen(setts);
-        var tale = sg.generate(setts, theme);
+        var tale = sg.generate(setts, god.theme);
 
         // TODO: indent every line in the inner-story.
         // SOMEHOW
@@ -983,7 +987,7 @@ var nTemplates = function(story, world) {
         var templates = [
             '{{AS}}{{VN}} {{was}} <%= punished() %> by {{HN}}.',
             '{{AS}}{{HN}} <%= punished() %> {{VN}}.',
-            (god.coinflip() ? 'Thanks to {{HN}}, ' : '') + '{{VN}} was completely burnt to cinders. That\'s that.',
+            (god.coinflip() ? 'Thanks to {{HN}}, ' : '') + '{{VN}} was completely burnt to cinders. That {{was}} that.',
             // okay. so there's been no mention of a horse. SO IT GOES.
             '{{HN}}\'s horse smote {{VN}} full swing with its hoof, and cracked <%= possessive(villain) %> skull, and {{HN}} made an end of <%= pronounobject(villain) %> with a club. Afterwards {{HN}} heaped up a pile of wood, set fire to it, burnt {{VN}} on the pyre, and scattered <%= possessive(villain) %> ashes to the wind.'
         ];
@@ -1043,15 +1047,19 @@ var nTemplates = function(story, world) {
 
         var lod = story.latd(god.hero, god);
 
-        var t = god.pick(templates);
+        var t = [];
+            t.push(god.pick(templates));
 
         // this a proof-of-concept
         if (lod.dead.length > 0) {
             // Years passes, but Lauren still mourns the stinging loss of Megan.
             // passed needs to be in the infinitive, here. need to pass this as something extra.
             var sent = 'Years {{passed}}, but <%= hero.name %> still {{mourns}} the stinging loss of ' + god.list(lod.dead) + '.';
-            t += ' ' + sent;
+            t.push(sent);
         };
+
+        // TODO: enumerate some posessions, perhaps. and places visited.
+        // ALTHOUGH NONE OF THIS IS VERY FAIRY-TALELY
 
         // if single, can't be they
         // TODO: earlier bride business....
@@ -1067,9 +1075,9 @@ var nTemplates = function(story, world) {
         // prosperous course of life, and if they haven't {{died}}, they're living
         // still.
 
-        // After that they both lived long and happily, survived to a great age, and then died peacefully.
+        t.push('After that <%= pronoun(hero) %> lived long and happily, survived to a great age, and then died peacefully.');
 
-        return t;
+        return t.join(' ');
 
     };
 

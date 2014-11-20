@@ -12,11 +12,11 @@ try {
     var text = [];
 
     var setts = {
-        herogender: 'male',
-        villaingender: 'male',
-        peoplegender: 'male',
+        herogender: 'random',
+        villaingender: 'random',
+        peoplegender: 'random',
         functions: world.resetProppFunctions(),
-        funcs: ['func0', 'func2', ['func8', 'casting into body of water'], 'func30'],
+        funcs: ['func0', 'func2', 'func3', ['func8', 'commits murder'], 'func30', 'func31'],
         // funcs: [['func8', 'casting into body of water'], 'func30'],
         bossmode: true,
         verbtense: 'past'
@@ -33,10 +33,10 @@ try {
     };
 
     // OH FOR CRYING IN THE BEER
-    setts.functions['func0'].active = true;
+    // setts.functions['func0'].active = true;
     // setts.functions['func2'].active = true; // _.deepClone is not accessible yet. blarg.
-    setts.functions['func8'].active = true;
-    setts.functions['func30'].active = true;
+    // setts.functions['func8'].active = true;
+    // setts.functions['func30'].active = true;
 
     var theme = {
         bank: wordbank,

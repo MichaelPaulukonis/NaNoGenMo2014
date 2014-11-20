@@ -154,14 +154,16 @@ var guiGet = function() {
 
     case 'original':
         theme = {
-            bank: defaultbank, // although it won't be used...
+            bank: defaultbank(words), // although it won't be used...
             templates: defaultTemplates
         };
     };
 
     // STILL EXPECTS THE story['funcn'].active stuff to be present. OUTCH
+    // WHY ARE WE PASSING THE SETTINGS IN TWICE ?!?!!?!
     var sg = new storyGen(settings);
     var tale = sg.generate(settings, theme);
+
     shoveToGui(tale);
 };
 
