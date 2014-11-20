@@ -516,7 +516,7 @@ var nTemplates = function(story) {
         // subFunc = 'commits murder';
         // subFunc = 'casting into body of water';
         // subFunc =  'theft of daylight';
-        subFunc =  'threat of cannibalism';
+        // subFunc =  'threat of cannibalism';
 
         console.log(subFunc);
 

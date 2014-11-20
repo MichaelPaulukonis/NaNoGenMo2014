@@ -200,7 +200,7 @@ var storyGen = function(settings) {
 
         var bank = _.deepClone(wordbank);
 
-        var itemGenerator = function() {
+        bank.itemGenerator = function() {
             return ig(bank);
         };
 
@@ -208,7 +208,7 @@ var storyGen = function(settings) {
             // TODO: this is not enough!
             // need to have these things as adjectives....
             for (var i = 0; i < 10; i++) {
-                bank.magicalitem.push(itemGenerator());
+                bank.magicalitem.push(bank.itemGenerator());
             }
         }
 
