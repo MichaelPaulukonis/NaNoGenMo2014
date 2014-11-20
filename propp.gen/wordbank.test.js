@@ -96,10 +96,12 @@ defaultbank.punish = ['brought to justice', 'hung, drawn, and quartered', 'given
 // TODO: more codishness? if kingdom is involved, king plus marriage plus banquet, &c. several such things
 // or find a better way to spin out text from a small premise (HAH HAH HAH)
 // these are passive
-defaultbank.ascension = ['{{is}} made king', '{{becomes}} a god', '{{becomes}} filled with knowledge', '{{is}} given keys to the city', '{{has}} parking tickets forgiven', ];
+defaultbank.ascension = ['{{is}} made king', '{{becomes}} a god', '{{becomes}} filled with knowledge', '{{is}} given keys to the city', '{{has}} parking tickets forgiven' ];
 
 defaultbank.marries = ['{{marry}}', '{{dates}} for a few years, but {{decides}} to remain single' ];
 
+// TODO: this is a global reference, not passed in
+// AND OS IT FAILS IN NODE.JS
 defaultbank.adjectives = words.adjectives;
 defaultbank.interjections = words.interjections;
 

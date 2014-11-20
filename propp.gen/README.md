@@ -23,6 +23,14 @@ The most-referenced version - [Fairy Tale Generator](https://web.archive.org/web
 
 A perhaps better model is the [Proto-Proppian Generator](http://www.stonedragonpress.com/vladimir_propp/propp_generator_v1.htm) that has _awful_ output, in that its a listing of the selected functions, with some minor variations. however, the technical details are more correct (to my untrained eye), and the selection of functions is dependent on other selections (ie, not totally independent -- it follows rules). This is perhaps the better model for me to work with.
 
+## TODOs
+1. pass in word.js dependency to wordbank.test.js
+1. fix locations - including visited locations
+1. journeys
+1. battle
+1. rules + randomizer - for embedded tales, headless running, &c
+1. false hero
+1. move/duplicate? (that is, refactor) punishments to apply as well in victory sequence
 
 ## Directions, and potential side-resources
 * WordNik
@@ -33,8 +41,13 @@ A perhaps better model is the [Proto-Proppian Generator](http://www.stonedragonp
 * [Indian Fairy Tales](https://github.com/GITenberg/Indian-Fairy-Tales_7128) on github, from Gutenberg.
  * there are others in this vein from the same group
 * [The Project Gutenberg EBook of Russian Fairy Tales, by W. R. S. Ralston](http://www.gutenberg.org/files/22373/22373-h/22373-h.htm)
+* 1001 nights
+ * [The Book of the Thousand Nights and One Night](http://www.gutenberg.org/cache/epub/8655/pg8655.html)
+ * [The Arabian Nights Entertainments](http://www.gutenberg.org/files/128/128-h/128-h.htm)
+ * [The Arabian Nights: Their Best-known Tales](http://www.gutenberg.org/files/20916/20916-h/20916-h.htm) - illos by Maxfield Parrish!
+ * [The Book of the Thousand Nights and a Night, Volume 3](http://www.gutenberg.org/cache/epub/3437/pg3437.html) - Richard Burton verson
 
-* [alyphen's generator](https://github.com/dariusk/NaNoGenMo-2014/issues/73) has some interesting lists. The sentences are purely random (based on a hard-coded gammar?) but read well. There's no connectivity, but the method of construction has some pointers.
+* [alyphen's generator](https://github.com/dariusk/NaNoGenMo-2014/issues/73) has some interesting lists (all from Corpora, I believe). The sentences are purely random (based on a hard-coded gammar?) but read well. There's no connectivity, but the method of construction has some pointers.
   * particularly look at [nanogenmo.py](https://github.com/alyphen/nanogenmo/blob/master/nanogenmo/nanogenmo.py)
 
 * [non-linear narrative](http://en.wikipedia.org/wiki/Nonlinear_narrative)

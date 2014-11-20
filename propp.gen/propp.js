@@ -127,9 +127,22 @@ var storyGen = function(settings) {
         return num;
     };
 
-    var randomProperty = function (obj) {
-        var keys = Object.keys(obj);
-        return obj[keys[ keys.length * Math.random() << 0]];
+    // original implementation can return 'id'
+    // var randomProperty = function (obj) {
+    //     var keys = Object.keys(obj);
+    //     return obj[keys[ keys.length * Math.random() << 0]];
+    // };
+
+    // http://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
+    var randomProperty = function(obj) {
+        var result;
+        var count = 0;
+        for (var prop in obj)
+            if (prop != 'id') {
+                if (Math.random() < 1/++count)
+                    result = obj[prop];
+            }
+        return result;
     };
 
     var pick = function(arr) {
@@ -696,7 +709,13 @@ var storyGen = function(settings) {
     // or -1 (not found)
     var findVillainy = function(storyFuncs) {
         for (var i = 0; i < storyFuncs.length; i++) {
-            if (storyFuncs[i] === 'func8') return i;
+            var f = settings.funcs[i];
+            var subFunc;
+            if (typeof f === 'object') {
+                subFunc = f[1];
+                f = f[0];
+            }
+            if (f === 'func8') return i;
         }
         return -1;
     };

@@ -93,7 +93,7 @@ var nTemplates = function(story) {
             'There ' + A + ' ' + B + '.',
             B + ' ' + A + '.',
             B + ' ' + A + ' ' + time + '.',
-            '<%= villain.name %> {{paid}} a visit to {{H}}.',
+            '<%= villain.name %> {{paid}} a visit to {{HH}}.',
             '{{HH}} {{plays}} host to <%= villain.name %>' + (god.coinflip() ? ' ' + time: '') + '.'
         ];
 
@@ -329,13 +329,23 @@ var nTemplates = function(story) {
             break;
         }
 
+        var mh = god.magicalhelper.name;
+
         // TODO: make the magicalhelper here. I guess
-        text.push(world.blankLine, interdiction.advisor.name + ' introduced ' + god.magicalhelper.name + ' to ' + hero.name);
+        text.push(world.blankLine, interdiction.advisor.name + ' introduced {{MH}} to ' + hero.name);
         text.push(world.blankLine, god.converse(hero, god.magicalhelper));
+
+        var intro = god.pick([
+            '{{MH}} {{said}} "I will tell you a story":',
+            '"I have a tale for you," {{said}} {{MH}}.'
+        ]);
+        text.push(world.blankLine, intro);
 
         text.push(story.subtale(god.magicalhelper, god));
 
-        return text.join('\n');
+        text.push(world.blankLine, '"And now," {{concluded}} {{MH}}, "my tale is done."');
+
+        return text.join('\n').replace(/{{MH}}/mg, mh);
 
     };
 
@@ -343,16 +353,14 @@ var nTemplates = function(story) {
 
         var text = [];
 
-        text.push(world.blankLine, narrator.name + ' {{said}} "I will tell you a story":');
-
         var setts = {
             herogender: 'male',
             villaingender: 'male',
             peoplegender: 'male',
             functions: resetProppFunctions(),
             // funcs: ['func0', ['func8', 'casting into body of water']],
-            funcs: [['func8', 'casting into body of water']],
-            bossmode: false,
+            funcs: [['func8', 'casting into body of water'], 'func30'],
+            bossmode: true,
             verbtense: 'present',
             narrator: _.deepClone(narrator),
             // swap them on some key?
@@ -366,8 +374,10 @@ var nTemplates = function(story) {
             characters: _.deepClone(god.cache.characters) // needed for hero and villain
         };
 
-        setts.functions['func0'].active = true;
+        // OH FOR CRYING IN THE BEER
+        // setts.functions['func0'].active = true;
         setts.functions['func8'].active = true;
+        setts.functions['func30'].active = true;
 
         var theme = {
             bank: defaultbank,
@@ -395,8 +405,6 @@ var nTemplates = function(story) {
         // tale = tale.replace(/(.{1,76})/mg, '$1\n');
         // tale = tale.replace(/^/mg, '    ');
         text.push(world.blankLine, tale);
-
-        text.push(world.blankLine, '"And now," {{concluded}} ' + narrator.name + ', "my tale is done."');
 
         return text.join('\n');
 
@@ -865,15 +873,28 @@ var nTemplates = function(story) {
     // Victory: Villain is defeated
     story['func18'].exec = function(god) {
 
+        var t = [];
+
+        var hn = '<%= select(hero.name, hero.nickname) %>';
         // func14 (recepit of magical item) is a rule if 18 is active
         var mi = god.hero.possessions[god.hero.possessions.length-1];
+        if (!mi) {
+            mi = god.createMagicalitem();
+            // but we never get rid of the previous item.....
+            god.hero.possessions.push(mi);
 
-        var t = [
+            t.push('{{HN}} remembered the {{MI}} <%= pronoun(hero) %> had been given before.');
+
+        }
+
+        var template = [
             // 'Through deft use of the {{MI}}, <%= villain.name %> {{was}} defeated.',
-            '<%= hero.name %> {{<%= select("deploy", "use", "manipulate") %>}} the {{MI}} to <%= select("defeat", "trounce", "vanquish", "annoy") %> <%= villain.name %>.'
+            '{{HN}} {{<%= select("deploy", "use", "manipulate") %>}} the {{MI}} to <%= select("defeat", "trounce", "vanquish", "annoy") %> <%= villain.name %>.'
         ];
 
-        return god.pick(t).replace(/{{MI}}/mg, mi);
+        t.push(god.pick(template));
+
+        return t.join('\n').replace(/{{MI}}/mg, mi).replace(/{{HN}}/mg, hn);
 
     };
 
