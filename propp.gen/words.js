@@ -13,5 +13,5 @@ var interjections = [ 'aah', 'ack', 'agreed', 'ah', 'aha', 'ahem', 'alas', 'all 
 
 var words = { adjectives: adjectives, interjections: interjections };
 
-// var module = module || {};
-// module.exports = words;
+module = module || {};
+module.exports = words;

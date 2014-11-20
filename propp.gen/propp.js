@@ -23,6 +23,7 @@ var nlp = nlp || require('nlp_compromise');
 // that means properties NOT FUNCTIONS
 _.mixin({ deepClone: function (o) { return JSON.parse(JSON.stringify(o)); } });
 
+// this is a global as far as the browser is concerned....
 var world = {};
 
 // TODO: THESE are the things that go into something called 'world'
@@ -118,6 +119,7 @@ var resetProppFunctions = function() {
     return propp;
 };
 
+world.resetProppFunctions = resetProppFunctions;
 
 var storyGen = function(settings) {
 
@@ -640,7 +642,6 @@ var storyGen = function(settings) {
             } else {
                 f = func.templates[random(func.templates.length)];
             }
-            console.log(f);
             var t = _.template(f);
             f = t(helper);
 
@@ -726,7 +727,7 @@ var storyGen = function(settings) {
         try {
 
             this.settings = settings;
-            var story = theme.templates(settings.functions);
+            var story = theme.templates(settings.functions, world);
             var restartVillainy = this.findVillainy(settings.funcs);
 
             var tale = [];
@@ -734,6 +735,7 @@ var storyGen = function(settings) {
             // the world is the things that have been created. no?
             // possibly not. since creation is called alla time again...
             this.universe = god(this.settings, theme.bank);
+
             for (var i = 0; i < settings.funcs.length; i++) {
                 var f = settings.funcs[i];
                 var subFunc;
@@ -758,10 +760,6 @@ var storyGen = function(settings) {
             }
             tale.push(this.sentence(story.outro, this.universe));
 
-            // this doesn't handle recursive stories (this is the one I'm particularly interested in)
-            // multiple tasks
-            // or going back to a previous point in the chain
-            // :-(
             // TODO: get a new iterator
             // it will be an array that is BUILT
             // aaaand, let's presume that it has been passed in as part of SETTINGS
@@ -812,7 +810,8 @@ var storyGen = function(settings) {
         pickRemove: pickRemove,
         randomProperty: randomProperty,
         sentence: sentence,
-        uid: uid
+        uid: uid,
+        world: world
     };
 
 

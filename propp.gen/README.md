@@ -13,6 +13,8 @@ That may seem wrong-headed, but I am am not fully engaging the entire narrative-
 
 I am interested in short-cuts, in making it _seem_ better than it is.
 
+However, I am not interested in futher "gimmicks." The major gimmick, here, is the templating system masquerading as something intelligent to make a story.  TODO: add links to/extracts from discussions on NaNoGenMo gimmicks and usefulness. For example, I could generate the novel solely though BOSSMODE (kill the villain; repeat), or through NESTED-TALES (character tells a story that has a character that tells a story that....), or NESTED-BOSSMODE (both of them). But there are plenty (several) extnat strategies that rely on nesting/recursion. I want to try something different. Assuming I have the time.
+
 Klein notes that "[t]he most complex problems in automatic Propp and Levi-Strauss concern logical qunatifications of functions. That is, the coherent selection of compatible characters, objects and functions" (Klein 1974, p23).
 
 In contrast, a rather "dumb" selection of characters and objects will result in humorous or jarring discontinitues that will _distract_ from other technical faults in the underlying "narrative" construct.
@@ -24,17 +26,26 @@ The most-referenced version - [Fairy Tale Generator](https://web.archive.org/web
 A perhaps better model is the [Proto-Proppian Generator](http://www.stonedragonpress.com/vladimir_propp/propp_generator_v1.htm) that has _awful_ output, in that its a listing of the selected functions, with some minor variations. however, the technical details are more correct (to my untrained eye), and the selection of functions is dependent on other selections (ie, not totally independent -- it follows rules). This is perhaps the better model for me to work with.
 
 ## TODOs
-1. pass in word.js dependency to wordbank.test.js
-1. fix locations - including visited locations
-1. journeys
-1. battle
-1. rules + randomizer - for embedded tales, headless running, &c
-1. false hero
-1. move/duplicate? (that is, refactor) punishments to apply as well in victory sequence
+[ ] pass in word.js dependency to wordbank.test.js
+[ ] fix locations - including visited locations
+[ ] journeys
+[ ] battle
+[ ] family - so hero can be child/sibling, parent, grand-parent, etc.
+[ ] extra possibility: if hero dies, another family-member becomes the hero
+[ ] rules + randomizer - for embedded tales, headless running, &c
+[ ] false hero
+[ ] move/duplicate? (that is, refactor) punishments to apply as well in victory sequence
+[ ] magicalitem template enhancement (currently static placeholder)
+[ ] conversation enhancements
+[ ] terse mode (simple intro, etc. for embedded tales, or otherwise)
+
 
 ## Directions, and potential side-resources
+* [NaNoGenMo 2014 resource "issue"](https://github.com/dariusk/NaNoGenMo-2014/issues/1)
+* [NaNoGenMo 2013 resource "issue"](https://github.com/dariusk/NaNoGenMo/issues/11)
+* [gutengrep](https://github.com/hugovk/gutengrep) for researching sentences in a large body og Gutenberg
 * WordNik
-* corpora (for locations, items, things like that)
+* [corpora](https://github.com/dariusk/corpora/) (for locations, items, things like that)
 
 * [list of online fairy tales](https://github.com/bscofield/fairy-tale-remix/blob/master/data/fairy-tales.json) - from a remixer that never got remixed.
 * [Bros Grimm](https://github.com/baldmountain/GrimmsFairyTales/blob/master/Grimms%20Fairy%20Tales%20-%20The%20Brothers%20Grimm.hatter/document.txt) on github (From Gutenberg)
@@ -59,17 +70,13 @@ A perhaps better model is the [Proto-Proppian Generator](http://www.stonedragonp
 from reading about the MESSy system used by Klein.
 
 * https://github.com/Planeshifter/node-concept-net
+ * playing with it a bit. Might be a way to get some sentences or something. But it won't be all that random.
+ * But it might help me build something up. Or not. who knows.
 * https://www.npmjs.org/package/expert
 * https://www.npmjs.org/package/file-concept-network
 * https://www.npmjs.org/package/concept-network
 
 * http://en.wikipedia.org/wiki/Cyc
-
-This may be going too far.
-Some simple variables might be enough (common to all templates).
-Or even just the templates -- and go with the flow.
-The functions I developed before -- like noun[n] to reuse a particular noun might be enough.
-
 
 
 ### Titles

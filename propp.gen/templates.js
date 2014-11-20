@@ -1,4 +1,4 @@
-var nTemplates = function(story) {
+var nTemplates = function(story, world) {
 
     var blankLine = '';
 
@@ -123,6 +123,68 @@ var nTemplates = function(story) {
         if (god.coinflip()) { t.push('There {{was}} much wailing in ' + god.hero.home.vicinity + '.'); }
 
         return t.join(' ');
+
+    };
+
+
+    story.subtale = function(narrator, god) {
+
+        var text = [];
+
+        var setts = {
+            herogender: 'male',
+            villaingender: 'male',
+            peoplegender: 'male',
+            functions: world.resetProppFunctions(),
+            // funcs: ['func0', ['func8', 'casting into body of water']],
+            funcs: [['func8', 'casting into body of water'], 'func30'],
+            bossmode: true,
+            verbtense: 'present',
+            narrator: _.deepClone(narrator),
+            // swap them on some key?
+            // unswapped, the hero gets killled
+            // which should shake them up a bit....
+            // TODO: cache.characters not populated in this situation
+            // fix inside of init()
+            // what I don't get is WHY IT WORKED FOR A WHILE
+            hero: _.deepClone(god.hero),
+            villain: _.deepClone(god.villain),
+            characters: _.deepClone(god.cache.characters) // needed for hero and villain
+        };
+
+        // OH FOR CRYING IN THE BEER
+        // setts.functions['func0'].active = true;
+        setts.functions['func8'].active = true;
+        setts.functions['func30'].active = true;
+
+        var theme = {
+            bank: defaultbank,
+            templates: nTemplates
+        };
+
+        // TODO: pass in the narrator, hero, and villain (and other situations, items, etc)
+        // like.... a magical item. or a violated interdiction that goes disastrously
+        // except, interdictions are ALWAYS violated.....
+        var sg = new storyGen(setts);
+        var tale = sg.generate(setts, theme);
+
+        // TODO: indent every line in the inner-story.
+        // SOMEHOW
+        // NOT GOOD ENOUGH - doesn't respect word-boundaries.
+        // need something more complicated
+        // respect word-boundaries (incl. punc)
+        // David lives with Nathan the Love-lorn, Sullen Ethan, Clean James, Joyous Tyl
+        // er, Interesting Christopher, Brandon the Steady, Prudent Samuel, Dylan the D
+        // elightful, and Dainty Benjamin.
+
+        // initial space should be deleted:
+        // Whether you believe it or not, this is what happened, for what I tell you is
+        //  true.
+        // tale = tale.replace(/(.{1,76})/mg, '$1\n');
+        // tale = tale.replace(/^/mg, '    ');
+        text.push(world.blankLine, tale);
+
+        return text.join('\n');
 
     };
 
@@ -349,67 +411,6 @@ var nTemplates = function(story) {
 
     };
 
-    story.subtale = function(narrator, god) {
-
-        var text = [];
-
-        var setts = {
-            herogender: 'male',
-            villaingender: 'male',
-            peoplegender: 'male',
-            functions: resetProppFunctions(),
-            // funcs: ['func0', ['func8', 'casting into body of water']],
-            funcs: [['func8', 'casting into body of water'], 'func30'],
-            bossmode: true,
-            verbtense: 'present',
-            narrator: _.deepClone(narrator),
-            // swap them on some key?
-            // unswapped, the hero gets killled
-            // which should shake them up a bit....
-            // TODO: cache.characters not populated in this situation
-            // fix inside of init()
-            // what I don't get is WHY IT WORKED FOR A WHILE
-            hero: _.deepClone(god.hero),
-            villain: _.deepClone(god.villain),
-            characters: _.deepClone(god.cache.characters) // needed for hero and villain
-        };
-
-        // OH FOR CRYING IN THE BEER
-        // setts.functions['func0'].active = true;
-        setts.functions['func8'].active = true;
-        setts.functions['func30'].active = true;
-
-        var theme = {
-            bank: defaultbank,
-            templates: nTemplates
-        };
-
-        // TODO: pass in the narrator, hero, and villain (and other situations, items, etc)
-        // like.... a magical item. or a violated interdiction that goes disastrously
-        // except, interdictions are ALWAYS violated.....
-        var sg = new storyGen(setts);
-        var tale = sg.generate(setts, theme);
-
-        // TODO: indent every line in the inner-story.
-        // SOMEHOW
-        // NOT GOOD ENOUGH - doesn't respect word-boundaries.
-        // need something more complicated
-        // respect word-boundaries (incl. punc)
-        // David lives with Nathan the Love-lorn, Sullen Ethan, Clean James, Joyous Tyl
-        // er, Interesting Christopher, Brandon the Steady, Prudent Samuel, Dylan the D
-        // elightful, and Dainty Benjamin.
-
-        // initial space should be deleted:
-        // Whether you believe it or not, this is what happened, for what I tell you is
-        //  true.
-        // tale = tale.replace(/(.{1,76})/mg, '$1\n');
-        // tale = tale.replace(/^/mg, '    ');
-        text.push(world.blankLine, tale);
-
-        return text.join('\n');
-
-    };
-
     // Violation of Interdiction
     story['func3'].exec = function(god) {
 
@@ -518,7 +519,7 @@ var nTemplates = function(story) {
         // subFunc =  'theft of daylight';
         // subFunc =  'threat of cannibalism';
 
-        console.log(subFunc);
+        // console.log(subFunc);
 
         switch(subFunc) {
         case 'kidnapping of person':
@@ -572,7 +573,7 @@ var nTemplates = function(story) {
             // TODO: thing or person
             // people have a location; if the location is "unknown" we can process this elsewhere...
             template.push('{{VN}} caused a sudden disappearance.');
-            if (god.coinflip()) { template += ' ' + god.converse(god.villain); }
+            if (god.coinflip()) { template.push(god.converse(god.villain)); }
             break;
 
         case 'bride is forgotten':

@@ -147,7 +147,7 @@ var guiGet = function() {
 
     case 'test':
         theme = {
-            bank: defaultbank,
+            bank: defaultbank(words),
             templates: nTemplates
         };
         break;
