@@ -50,7 +50,7 @@ try {
 
     var tale = sg.generate(setts, theme);
 
-    console.log(tale);
+    console.log(tale.title.toUpperCase() + '\n\n' + tale.tale);
 
 } catch(ex) {
     // the last 3 items are non-standard.....

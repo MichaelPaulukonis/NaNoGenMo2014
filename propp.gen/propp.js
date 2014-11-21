@@ -250,7 +250,9 @@ var storyGen = function(settings) {
                      description: descr,
                      knows: [], // people known to character (identifier, not object-reference, so we don't get all circular)
                      id: uid.toString(),
-                     getCharacter: getCharacter
+                     getCharacter: getCharacter,
+                     object: pronounobject(gndr),
+                     possessive: possessive(gndr)
                    };
         };
 
@@ -780,7 +782,16 @@ var storyGen = function(settings) {
             //     }
             // }
 
+            var title = this.sentence(story.title, this.universe);
+
+            return {
+                title: title,
+                tale: tale.join('\n\n')
+            };
+
             return tale.join('\n\n');
+
+
         } catch(ex) {
             // the last 3 items are non-standard.....
             var msg = ex.name + ' : ' + ex.message;

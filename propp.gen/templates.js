@@ -32,6 +32,11 @@ var nTemplates = function(story, world, storyGen) {
         '19'  : 'declaration of war'
     };
 
+    story.title = function(god, world) {
+
+        return 'The story of <%= hero.name %> and <%= hero.possessive %> adventures';
+
+    };
 
     var journey = function(p1, destination) {
 
@@ -186,9 +191,9 @@ var nTemplates = function(story, world, storyGen) {
         //  true.
         // tale = tale.replace(/(.{1,76})/mg, '$1\n');
         // tale = tale.replace(/^/mg, '    ');
-        text.push(world.blankLine, tale);
+        // text.push(world.blankLine, tale);
 
-        return text.join('\n');
+        return tale;
 
     };
 
@@ -401,13 +406,15 @@ var nTemplates = function(story, world, storyGen) {
         text.push(world.blankLine, interdiction.advisor.name + ' introduced {{MH}} to ' + hero.name);
         text.push(world.blankLine, god.converse(hero, god.magicalhelper));
 
+        var tale = story.subtale(god.magicalhelper, god);
+
         var intro = god.pick([
             '{{MH}} {{said}} "I will tell you a story":',
-            '"I have a tale for you," {{said}} {{MH}}.'
+            '"I have a tale for you," {{said}} {{MH}}, "' + tale.title + ':"'
         ]);
-        text.push(world.blankLine, intro);
+        text.push(world.blankLine, intro, world.blankLine);
 
-        text.push(story.subtale(god.magicalhelper, god));
+        text.push(tale.tale);
 
         text.push(world.blankLine, '"And now," {{concluded}} {{MH}}, "my tale is done."');
 

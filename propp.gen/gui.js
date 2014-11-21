@@ -125,7 +125,7 @@ var getFunctionsFromGui = function() {
 
 var shoveToGui = function(tale) {
 
-    window.document.myform.output.value = tale;
+    window.document.myform.output.value = tale.title + '\n\n' + tale.tale;
 
 };
 
