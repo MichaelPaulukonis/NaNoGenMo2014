@@ -21,23 +21,29 @@ In contrast, a rather "dumb" selection of characters and objects will result in 
 
 
 ## Notes on the extant proppian generators
-The most-referenced version - [Fairy Tale Generator](https://web.archive.org/web/20061112014356/http://www.brown.edu/Courses/FR0133/Fairytale_Generator/gen.html) - was developed for a class (at Brown? in ????). It's not the most faithful Propp version -- it breaks the 31 functions into 34 pieces, and makes them all optional and independent -- nothings depends on anything else. The high level of citations is in no doubt due to the readily pleasing effects, which are primarily due to the source materials included. Each function, instead of actually referencing characters, objects or other functions, consists of the random selection of pre-written sentences, independent of previous selections. Due to the nature of the writing, there _may be_ inter-references, but this is all accidental.
+The most-referenced version - [Fairy Tale Generator](https://web.archive.org/web/20061112014356/http://www.brown.edu/Courses/FR0133/Fairytale_Generator/gen.html) - was developed for a class (at Brown in ????). It's not the most faithful Propp version -- it breaks the 31 functions into 34 pieces, and makes them all optional and independent -- nothings depends on anything else. The high level of citations is in no doubt due to the readily pleasing effects, which are primarily due to the source materials included. Each function, instead of actually referencing characters, objects or other functions, consists of the random selection of pre-written sentences, independent of previous selections. Due to the nature of the writing, there _may be_ inter-references, but this is all accidental. They are well-written, and the use of indefinite determiners allows sentences to seemingly reference one another. Plus, a lot of themes occur again (soil, shoes, needles).
 
 A perhaps better model is the [Proto-Proppian Generator](http://www.stonedragonpress.com/vladimir_propp/propp_generator_v1.htm) that has _awful_ output, in that its a listing of the selected functions, with some minor variations. however, the technical details are more correct (to my untrained eye), and the selection of functions is dependent on other selections (ie, not totally independent -- it follows rules). This is perhaps the better model for me to work with.
 
 ## TODOs
-[ ] pass in word.js dependency to wordbank.test.js
-[ ] fix locations - including visited locations
-[ ] journeys
-[ ] battle
-[ ] family - so hero can be child/sibling, parent, grand-parent, etc.
-[ ] extra possibility: if hero dies, another family-member becomes the hero
-[ ] rules + randomizer - for embedded tales, headless running, &c
-[ ] false hero
-[ ] move/duplicate? (that is, refactor) punishments to apply as well in victory sequence
-[ ] magicalitem template enhancement (currently static placeholder)
-[ ] conversation enhancements
-[ ] terse mode (simple intro, etc. for embedded tales, or otherwise)
+- [ ] get node.js headless mode working ("novel builder")
+- [ ] novel-builder loop-through with word-count check
+- [ ] novel-builder writes to a file
+- [ ] novel-builder framing device? (Count N visiting a mansion and reading volumes in the library)
+- [ ] pass in word.js dependency to wordbank.test.js
+- [ ] fix locations - including visited locations
+- [ ] villain can be a creature (bear, dragon, whatever, dark cloud, whatever)
+- [ ] journeys
+- [ ] battle
+- [ ] family - so hero can be child/sibling, parent, grand-parent, etc.
+- [ ] false hero
+- [ ] extra possibility: if hero dies, another family-member becomes the hero
+- [ ] rules + randomizer - for embedded tales, headless running, &c
+- [ ] hero/villain can have aspect changed on startup (eg, good/bad swap)
+- [ ] move/duplicate? (that is, refactor) punishments to apply as well in victory sequence
+- [ ] magicalitem template enhancement (currently static placeholder)
+- [ ] conversation enhancements
+- [ ] terse mode (simple intro, etc. for embedded tales, or otherwise)
 
 
 ## Directions, and potential side-resources
