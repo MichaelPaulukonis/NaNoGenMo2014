@@ -26,25 +26,32 @@ The most-referenced version - [Fairy Tale Generator](https://web.archive.org/web
 A perhaps better model is the [Proto-Proppian Generator](http://www.stonedragonpress.com/vladimir_propp/propp_generator_v1.htm) that has _awful_ output, in that its a listing of the selected functions, with some minor variations. however, the technical details are more correct (to my untrained eye), and the selection of functions is dependent on other selections (ie, not totally independent -- it follows rules). This is perhaps the better model for me to work with.
 
 ## TODOs
-- [ ] get node.js headless mode working ("novel builder")
+
+These are NOT in order; but are lightly clustered....
+
+- [x] get node.js headless mode working ("novel builder")
+- [ ] title-maker templates
+  - [ ] store list of villains encountered to possibly aid with title
 - [ ] novel-builder loop-through with word-count check
 - [ ] novel-builder writes to a file
-- [ ] novel-builder framing device? (Count N visiting a mansion and reading volumes in the library)
-- [ ] pass in word.js dependency to wordbank.test.js
-- [ ] fix locations - including visited locations
-- [ ] villain can be a creature (bear, dragon, whatever, dark cloud, whatever)
+- [ ] rules + randomizer - for embedded tales, headless running, &c
 - [ ] journeys
 - [ ] battle
+- [x] pass in word.js dependency to wordbank.test.js
+- [ ] more descriptors for characters - old|young|child, man|woman|person (villains and advisor/helpers can also be "things" like bear, dragon, cloud of flies)
+- [ ] fix locations - including visited locations
+- [ ] villain can be a creature (bear, dragon, whatever, dark cloud, whatever)
 - [ ] family - so hero can be child/sibling, parent, grand-parent, etc.
 - [ ] false hero
-- [ ] extra possibility: if hero dies, another family-member becomes the hero
-- [ ] rules + randomizer - for embedded tales, headless running, &c
 - [ ] hero/villain can have aspect changed on startup (eg, good/bad swap)
 - [ ] move/duplicate? (that is, refactor) punishments to apply as well in victory sequence
 - [ ] magicalitem template enhancement (currently static placeholder)
 - [ ] conversation enhancements
 - [ ] terse mode (simple intro, etc. for embedded tales, or otherwise)
-
+- [ ] theme selector, so that sub-tales can pick a different set of templates and wordbanks
+- [ ] extra possibility: if hero dies, another family-member becomes the hero
+- [ ] novel-builder framing device? (Count N visiting a mansion and reading volumes in the library)
+- [ ] generate() stores all templates so that we could re-process them, like to switch tense, or something
 
 ## Directions, and potential side-resources
 * [NaNoGenMo 2014 resource "issue"](https://github.com/dariusk/NaNoGenMo-2014/issues/1)
@@ -64,12 +71,18 @@ A perhaps better model is the [Proto-Proppian Generator](http://www.stonedragonp
  * [The Arabian Nights: Their Best-known Tales](http://www.gutenberg.org/files/20916/20916-h/20916-h.htm) - illos by Maxfield Parrish!
  * [The Book of the Thousand Nights and a Night, Volume 3](http://www.gutenberg.org/cache/epub/3437/pg3437.html) - Richard Burton verson
 
+* [Thompson's Motif-index of fold-literature](http://www.ualberta.ca/~urban/Projects/English/Motif_Index.htm)
+
 * [alyphen's generator](https://github.com/dariusk/NaNoGenMo-2014/issues/73) has some interesting lists (all from Corpora, I believe). The sentences are purely random (based on a hard-coded gammar?) but read well. There's no connectivity, but the method of construction has some pointers.
   * particularly look at [nanogenmo.py](https://github.com/alyphen/nanogenmo/blob/master/nanogenmo/nanogenmo.py)
 
 * [non-linear narrative](http://en.wikipedia.org/wiki/Nonlinear_narrative)
 
 * [nlp_compromise](https://github.com/spencermountain/nlp_compromise)
+
+* [Node Sentence Tokenizer](https://github.com/parmentf/node-sentence-tokenizer) for reprocessing text with nlp_compromise. yaaay!
+
+* [random weighted choice](https://github.com/parmentf/random-weighted-choice) for when I want some templates more often than others, but not ALL the time....
 
 
 ### Semantic Networks

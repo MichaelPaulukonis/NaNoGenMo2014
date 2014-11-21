@@ -1,6 +1,6 @@
-{
+module.exports = {
   "description": "First names of men and women, pulled from the US Census for the 2000s.",
-  "firstNames": [
+  "firstnames": [
     "Jacob",
     "Michael",
     "Joshua",

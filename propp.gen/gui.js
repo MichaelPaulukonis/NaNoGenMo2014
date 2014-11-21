@@ -21,7 +21,7 @@ var gui = function() {
 var preset = function(presets) {
 
     // reset should not be global.
-    var propp = resetProppFunctions();
+    var propp = resetProppFunctions(false); // ARGH these are all now true!
 
     for (var i = 0; i < presets.length; i++) {
         propp[presets[i]].active = true;
@@ -45,28 +45,28 @@ var presets = {
 };
 
 function cinderella() {
-    proppFunctions = preset(presets.cinderella);
-    pushSettingsToGui(proppFunctions);
+    var story = preset(presets.cinderella);
+    pushSettingsToGui(story);
 }
 
 function hansel(){
-    proppFunctions = preset(presets.hansel);
-    pushSettingsToGui(proppFunctions);
+    var story = preset(presets.hansel);
+    pushSettingsToGui(story);
 }
 
 function swhite(){
-    proppFunctions = preset(presets.swhite);
-    pushSettingsToGui(proppFunctions);
+    var story = preset(presets.swhite);
+    pushSettingsToGui(story);
 }
 
 function lrrh(){
-    proppFunctions = preset(presets.lrrh);
-    pushSettingsToGui(proppFunctions);
+    var story = preset(presets.lrrh);
+    pushSettingsToGui(story);
 }
 
 function juniper(){
-    proppFunctions = preset(presets.juniper);
-    pushSettingsToGui(proppFunctions);
+    var story = preset(presets.juniper);
+    pushSettingsToGui(story);
 }
 
 function barebones() {

@@ -83,43 +83,47 @@ world.blankLine = '';
 // TODO: this needs to be accessible somewhere else...
 // should this be reduced back down to a 0..31 array?
 
-var resetProppFunctions = function() {
+var resetProppFunctions = function(onoff) {
+
+    // if not passed in, turn it on
+    // this is a legacy setting used (mainly?) by the GUI
+    if (onoff == null) { onoff = true; }
 
     var propp = {
 
-        "func0": { active: true, templates: [] },
-        "func1": { active: true, templates: [] },
-        "func2": { active: true, templates: [] },
-        "func3": { active: true, templates: [] },
-        "func4": { active: true, templates: [] },
-        "func5": { active: true, templates: [] },
-        "func6": { active: true, templates: [] },
-        "func7": { active: true, templates: [] },
-        "func8": { active: true, templates: [] },
-        "func8a": { active: true, templates: [] },
-        "func9": { active: true, templates: [] },
-        "func10": { active: true, templates: [] },
-        "func11": { active: true, templates: [] },
-        "func12": { active: true, templates: [] },
-        "func13": { active: true, templates: [] },
-        "func14": { active: true, templates: [] },
-        "func15": { active: true, templates: [] },
-        "func16": { active: true, templates: [] },
-        "func17": { active: true, templates: [] },
-        "func18": { active: true, templates: [] },
-        "func19": { active: true, templates: [] },
-        "func20": { active: true, templates: [] },
-        "func21": { active: true, templates: [] },
-        "func22": { active: true, templates: [] },
-        "func23": { active: true, templates: [] },
-        "func24": { active: true, templates: [] },
-        "func25": { active: true, templates: [] },
-        "func26": { active: true, templates: [] },
-        "func27": { active: true, templates: [] },
-        "func28": { active: true, templates: [] },
-        "func29": { active: true, templates: [] },
-        "func30": { active: true, templates: [] },
-        "func31": { active: true, templates: [] }
+        "func0": { active: onoff, templates: [] },
+        "func1": { active: onoff, templates: [] },
+        "func2": { active: onoff, templates: [] },
+        "func3": { active: onoff, templates: [] },
+        "func4": { active: onoff, templates: [] },
+        "func5": { active: onoff, templates: [] },
+        "func6": { active: onoff, templates: [] },
+        "func7": { active: onoff, templates: [] },
+        "func8": { active: onoff, templates: [] },
+        "func8a": { active: onoff, templates: [] },
+        "func9": { active: onoff, templates: [] },
+        "func10": { active: onoff, templates: [] },
+        "func11": { active: onoff, templates: [] },
+        "func12": { active: onoff, templates: [] },
+        "func13": { active: onoff, templates: [] },
+        "func14": { active: onoff, templates: [] },
+        "func15": { active: onoff, templates: [] },
+        "func16": { active: onoff, templates: [] },
+        "func17": { active: onoff, templates: [] },
+        "func18": { active: onoff, templates: [] },
+        "func19": { active: onoff, templates: [] },
+        "func20": { active: onoff, templates: [] },
+        "func21": { active: onoff, templates: [] },
+        "func22": { active: onoff, templates: [] },
+        "func23": { active: onoff, templates: [] },
+        "func24": { active: onoff, templates: [] },
+        "func25": { active: onoff, templates: [] },
+        "func26": { active: onoff, templates: [] },
+        "func27": { active: onoff, templates: [] },
+        "func28": { active: onoff, templates: [] },
+        "func29": { active: onoff, templates: [] },
+        "func30": { active: onoff, templates: [] },
+        "func31": { active: onoff, templates: [] }
     };
 
     return propp;
@@ -566,6 +570,11 @@ var storyGen = function(settings) {
 
                 if (settings.narrator) { cache.narrator = settings.narrator; }
 
+                // TODO: alternately pass in an aspect, so the hero (main character) is an anti-hero, and the villain is a good person!
+                // maybe protagonist/antagonist and the main chars?
+                // and hero/villain is a particular instantiation?
+                // so that the protag is here, with antag as villain, OR protag as villain with antag as hero
+                // and the other two combos. What would THAT do?
                 cache.hero = settings.hero || createHero(settings.herogender, world.aspect.good);
                 cache.villain = settings.villain || createVillain(settings.villaingender, world.aspect.bad, createMagicalitem(), 2);
 

@@ -197,6 +197,29 @@ var nTemplates = function(story, world, storyGen) {
 
     };
 
+    story.createLack = function(god) {
+
+        var lacks = ['{{needs}} a bride, a friend, or just somebody to talk to.',
+                     '{{needs}} a helper or magical agent.',
+                     '{{needs}} a wondrous object or two. Possibly three. No more than that. Unless they {{were}} collectible?',
+                     '{{needs}} a egg of death or love. Either would do.',
+                     '{{needs}} money or means of existence. Times {{were}} tough.',
+                     '{{had}} lacks in other forms. Tsk tsk. Those lacks.'
+                    ];
+
+        var l = god.pick(lacks);
+        var p = god.pick(god.hero.family);
+        var lack = {
+            lack: l,
+            person: p
+        };
+
+        god.cache.lack = lack;
+
+        return lack;
+
+    };
+
     story.intro = function(god) {
 
         // There lived in a certain land an old man of this kind
@@ -486,7 +509,7 @@ var nTemplates = function(story, world, storyGen) {
 
         var tmpls = [
             '{{VN}} {{gained}} information.',
-            'After a chat with <%= pick(hero.family).name %>, {{VN}} {{learned}} some interesting news.',
+            'After a chat with <%= getCharacter(pick(hero.family)).name %>, {{VN}} {{learned}} some interesting news.',
             'While skulking about <%= hero.home.vicinity %>, {{VN}} {{overheard}} some gossip about <%= hero.name %>.'
         ];
 
@@ -498,7 +521,7 @@ var nTemplates = function(story, world, storyGen) {
     story['func6'].templates.push('<%= villain.name %> {{attempted}} to deceive victim.');
 
     // Complicity: Unwitting helping of the enemy
-    story['func7'].templates.push('<%= hero.name %> {{unwittingly}} helped <%= villain.name %>.');
+    story['func7'].templates.push('<%= hero.name %> unwittingly {{helped}} <%= villain.name %>.');
 
 
     // 2nd Sphere: The Body of the story
@@ -537,6 +560,7 @@ var nTemplates = function(story, world, storyGen) {
             template.push('{{VN}} kidnapped <%= pick(select(hero.family, hero.acquaintances)).name %>.');
             break;
 
+            // TODO: name not setup???
         case 'seizure of magical agent or helper':
             template.push('{{VN}} <%= select("forcibly seized", "kidnapped", "made off with") %> <%= magicalhelper.name %>.');
             break;
@@ -737,61 +761,15 @@ var nTemplates = function(story, world, storyGen) {
 
     //  8a - Lack: The need is identified (Lack)
     // function 8a: one member of family lacks/desires something = lack - a
-    // TODO: push this into an exec function
-    // pick one of the following, and store the object
     // or.... figure out a better way to accomplish this...
     story['func8a'].exec = function(god, subFunc) {
 
-        // var lacks = ['needed a bride, friend, or an individual.',
-        //              'needed a helper or magical agent.',
-        //              'needed a wondrous object(s).',
-        //              'needed a egg of death or love.',
-        //              'needed a money or means of existence.',
-        //              'had lacks in other forms'
-        //             ];
-
-        // // if this function isn't executed
-        // // the lack does not exist for the NEXT function to call it
-        // // DANG DANG DANG DANG
-        // var lack = god.pick(lacks);
-        // var person = god.pick(god.hero.family);
-        // god.cache.lack = {
-        //     lack: lack,
-        //     person: person
-        // };
-
         var lack = story.createLack(god);
 
-        // TODO: this should not be hero, it should be someone else
         return god.getCharacter(lack.person).name + ' ' + lack.lack;
 
     };
 
-    story.createLack = function(god) {
-
-        var lacks = ['needed a bride, friend, or an individual.',
-                     'needed a helper or magical agent.',
-                     'needed a wondrous object(s).',
-                     'needed a egg of death or love.',
-                     'needed a money or means of existence.',
-                     'had lacks in other forms'
-                    ];
-
-        // if this function isn't executed
-        // the lack does not exist for the NEXT function to call it
-        // DANG DANG DANG DANG
-        var l = god.pick(lacks);
-        var p = god.pick(god.hero.family);
-        var lack = {
-            lack: l,
-            person: p
-        };
-
-        god.cache.lack = lack;
-
-        return lack;
-
-    };
 
     // Mediation: hero discovers the lack
     story['func9'].exec = function(god) {
