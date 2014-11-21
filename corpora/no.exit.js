@@ -102,6 +102,7 @@ var wordcount = function(s) {
 
 var text = function() {
 
+    var wc = 0;
     var n = [];
 
     var person = newPerson();
@@ -114,18 +115,24 @@ var text = function() {
 
     people.push(person);
 
-    for (var i = 0; i < 100; i++) {
+    while (wc < 50000) {
 
         // n time passes
         // lights flicker.
 
+        var e = [];
+
         person = newPerson();
 
-        n.push(entrance(person));
+        e.push(entrance(person));
 
-        n.push(greets(people, person));
+        e.push(greets(people, person));
 
         people.push(person);
+
+        wc = wc + wordcount(e.join('\n\n')); // we skip the opening words, but what they hey.
+
+        n.push(e);
 
     }
 

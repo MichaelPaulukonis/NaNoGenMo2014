@@ -7,57 +7,113 @@ var storygen = require('./propp.js');
 
 var world = storygen().world;
 
-try {
+var oneStory = function() {
 
-    var text = [];
+    try {
 
-    var setts = {
-        herogender: 'random',
-        villaingender: 'random',
-        peoplegender: 'random',
-        functions: world.resetProppFunctions(),
-        funcs: ['func0', 'func2', 'func3', ['func8', 'commits murder'], 'func30', 'func31'],
-        // funcs: [['func8', 'casting into body of water'], 'func30'],
-        bossmode: true,
-        verbtense: 'past'
-        // narrator: _.deepClone(narrator),
-        // swap them on some key?
-        // unswapped, the hero gets killled
-        // which should shake them up a bit....
-        // TODO: cache.characters not populated in this situation
-        // fix inside of init()
-        // what I don't get is WHY IT WORKED FOR A WHILE
-        // hero: _.deepClone(god.hero),
-        // villain: _.deepClone(god.villain),
-        // characters: _.deepClone(god.cache.characters) // needed for hero and villain
-    };
+        var text = [];
 
-    // OH FOR CRYING IN THE BEER
-    // setts.functions['func0'].active = true;
-    // setts.functions['func2'].active = true; // _.deepClone is not accessible yet. blarg.
-    // setts.functions['func8'].active = true;
-    // setts.functions['func30'].active = true;
+        var setts = {
+            herogender: 'random',
+            villaingender: 'random',
+            peoplegender: 'random',
+            functions: world.resetProppFunctions(),
+            // TODO: randomizer
+            funcs: ['func0', 'func2', 'func3', 'func8', 'func30', 'func31'],
+            // funcs: ['func0', 'func2', 'func3', ['func8', 'commits murder'], 'func30', 'func31'],
+            // funcs: [['func8', 'casting into body of water'], 'func30'],
+            bossmode: true,
+            verbtense: 'past'
+        };
 
-    var theme = {
-        bank: wordbank,
-        templates: templates
-    };
+        var theme = {
+            bank: wordbank,
+            templates: templates
+        };
 
 
-    var sg = new storygen(setts);
+        var sg = new storygen(setts);
 
-    // console.log(sg);
+        // console.log(sg);
 
-    var tale = sg.generate(setts, theme);
+        var tale = sg.generate(setts, theme);
 
-    console.log(tale.title.toUpperCase() + '\n\n' + tale.tale);
+        return tale;
 
-} catch(ex) {
-    // the last 3 items are non-standard.....
-    var msg = ex.name + ' : ' + ex.message;
-    if (ex.lineNumber && ex.columnNumber && ex.stack) {
-        msg += ' line: ' + ex.lineNumber + ' col: ' + ex.columnNumber + '\n'
-            + ex.stack;
+    } catch(ex) {
+        // the last 3 items are non-standard.....
+        var msg = ex.name + ' : ' + ex.message;
+        if (ex.lineNumber && ex.columnNumber && ex.stack) {
+            msg += ' line: ' + ex.lineNumber + ' col: ' + ex.columnNumber + '\n'
+                + ex.stack;
+        }
+        console.log(msg);
     }
-    console.log(msg);
-}
+};
+
+
+
+// http://stackoverflow.com/questions/18679576/counting-words-in-string
+var wordcount = function(s) {
+
+    s = s.replace(/(^\s*)|(\s*$)/gi,"");//exclude  start and end white-space
+    s = s.replace(/[ ]{2,}/gi," ");//2 or more space to 1
+    s = s.replace(/\n /,"\n"); // exclude newline with a start spacing
+    return s.split(' ').length;
+
+};
+
+
+var writeitout = function(text) {
+
+    var fs = require('fs');
+
+    var fn = 'wonder.tale.' + (Math.random() * 0x1000000000).toString(36) + '.txt';
+
+    fs.writeFile(fn, text);
+
+    console.log('\n\nWritten to ' + fn);
+
+};
+
+var novel = function() {
+
+
+    // console.log(oneStory());
+
+    var wc = 0;
+    var n = [];
+
+    while (wc < 50000) {
+
+        var tale = oneStory();
+
+        // console.log(tale);
+
+        // there's a bug that is killing tales.
+        // it's NOT BEING LOGGED BLARG
+        if (tale && tale.title && tale.tale) {
+
+            var formatted = tale.title.toUpperCase() + '\n\n' + tale.tale;
+
+            wc += wordcount(formatted);
+
+            n.push(formatted);
+
+        }
+
+    }
+
+    writeitout(n.join('\n\n'));
+
+    console.log('DONE');
+
+
+};
+
+
+novel();
+
+// console.log(oneStory());
+// console.log(oneStory());
+// console.log(oneStory());

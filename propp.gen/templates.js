@@ -34,7 +34,17 @@ var nTemplates = function(story, world, storyGen) {
 
     story.title = function(god, world) {
 
-        return 'The story of <%= hero.name %> and <%= hero.possessive %> adventures';
+        var tale = god.select('story', 'tale', 'narrative');
+        var hn = god.select(god.hero.name, god.hero.nickname);
+
+        var templates = [
+            'The {{TL}} of {{HN}} and <%= hero.possessive %> adventures',
+            '{{HN}} of <%= hero.home.nation %>'
+        ];
+
+        var t = god.pick(templates);
+
+        return t.replace(/{{HN}}/mg, hn).replace(/{{TL}}/mg, tale);
 
     };
 

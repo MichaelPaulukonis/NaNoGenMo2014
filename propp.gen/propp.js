@@ -662,6 +662,7 @@ var storyGen = function(settings) {
             } else {
                 f = func.templates[random(func.templates.length)];
             }
+            // console.log(f);
             var t = _.template(f);
             f = t(helper);
 
