@@ -1,5 +1,8 @@
 var defaultbank = function(words) {
 
+
+    var fantasticForm = ['bear', 'squirrel', 'cloud', 'swarm of ants', 'dragon', 'snake', 'serpent', 'eagle', 'hawk', 'rabbit', 'lion'];
+
     // the specific location, like "home" or "office"
     var residence = ['grass hut', 'small house', 'barn', 'hovel', 'stately manor', 'decayed mansion', 'shack', 'shed', 'house'];
 

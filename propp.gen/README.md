@@ -32,8 +32,8 @@ These are NOT in order; but are lightly clustered....
 - [x] get node.js headless mode working ("novel builder")
 - [ ] title-maker templates
   - [ ] store list of villains encountered to possibly aid with title
-- [ ] novel-builder loop-through with word-count check
-- [ ] novel-builder writes to a file
+- [x] novel-builder loop-through with word-count check
+- [x] novel-builder writes to a file
 - [ ] rules + randomizer - for embedded tales, headless running, &c
 - [ ] journeys
 - [ ] battle
