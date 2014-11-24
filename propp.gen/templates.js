@@ -143,17 +143,19 @@ var nTemplates = function(story, world, storyGen) {
 
         var templates = [
             time + ' in {{HH}}, {{B}} {{strides}} in.',
-            time + ', there ' + A + ' ' + B + '.',
-            'There ' + A + ' ' + B + '.',
-            B + ' ' + A + '.',
-            B + ' ' + A + ' ' + time + '.',
+            time + ', there {{A}} {{B}.',
+            'There {{A}} {{B}}.',
+            '{{B}} {{A}}.',
+            '{{B}} {{A}} {{TIME}}.',
+            // THESE ARE TOO SUBTLE
+            // the villainy needs to be explicated
             '{{VN}} {{paid}} a visit to {{HH}}.',
             '{{HH}} {{plays}} host to {{VN}}' + (god.coinflip() ? ' ' + time: '') + '.'
         ];
 
         god.villain.introduced = true;
 
-        return god.pick(templates).replace(/{{HH}}/mg, h).replace(/{{B}}/mg, B).replace(/{{A}}/mg, A);
+        return god.pick(templates).replace(/{{HH}}/mg, h).replace(/{{B}}/mg, B).replace(/{{A}}/mg, A).replace(/{{TIME}}/mg, time);
 
     };
 
@@ -248,6 +250,8 @@ var nTemplates = function(story, world, storyGen) {
 
     story.createLack = function(god) {
 
+        // TODO: need to have verbs/object set apart, so we can resolve this....
+        // TODO: need there to be a lack THING, then there can be additional things to say.
         var lacks = ['{{needs}} a bride, a friend, or just somebody to talk to.',
                      '{{needs}} a helper or magical agent.',
                      '{{needs}} a wondrous object or two. Possibly three. No more than that. Unless they {{were}} collectible?',
@@ -269,6 +273,89 @@ var nTemplates = function(story, world, storyGen) {
 
     };
 
+    story.punish = function(god, person) {
+
+        // TODO: needs to be PERSON, not villain.....
+
+        var eitherName = function(p) {
+            return god.coinflip() ? p.nickname : p.name;
+        };
+
+        // var vn = '<%= coinflip() ? villain.nickname : villain.name %>';
+        var hn = '<%= coinflip() ? hero.nickname : hero.name %>';
+        var as = '<%= coinflip() ? "and " : coinflip() ? "so " : "" %>';
+        var ba = '<%= (coinflip() ? "" : coinflip() ? "But " : "And ")%>';
+        var poss = god.possessive(person);
+
+        // Presently Vikhor came flying in, and addressed the Queen angrily.
+        // Prince Vasily remained concealed until his mother gave him a hint to
+        // come forth. This he did, and then greeted Vikhor, and caught hold of
+        // his right little finger. Vikhor tried to shake him off, flying first
+        // about the house and then out of it, but all in vain. At last Vikhor,
+        // after soaring on high, struck the ground, and fell to pieces, becoming
+        // a fine yellow sand. But the little finger remained in the
+        // possession of Prince Vasily, who scraped together the sand and burnt
+        // it in the stove.
+
+        // seeing that Vikhor was perfectly enfeebled, he snatched from him his
+        // keen faulchion, and with a single blow struck off his head. Behind him
+        // voices began to cry:
+
+        // "Strike again! strike again! or he will come to life!"
+
+        // "No," replied the Prince, "a hero's hand does not strike twice, but
+        // finishes its work with a single blow." And straightway he lighted a
+        // fire, burnt the head and the trunk, and scattered the ashes to the
+        // winds.
+
+        // hero and selected acquaintances seize villain (or false hero, I suppose)
+        // bind him, drag him through the town.
+        // Then the servants seized Katoma and dragged him to the palace. He went with them, making no excuses, relying on [Pg 258] himself. They brought him to
+
+        // He is killed, however, by his elder brothers, who cut him into small pieces,
+        //The Princess died; they placed her in a coffin, and carried it to church [not allowed inside? bursts into flames? something]
+
+
+        var templates = [
+            '{{AS}}{{PN}} {{was}} <%= punished() %> by {{HN}}.',
+            '{{AS}}{{HN}} <%= punished() %> {{PN}}.',
+            (god.coinflip() ? 'Thanks to {{HN}}, ' : '') + '{{PN}} was completely burnt to cinders. That {{was}} that.',
+            // okay. so there's been no mention of a horse. SO IT GOES.
+            '{{HN}}\'s horse smote {{PN}} full swing with its hoof, and cracked <%= possessive(villain) %> skull, and {{HN}} made an end of <%= pronounobject(villain) %> with a club. Afterwards {{HN}} heaped up a pile of wood, set fire to it, burnt {{PN}} on the pyre, and scattered <%= possessive(villain) %> ashes to the wind.'
+        ];
+        god.villain.health = 'dead';
+
+        var t = [god.pick(templates)];
+
+        // if (god.coinflip()) {
+        if (true) {
+            var tmpl2 = [
+                // TODO: come up with another word for punish
+                // TODO: NOT THE VILLAIN! doh
+                // 'God <%= (coinflip() ? "evidently " : "")%>{{did}} it to punish {{PN}} for {{POSS}}<%= (coinflip() ? " great" : "")%> <%= nlp.adjective(pick(villain.description)).conjugate().noun %>.',
+                // '{{BA}}{{PN}} sits to this day in the pit - in Tartarus.',
+                '{{BA}}{{PN}} ' + (god.coinflip() ? '<%= select("{{disappear}}", "{{vanish}}") %>, and ' : '' ) +'{{was}} never seen again.'
+            ];
+            t.push(god.pick(tmpl2));
+        };
+
+        // TODO: various deathly punishments or summations.
+        // Then the King {{was}} wroth with those sons, and punished them as he thought best.
+        // But as for the Witch-Snake, she remained down below on earth.
+
+        // punishment and conclusion
+        // Woe slipped into the wheel; the merchant caught up the oaken wedge,
+        // and drove it into the axle-box from the other side. Then he seized the
+        // wheel and flung it, with Woe in it, into the river. Woe {{was}} drowned,
+        // and the merchant began to live again as he had been wont to do of old.
+
+        // "Into the bottomless pit with you! Out of sight, accursed one!"
+
+        // TODO: this will do the same name EACH TIME but I want EACH REPLACEMENT mapped to a new call....
+        return t.join(' ').replace(/{{PN}}/mg, eitherName(person)).replace(/{{AS}}/mg, as).replace(/{{BA}}/mg, ba).replace(/{{POSS}}/mg, poss);
+
+    };
+
     story.intro = function(god) {
 
         // There lived in a certain land an old man of this kind
@@ -276,20 +363,21 @@ var nTemplates = function(story, world, storyGen) {
         // can't use a complete sentence. DANG. because: capitalization
         // 'This is the way the world begins.',
         var intros = [
-            'Once upon a time,', 'Once there was, and there wasn\t,',
+            'Once upon a time,', 'Once there was, and there wasn\tt,',
             'I\'ve heard it said that once',
             'A long time ago,', 'Some years before you were born,',
             'In the time when your parents\' parents were but small babies,',
-            // this is a bit.... long. And invariant.
-            'Once upon a time,', 'We say that we are wise folks, but our old people dispute, '
-                + 'the fact, saying: "No, no, we were wiser than you are." But '
-                + 'stories tell that, before our grandfathers had learnt '
-                + 'anything, before their grandfathers were born,'
+            'Once upon a time,',
+            (god.coinflip() ? 'We <%= coinflip() ? "like to " : "" %><%= coinflip() ? "say" : "think" %> '
+             + 'that we are wise<%= select(" folk", " folks", " people", "") %>, '
+             + 'but our <%= select("old", "old people", "elders") %> dispute <%= select("the fact", "this fact", "this") %>, '
+             + 'saying: "No, no, we were wiser than you are." But '
+             + 'stories tell that ' : '') + 'before our grandfathers had learnt anything, and before their grandfathers were born,'.replace(/fathers/mg, (god.coinflip() ? 'fathers' : 'mothers'))
         ];
 
         // TODO: if blank, don't output the empty lines before the first paragraph.
         var intro = god.pick(intros);
-        return intro;
+        return '{{**}}' + intro;
     };
 
     // TODO: VERB TENSE STANDARDIZATION - s/b past in all places. OR .... ???
@@ -348,7 +436,7 @@ var nTemplates = function(story, world, storyGen) {
             'there was once an old {{RES}} that stood in the middle of a deep gloomy {{VCN}}, and in the {{RES}} lived {{HN}}.',
             '{{HN}} {{lived}} in a {{RES}} {{NEAR}} {{VCN}} in the {{NT}} <%= hero.home.nation %>. ',
             'in the distant {{NT}} of <%= hero.home.nation %>, {{HN}} {{lived}} in a {{RES}} {{NEAR}} {{VCN}}. ',
-            '{{NEAR}} {{VCN}} in the {{NT}} <%= hero.home.nation %>, there {{was}} a {{RES}} where {{HN}} {{lived}}. '
+            '{{NEAR}} {{VCN}} in the {{NT}} of <%= hero.home.nation %>, there {{was}} a {{RES}} where {{HN}} {{lived}}.'
         ];
 
         var t = [];
@@ -363,7 +451,7 @@ var nTemplates = function(story, world, storyGen) {
             }
         }
 
-        return t.join('\n').replace(/{{RES}}/gm, res).replace(/{{VCN}}/mg, vicin).replace(/{{HN}}/mg, hn).replace(/{{MW}}/mg, mw);
+        return '{{**}}' + t.join('\n').replace(/{{RES}}/gm, res).replace(/{{VCN}}/mg, vicin).replace(/{{HN}}/mg, hn).replace(/{{MW}}/mg, mw);
 
     };
 
@@ -546,9 +634,7 @@ var nTemplates = function(story, world, storyGen) {
 
         var t = [];
 
-        if (!god.villain.introduced) {
-            t.push(story.introduceVillain(god));
-        }
+        if (!god.villain.introduced) { t.push(story.introduceVillain(god)); }
 
         return t.join('\n');
 
@@ -895,6 +981,7 @@ var nTemplates = function(story, world, storyGen) {
 
     // Struggle: hero and villain do battle
     // TODO: battle() function
+    // TODO: _FOR MY PURPOSES_ combine the functions of 16 and 18, and put 17 in the middle as well (make it a parameter)
     // TODO: if villain and hero have not met, they must converse
     story['func16'].exec = function(god) {
         var t = [];
@@ -908,6 +995,7 @@ var nTemplates = function(story, world, storyGen) {
     };
 
     // Branding: hero is branded
+    // TODO: make this a function callable from 16/18
     story['func17'].templates.push('<%= hero.name %> {{was}} changed by the encounter.');
     story['func17'].templates.push('<%= hero.name %> {{was}} scarred internally.');
     story['func17'].templates.push('This day would never be forgotten by <%= hero.name %>.');
@@ -915,6 +1003,7 @@ var nTemplates = function(story, world, storyGen) {
     story['func17'].templates.push('<%= villain.name %>\'s head popped off, and {{was}} scavenged by <%= hero.name %>.');
 
     // Victory: Villain is defeated
+    // TODO: use the defeat/punishment structures built for #30
     story['func18'].exec = function(god) {
 
         var t = [];
@@ -938,12 +1027,33 @@ var nTemplates = function(story, world, storyGen) {
 
         t.push(god.pick(template));
 
+        // proof-of-concept YES, but doesn't use the magical item, above.
+        // I guess that should be part of the punishment/defeat
+        // optionally, LEVELS?
+        // or maybe not...... punishments in these stories are often beyond the pale.....
+        t.push(blankLine, story.punish(god, god.villain));
+
         return t.join('\n').replace(/{{MI}}/mg, mi).replace(/{{HN}}/mg, hn);
 
     };
 
     // Resolution: Initial misfortune or lack is resolved
-    story['func19'].templates.push('Initial misfortune or lack {{was}} resolved.');
+    story['func19'].exec = function(god) {
+
+        var t = [];
+
+        // '<%= hero.name %> {{discovered}} that ' + god.getCharacter(god.cache.lack.person).name + ' ' + god.cache.lack.lack;
+
+
+        var lt = god.cache.lack.lack;
+        // this is singularly un-interesting
+        var tmpls = ['The problems experienced by ' + god.getCharacter(god.cache.lack.person).name + ', who {{LT}},  {{are}} resolved by {{HN}}.'];
+
+        t.push(god.pick(tmpls));
+
+        return t.join('\n').replace(/{{LT}}/mg, lt);
+
+};
 
     // 4th Sphere: The hero\'s return
     // In the final (and often optional) phase of the storyline, the hero returns home, hopefully uneventfully and to a hero\'s welcome, although this may not always be the case.
@@ -989,77 +1099,13 @@ var nTemplates = function(story, world, storyGen) {
     // Punishment: Villain is punished
     story['func30'].exec = function(god) {
 
-        var vn = '<%= coinflip() ? villain.nickname : villain.name %>';
-        var hn = '<%= coinflip() ? hero.nickname : hero.name %>';
-        var as = '<%= coinflip() ? "and " : coinflip() ? "so " : "" %>';
-        var ba = '<%= (coinflip() ? "" : coinflip() ? "But " : "And ")%>';
+        // rules will tell us a bit about when this can be created or not
+        // if villain is dead, it would have to be the false hero
+        // if the false hero is dead... WELL I DO NOT KNOW
+        // TODO: person = falsefriend or villain (or henchperson?)
+        var person = (god.villain.health === world.healthLevel.living ? god.villain : god.falsehero);
 
-        // Presently Vikhor came flying in, and addressed the Queen angrily.
-        // Prince Vasily remained concealed until his mother gave him a hint to
-        // come forth. This he did, and then greeted Vikhor, and caught hold of
-        // his right little finger. Vikhor tried to shake him off, flying first
-        // about the house and then out of it, but all in vain. At last Vikhor,
-        // after soaring on high, struck the ground, and fell to pieces, becoming
-        // a fine yellow sand. But the little finger remained in the
-        // possession of Prince Vasily, who scraped together the sand and burnt
-        // it in the stove.
-
-        // seeing that Vikhor was perfectly enfeebled, he snatched from him his
-        // keen faulchion, and with a single blow struck off his head. Behind him
-        // voices began to cry:
-
-        // "Strike again! strike again! or he will come to life!"
-
-        // "No," replied the Prince, "a hero's hand does not strike twice, but
-        // finishes its work with a single blow." And straightway he lighted a
-        // fire, burnt the head and the trunk, and scattered the ashes to the
-        // winds.
-
-        // hero and selected acquaintances seize villain (or false hero, I suppose)
-        // bind him, drag him through the town.
-        // Then the servants seized Katoma and dragged him to the palace. He went with them, making no excuses, relying on [Pg 258] himself. They brought him to
-
-        // He is killed, however, by his elder brothers, who cut him into small pieces,
-        //The Princess died; they placed her in a coffin, and carried it to church [not allowed inside? bursts into flames? something]
-
-
-        var templates = [
-            '{{AS}}{{VN}} {{was}} <%= punished() %> by {{HN}}.',
-            '{{AS}}{{HN}} <%= punished() %> {{VN}}.',
-            (god.coinflip() ? 'Thanks to {{HN}}, ' : '') + '{{VN}} was completely burnt to cinders. That {{was}} that.',
-            // okay. so there's been no mention of a horse. SO IT GOES.
-            '{{HN}}\'s horse smote {{VN}} full swing with its hoof, and cracked <%= possessive(villain) %> skull, and {{HN}} made an end of <%= pronounobject(villain) %> with a club. Afterwards {{HN}} heaped up a pile of wood, set fire to it, burnt {{VN}} on the pyre, and scattered <%= possessive(villain) %> ashes to the wind.'
-        ];
-        god.villain.health = 'dead';
-
-        var t = [god.pick(templates)];
-
-        // if (god.coinflip()) {
-        if (true) {
-            var tmpl2 = [
-                // TODO: come up with another word for punish
-                'God <%= (coinflip() ? "evidently " : "")%>{{did}} it to punish {{VN}} for <%= possessive(villain) %><%= (coinflip() ? " great" : "")%> <%= nlp.adjective(pick(villain.description)).conjugate().noun %>.',
-                '{{BA}}{{VN}} sits to this day in the pit - in Tartarus.',
-                '{{BA}}{{VN}} <%= select("{{disappear}}", "{{vanish}}") %>, and {{was}} never seen again.'
-            ];
-            t.push(god.pick(tmpl2));
-        };
-
-        // TODO: various deathly punishments or summations.
-        // Then the King {{was}} wroth with those sons, and punished them as he thought best.
-        // But as for the Witch-Snake, she remained down below on earth.
-
-        // punishment and conclusion
-        // Woe slipped into the wheel; the merchant caught up the oaken wedge,
-        // and drove it into the axle-box from the other side. Then he seized the
-        // wheel and flung it, with Woe in it, into the river. Woe {{was}} drowned,
-        // and the merchant began to live again as he had been wont to do of old.
-
-        // "Into the bottomless pit with you! Out of sight, accursed one!"
-
-
-
-        return t.join(' ').replace(/{{VN}}/mg, vn).replace(/{{HN}}/mg, hn).replace(/{{AS}}/mg, as).replace(/{{BA}}/mg, ba);
+        return story.punish(god, person);
 
     };
 

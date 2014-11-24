@@ -19,6 +19,7 @@ var global;
 
 var _ = _ || require('underscore');
 var nlp = nlp || require('nlp_compromise');
+var Tokenizer = Tokenizer || require('sentence-tokenizer');
 
 // http://blog.elliotjameschong.com/2012/10/10/underscore-js-deepclone-and-deepextend-mix-ins/
 // in case it is not clear, deepClone clones everything that can JSON-ified
@@ -755,20 +756,47 @@ var storyGen = function(settings) {
             } else {
                 f = func.templates[random(func.templates.length)];
             }
-            console.log(f);
+            // console.log(f);
+
+            var vicn = '<%= coinflip() ? victim.name : victim.nickname %>';
+            var villn = '<%= coinflip() ? villain.nickname : villain.name %>';
+            var hn = '<%= coinflip() ? hero.nickname : hero.name %>';
+
+            f = f.replace(/{{VICN}}/mg, vicn).replace(/{{HN}}/mg, hn).replace(/{{VN}}/mg, villn);
+
             var t = _.template(f);
             f = t(helper);
 
-            var vn = '<%= coinflip() ? victim.name : victim.nickname %>';
+            // TODO: attempt to parse sentences, and apply past tense....
+            // TROUBLE: this means we will also swap the tense of the embedded tales
+            // WAAAAH!
+            // hrm....
+            // how about... we check for the presence of a specific TAG, say '{{**}}''
+            // if present, remove it an swap case
+            // if not, pretend like nothing happened...
+            // I AM NOT HAPPY WITH THE RESULTS
+            f = f.replace(/{{\*\*}}/mg, ''); // so remove it
+            if (f.indexOf('{{**}}') >= 0) {
+                f = f.replace(/{{\*\*}}/mg, ''); // remove it
+                f = f.replace(/{{|}}/mg, ''); // remove old-style verb-tags
+                var tokenizer = new Tokenizer();
+                tokenizer.setEntry(f);
+                var sentences = tokenizer.getSentences();
+                var tensed = [];
 
-            f = f.replace(/{{VN}}/mg, vn);
-            // DOES NOT WORK if there are multiple sentences inside...
-            // if (this.settings.verbtense == 'past') {
-            //     f = nlp.pos(f)[0].to_past().text();
-            // } else {
-            //     f = nlp.pos(f)[0].to_present().text();
-            // }
+                for (var i = 0; i < sentences.length; i++) {
+                    console.log(sentences[i]);
+                    if (this.settings.verbtense == 'past') {
+                        tensed.push(capitalize(nlp.pos(sentences[i]).sentences[0].to_past().text()));
+                    } else {
+                        tensed.push(capitalize(nlp.pos(sentences[i]).sentences[0].to_present().text()));
+                    }
+                }
 
+                // if there are paragraph breaks WE JUST LOST THEM
+                f = tensed.join(' ');
+
+            }
             // handle non-template transforms.
             var tag,
                 re = /\{{.*?\}}/g,
