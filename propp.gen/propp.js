@@ -15,6 +15,8 @@
 
 "use strict";
 
+var global;
+
 var _ = _ || require('underscore');
 var nlp = nlp || require('nlp_compromise');
 
@@ -32,7 +34,28 @@ _.mixin({ deepClone: function (o) {
 
 var world = {};
 
-// TODO: THESE are the things that go into something called 'world'
+// "enum", with numbers for comparison?
+world.sizes = {
+    'miniscule': 0,
+    'tiny': 1,
+    'small': 2,
+    'medium-sized': 3,
+    'large': 4,
+    'enormous': 5
+};
+
+// in a description, 'medium' would be skipped
+// eg, 'male child' (or boy), 'young man', 'man', 'middle-aged man', 'old man', 'ancient man'
+world.ages = {
+    'child': 0,
+    'young' : 1,
+    'medium': 2,
+    'middle-aged': 3,
+    'old': 4,
+    'ancient': 5
+};
+
+
 world.aspect = {
     good: 'good',
     bad: 'bad'
@@ -271,6 +294,59 @@ var storyGen = function(settings) {
             return acqs;
         };
 
+        // they are not characters at this point.
+        var createFamily = function(gndr) {
+
+            // mother, father, siblings
+            // wife/husband, children
+
+            var family = {
+                mother: null,
+                father: null,
+                wife: null,
+                husband: null,
+                children: null,
+                siblings: null
+            };
+
+            // small percentage of the time lives alone. waaaah!
+            if (coinflip(0.1)) {
+                // lives alone!
+            } else {
+                // TODO: siblings
+                var maxSibs = (coinflip(0.3) ? 12 : 3);
+                var sibCount = random(maxSibs);
+                var boys = [];
+                var girls = [];
+                for (var i = 0; i < sibCount; i++) {
+                    if (coinflip()) {
+                        boys.push(pick(bank.names['male']));
+                    } else {
+                        girls.push(pick(bank.names['female']));
+                    }
+                }
+                if (coinflip()) {
+                    // mother, father, siblings
+                    family.father = pick(bank.names['male']);
+                    family.mother = pick(bank.names['female']);
+                    family.siblings = { brothers: boys, sisters: girls };
+                } else {
+                    // spouse, siblings
+                    // GONNA BE TRADITIONAL HERE, SO FAR
+                    if (gndr === world.gender.male) {
+                        family.wife = pick(bank.names.female);
+                    } else {
+                        family.husband = pick(bank.names.male);
+                    }
+                    family.children = { boys: boys, girls: girls };
+                }
+            }
+
+            return family;
+
+        };
+
+
         var place = function() {
             // don't need to do a pick-remove
             // but we should probably store all places
@@ -297,10 +373,10 @@ var storyGen = function(settings) {
         };
 
         // hero or villain
-        var createHero = function(g, aspct, item) {
+        var createHero = function(gndr, aspct, item) {
             // oooooh, we just want to ADD properties to the character
             // so we d on't repeat the name, gender, posessions, etc....
-            var c = createCharacter(g, aspct);
+            var c = createCharacter(gndr, aspct);
             var family = createCharacters(settings.peoplegender, aspct);
             var acquaintances = createCharacters(settings.peoplegender, aspct);
             c.family = [];
@@ -312,6 +388,19 @@ var storyGen = function(settings) {
                 c.knows.push(family[i].id);
                 cache.characters[family[i].id] = family[i];
             }
+
+            // TODO: NOT THERE YET
+            // do a full-on createCharacter for each
+            // so that they are in the character bank
+            // and STILL have a simple family: []
+            // that can be used for reference
+            // except... how to pull from family array to relationship ?!?!!????
+            // UGH UGH UGH UGH UGH
+            //
+            // I just want to be able to say "lived alone" or "lived with mother, father and 7 brothers" or something
+            // and, of cours,e be able to make use of those people....
+            //
+            // c.family = createFamily(gndr);
 
             for (i = 0; i < acquaintances.length; i++) {
                 c.acquaintances.push(acquaintances[i].id);
@@ -337,6 +426,7 @@ var storyGen = function(settings) {
 
         // differs from here in that there are no acquaintances
         // and only creates minions if a number is passed in
+        // and there is a fantastic form
         var createVillain = function(g, aspct, item, minionCount) {
             var c = createCharacter(g, aspct);
             c.family = [];
@@ -349,6 +439,8 @@ var storyGen = function(settings) {
             c.location = c.home.residence;
             c.introduced = false; // introduced in story
             if (item) { c.possessions.push(item); }
+
+            c.form = (coinflip() ? 'human' : pick(bank.fantasticForm));
 
             return c;
         };
@@ -587,7 +679,8 @@ var storyGen = function(settings) {
                 cache.magicalhelper = settings.magicalhelper || createMagicalHelper(null, world.aspect.good);
                 cache.punished = settings.punished || createPunished();
                 cache.task = pick(bank.task);
-                cache.victim = settings.victim || getCharacter(pick(cache.hero.family.concat(cache.hero)));
+                // AAARGH. doesn't work...
+                // cache.victim = settings.victim || getCharacter(pick(cache.hero.family.concat(cache.hero)));
                 cache.ascension = pick(bank.ascension);
                 cache.marries = pick(bank.marries);
                 cache.falsehero = settings.falsehero || pick(cache.villain.family);
@@ -662,10 +755,13 @@ var storyGen = function(settings) {
             } else {
                 f = func.templates[random(func.templates.length)];
             }
-            // console.log(f);
+            console.log(f);
             var t = _.template(f);
             f = t(helper);
 
+            var vn = '<%= coinflip() ? victim.name : victim.nickname %>';
+
+            f = f.replace(/{{VN}}/mg, vn);
             // DOES NOT WORK if there are multiple sentences inside...
             // if (this.settings.verbtense == 'past') {
             //     f = nlp.pos(f)[0].to_past().text();
@@ -756,6 +852,7 @@ var storyGen = function(settings) {
             // the world is the things that have been created. no?
             // possibly not. since creation is called alla time again...
             this.universe = god(this.settings, theme.bank, theme);
+            global = this.universe;
 
             for (var i = 0; i < settings.funcs.length; i++) {
                 var f = settings.funcs[i];

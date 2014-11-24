@@ -1,7 +1,11 @@
 var defaultbank = function(words) {
 
 
-    var fantasticForm = ['bear', 'squirrel', 'cloud', 'swarm of ants', 'dragon', 'snake', 'serpent', 'eagle', 'hawk', 'rabbit', 'lion'];
+    // should probably include a description and a few adjectives and other properties
+    // let's save that for later.
+    var fantasticForm = ['bear', 'squirrel', 'cloud', 'swarm of ants', 'dragon', 'snake', 'serpent', 'eagle', 'hawk', 'rabbit', 'lion', 'fish', 'bat', 'wolf', 'dog', 'boar', 'pig', 'spider', 'griffin', 'harpy', 'jackal', 'demon'];
+
+    var color = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
 
     // the specific location, like "home" or "office"
     var residence = ['grass hut', 'small house', 'barn', 'hovel', 'stately manor', 'decayed mansion', 'shack', 'shed', 'house'];
@@ -170,6 +174,7 @@ var defaultbank = function(words) {
 
         adjectives: adjectives,
         ascension: ascension,
+        fantasticForm: fantasticForm,
         greetings: greetings,
         interjections: interjections,
         itembank: itembank,

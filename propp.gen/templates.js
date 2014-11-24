@@ -48,6 +48,7 @@ var nTemplates = function(story, world, storyGen) {
 
     };
 
+
     var journey = function(p1, destination) {
 
         var t = [];
@@ -65,6 +66,40 @@ var nTemplates = function(story, world, storyGen) {
         // from a certain village by the evil spirit. And when she caught sight
         // of him she cried:
 
+        // So the girl went away, and walked and walked, till she came
+        // to the place. There stood a hut, and in it sat weaving the
+        // Baba Yaga, the Bony-shanks.
+
+
+        // So Vasilissa got ready, put her doll in her pocket, crossed
+        // herself, and went out into the thick forest.
+
+        // As she walks she trembles. Suddenly a horseman gallops by. He is
+        // white, and he is dressed in white, under him is a white horse, and
+        // the trappings of the horse are white - and the day begins to break.
+
+        // She goes a little further, and a second rider gallops by. He is
+        // red, dressed in red, and sitting on a red horse - and the sun rises.
+
+        // Vasilissa went on walking all night and all next day. It was only
+        // towards the evening that she reached the clearing on which stood
+        // the dwelling of the Baba Yaga. The fence around it was made of dead
+        // men's bones; on the top of the fence were stuck human skulls with
+        // eyes in them; instead of uprights at the gates [Pg 162] were men's
+        // legs; instead of bolts were arms; instead of a lock was a mouth
+        // with sharp teeth.
+
+        // Vasilissa was frightened out of her wits, and stood still as if
+        // rooted to the ground.
+
+        // Suddenly there rode past another horseman. He was black, dressed
+        // all in black, and on a black horse. He galloped up to the Baba
+        // Yaga's gate and disappeared, just as if he had sunk through the
+        // ground - and night fell. But the darkness did not last long. The eyes
+        // of all the skulls on the fence began to shine and the whole
+        // clearing became as bright as if it had been midday. Vasilissa
+        // shuddered with fear, but stopped where she was, not knowing which
+        // way to run.
 
         return t.join('\n'); // or something like that. need to improve paragraphization
 
@@ -97,10 +132,14 @@ var nTemplates = function(story, world, storyGen) {
 
         var time = god.select('one morning', 'one evening', 'one night', 'one day', 'in the middle of the night', 'when nobody {{was}} paying attention', 'after breakfast', 'around lunchtime');
         var person = god.select('person', 'individual');
+        if (god.villain.form != 'human') {
+            person = god.villain.form;
+        }
 
         var A = '{{came}} into the region of <%= hero.home.vicinity %>';
-        var B = 'a very <%= pick(villain.description) %> ' + person + ' known as <%= villain.nickname %>';
+        var B = 'a <%= coinflip() ? "very " : "" %><%= pick(villain.description) %> ' + person + ' known as {{VN}}';
         var h = '<%= hero.home.vicinity %>';
+
 
         var templates = [
             time + ' in {{HH}}, {{B}} {{strides}} in.',
@@ -108,8 +147,8 @@ var nTemplates = function(story, world, storyGen) {
             'There ' + A + ' ' + B + '.',
             B + ' ' + A + '.',
             B + ' ' + A + ' ' + time + '.',
-            '<%= villain.name %> {{paid}} a visit to {{HH}}.',
-            '{{HH}} {{plays}} host to <%= villain.name %>' + (god.coinflip() ? ' ' + time: '') + '.'
+            '{{VN}} {{paid}} a visit to {{HH}}.',
+            '{{HH}} {{plays}} host to {{VN}}' + (god.coinflip() ? ' ' + time: '') + '.'
         ];
 
         god.villain.introduced = true;
@@ -218,7 +257,7 @@ var nTemplates = function(story, world, storyGen) {
                     ];
 
         var l = god.pick(lacks);
-        var p = god.pick(god.hero.family);
+        var p = god.pick(god.hero.family); // argh, this ain't gonna work...
         var lack = {
             lack: l,
             person: p
@@ -317,7 +356,11 @@ var nTemplates = function(story, world, storyGen) {
         // TODO: list regular name or nickname at random
         t.push(blankLine, '<%= hero.name %> {{lived}} with <%= list(hero.family, "nickname") %>.');
         if (god.hero.acquaintances.length > 0) {
-            t.push(blankLine, '<%= list(hero.acquaintances, "nickname") %> {{were}} <%= select("friends of", "known to") %> <%= hero.name %>.');
+            if (god.hero.acquaintances.length > 1) {
+                t.push(blankLine, '<%= list(hero.acquaintances, "nickname") %> {{were}} <%= select("friends of", "known to") %> <%= hero.name %>.');
+            } else {
+                t.push(blankLine, '<%= list(hero.acquaintances, "nickname") %> {{was}} <%= select("a friend of", "known to") %> <%= hero.name %>.');
+            }
         }
 
         return t.join('\n').replace(/{{RES}}/gm, res).replace(/{{VCN}}/mg, vicin).replace(/{{HN}}/mg, hn).replace(/{{MW}}/mg, mw);
@@ -590,16 +633,17 @@ var nTemplates = function(story, world, storyGen) {
                 'Suddenly the sky was covered by a black cloud; a terrible storm arose.',
                 'The moon came across the sun, turning the landscape a dark, curdled, black-red.',
                 // http://hbar.phys.msu.su/gorm/atext/ginzele.htm
-                'There {{is}} a shroud of darkness drawn over you from head to foot, your cheeks are wet with tears; the air is alive with wailing voices; the walls and roof-beams drip blood; the gate of the cloisters and the court beyond them are full of ghosts trooping down into the night of hell; the sun is blotted out of heaven, and a blighting gloom is over allthe land.',
+                // TODO: clean this up a bit, still.....
+                'There {{is}} a shroud of darkness drawn over the everyone in the land from head to foot, their cheeks {{were}} wet with tears; the air {{was}} alive with wailing voices; the walls and roof-beams drip blood; the gate of the cloisters and the court beyond them are full of ghosts trooping down into the night of hell; the sun is blotted out of heaven, and a blighting gloom is over allthe land.',
                 'Sudden strange and unaccountable disorders and alterations took place in the air; the face of the sun was darkened, and the day turned into night, and that, too, no quiet, peaceable night, but with terrible thunderings, and boisterous winds from all quarters.',
                 // TODO: victim disappears...
                 'A violent thunderstorm suddenly arose and enveloped {{VN}} in so dense a cloud that he was quite invisible to the assembly. From that hour Romulus was no longer seen on earth. When the fears of the Roman youth were allayed by the return of bright, calm sunshine after such fearful weather, they saw that the royal seat was vacant.',
                 '{{VN}} has made night out of noonday, hiding the bright sunlight, and . . . fear has come upon mankind. After this, men can believe anything, expect anything. Don\t any of you be surprised in future if land beasts change places with dolphins and go to live in their salty pastures, and get to like the sounding waves of the sea more than the land, while the dolphins prefer the mountains.',
-                'For when the sun suddenly obscured and darkness reigned, and the Athenians were overwhelmed with the greatest terror, Pericles, who was then supreme among his countrymen in influenle, eloquence, and wisdom, is said to have communicated to his fellowcitizens the information he had received from Anaxagoras, whose pupil he had been- that this phenomenon occurs at fixed periods and by inevitable law, whenever the moon passes entirely beneath the orb of the sun, and that therefore, though it does not happen at every new moon, it cannot happen except at certain periods of the new moon. When he had discussed the subject and given the explanation of the phenomenon, the people were freed of their fears',
+                'For when the sun suddenly obscured and darkness reigned, and the COUNTRYNAME were overwhelmed with the greatest terror, {{HN}}, who was then supreme among his countrymen in influenle, eloquence, and wisdom, is said to have communicated to his fellow citizens the information he had received from ADVISOR, whose pupil he had been - that this phenomenon occurs at fixed periods and by inevitable law, whenever the moon passes entirely beneath the orb of the sun, and that therefore, though it does not happen at every new moon, it cannot happen except at certain periods of the new moon. When he had discussed the subject and given the explanation of the phenomenon, the people were freed of their fears',
                 'A cloud, however, overspread the sun and hid it from sight until the inhabitants abandoned their city; and thus it was taken.',
-                'the sun was suddenly darkened in mid sky.',
-                '"The moon shuts off the beams of the sun as it passes across it, and darkens so much of the earth as the breadth of the blue-eyed moon amounts to."',
-                'The sun was darkened and there was darkness over the world. The most learned Phlegon of Athens has written in his work about this darkness as follows, "In the 18th year of the reign of Tiberius Caesar there was a very great eclipse of the sun, greater than any that had been known before. Night prevailed at the sixth hour of the day so that even the stars appeared',
+                'The sun was suddenly darkened in mid sky.',
+                'The moon shuts off the beams of the sun as it passes across it, and darkens so much of the earth as the breadth of the blue-eyed moon amounts to.',
+                'The sun was darkened and there was darkness over the world, greater than any that had been known before. Night prevailed at the sixth hour of the day so that even the stars appeared',
                 'There occurred too a thick succession of portents, which meant nothing. A woman gave birth to a snake, and another was killed by a thunderbolt in her husband\'s embrace. Then the sun was suddenly darkened and the fourteen districts of the city were struck by lightning. All this happened quite without any providential design; so much so, that for many subsequent years {{VN}} prolonged <% possessive(villain) %> reign and <% possessive(villain) %> crimes.',
                 'While {{VN}} was behaving in this way, evil omens occurred. A comet was seen, and the moon, contrary to precedent, appeared to suffer two eclipses, being obscured on the fourth and on the seventh day. Also people saw two suns at once, one in the west weak and pale, and one in the east brilliant and powerful.'
             ];
@@ -1043,7 +1087,7 @@ var nTemplates = function(story, world, storyGen) {
         var lod = story.latd(god.hero, god);
 
         var t = [];
-            t.push(god.pick(templates));
+        t.push(god.pick(templates));
 
         // this a proof-of-concept
         if (lod.dead.length > 0) {
