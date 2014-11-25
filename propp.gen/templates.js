@@ -136,26 +136,26 @@ var nTemplates = function(story, world, storyGen) {
             person = god.villain.form;
         }
 
+        person = god.pick(god.villain.description) + ' ' + person;
+
         var A = '{{came}} into the region of <%= hero.home.vicinity %>';
-        var B = 'a <%= coinflip() ? "very " : "" %><%= pick(villain.description) %> ' + person + ' known as {{VN}}';
-        var h = '<%= hero.home.vicinity %>';
+        var B = 'a <%= coinflip() ? "very " : "" %>{{PP}} known as {{VN}}';
+        var hh = '<%= hero.home.vicinity %>';
 
-
+        // the villainy of the person is not..... AWESOME... but it will do for now.
         var templates = [
             time + ' in {{HH}}, {{B}} {{strides}} in.',
-            time + ', there {{A}} {{B}.',
+            time + ', there {{A}} {{B}}.',
             'There {{A}} {{B}}.',
             '{{B}} {{A}}.',
             '{{B}} {{A}} {{TIME}}.',
-            // THESE ARE TOO SUBTLE
-            // the villainy needs to be explicated
-            '{{VN}} {{paid}} a visit to {{HH}}.',
-            '{{HH}} {{plays}} host to {{VN}}' + (god.coinflip() ? ' ' + time: '') + '.'
+            '{{VN}}, a {{PP}}, {{paid}} a visit to {{HH}}.',
+            '{{HH}} {{plays}} host to a {{PP}}, {{VN}}' + (god.coinflip() ? ' ' + time: '') + '.'
         ];
 
         god.villain.introduced = true;
 
-        return god.pick(templates).replace(/{{HH}}/mg, h).replace(/{{B}}/mg, B).replace(/{{A}}/mg, A).replace(/{{TIME}}/mg, time);
+        return god.pick(templates).replace(/{{HH}}/mg, hh).replace(/{{B}}/mg, B).replace(/{{A}}/mg, A).replace(/{{TIME}}/mg, time).replace(/{{PP}}/mg, person);
 
     };
 
@@ -286,62 +286,10 @@ var nTemplates = function(story, world, storyGen) {
         var as = '<%= coinflip() ? "and " : coinflip() ? "so " : "" %>';
         var ba = '<%= (coinflip() ? "" : coinflip() ? "But " : "And ")%>';
         var poss = god.possessive(person);
-
-        // Presently Vikhor came flying in, and addressed the Queen angrily.
-        // Prince Vasily remained concealed until his mother gave him a hint to
-        // come forth. This he did, and then greeted Vikhor, and caught hold of
-        // his right little finger. Vikhor tried to shake him off, flying first
-        // about the house and then out of it, but all in vain. At last Vikhor,
-        // after soaring on high, struck the ground, and fell to pieces, becoming
-        // a fine yellow sand. But the little finger remained in the
-        // possession of Prince Vasily, who scraped together the sand and burnt
-        // it in the stove.
-
-        // seeing that Vikhor was perfectly enfeebled, he snatched from him his
-        // keen faulchion, and with a single blow struck off his head. Behind him
-        // voices began to cry:
-
-        // "Strike again! strike again! or he will come to life!"
-
-        // "No," replied the Prince, "a hero's hand does not strike twice, but
-        // finishes its work with a single blow." And straightway he lighted a
-        // fire, burnt the head and the trunk, and scattered the ashes to the
-        // winds.
-
-        // hero and selected acquaintances seize villain (or false hero, I suppose)
-        // bind him, drag him through the town.
-        // Then the servants seized Katoma and dragged him to the palace. He went with them, making no excuses, relying on [Pg 258] himself. They brought him to
-
-        // He is killed, however, by his elder brothers, who cut him into small pieces,
-        //The Princess died; they placed her in a coffin, and carried it to church [not allowed inside? bursts into flames? something]
-
-
-        var templates = [
-            '{{AS}}{{PN}} {{was}} <%= punished() %> by {{HN}}.',
-            '{{AS}}{{HN}} <%= punished() %> {{PN}}.',
-            (god.coinflip() ? 'Thanks to {{HN}}, ' : '') + '{{PN}} was completely burnt to cinders. That {{was}} that.',
-            // okay. so there's been no mention of a horse. SO IT GOES.
-            '{{HN}}\'s horse smote {{PN}} full swing with its hoof, and cracked <%= possessive(villain) %> skull, and {{HN}} made an end of <%= pronounobject(villain) %> with a club. Afterwards {{HN}} heaped up a pile of wood, set fire to it, burnt {{PN}} on the pyre, and scattered <%= possessive(villain) %> ashes to the wind.'
-        ];
-        god.villain.health = 'dead';
-
-        var t = [god.pick(templates)];
-
-        // if (god.coinflip()) {
-        if (true) {
-            var tmpl2 = [
-                // TODO: come up with another word for punish
-                // TODO: NOT THE VILLAIN! doh
-                // 'God <%= (coinflip() ? "evidently " : "")%>{{did}} it to punish {{PN}} for {{POSS}}<%= (coinflip() ? " great" : "")%> <%= nlp.adjective(pick(villain.description)).conjugate().noun %>.',
-                // '{{BA}}{{PN}} sits to this day in the pit - in Tartarus.',
-                '{{BA}}{{PN}} ' + (god.coinflip() ? '<%= select("{{disappear}}", "{{vanish}}") %>, and ' : '' ) +'{{was}} never seen again.'
-            ];
-            t.push(god.pick(tmpl2));
-        };
-
-        // TODO: various deathly punishments or summations.
-        // Then the King {{was}} wroth with those sons, and punished them as he thought best.
-        // But as for the Witch-Snake, she remained down below on earth.
+        var proo = god.pronounobject(person);
+        var vpro = god.pronoun(person); // v:= villain, but it could be false-hero or somebody punishable.
+        var hpron = god.pronoun(god.hero);
+        var hprono = god.pronounobject(god.hero);
 
         // punishment and conclusion
         // Woe slipped into the wheel; the merchant caught up the oaken wedge,
@@ -349,10 +297,60 @@ var nTemplates = function(story, world, storyGen) {
         // wheel and flung it, with Woe in it, into the river. Woe {{was}} drowned,
         // and the merchant began to live again as he had been wont to do of old.
 
-        // "Into the bottomless pit with you! Out of sight, accursed one!"
+        // TODO: helpers - family, advisor, helper or whatnot
 
-        // TODO: this will do the same name EACH TIME but I want EACH REPLACEMENT mapped to a new call....
-        return t.join(' ').replace(/{{PN}}/mg, eitherName(person)).replace(/{{AS}}/mg, as).replace(/{{BA}}/mg, ba).replace(/{{POSS}}/mg, poss);
+        var end = [
+            '{{AS}}{{PN}} {{was}} <%= punished() %> by {{HN}}.',
+            '{{AS}}{{HN}} <%= punished() %> {{PN}}.',
+            // okay. so there's been no mention of a horse. SO IT GOES.
+            '{{HN}}\'s horse smote {{PN}} full swing with its hoof, and cracked {{POSS}} '
+                + 'skull, and {{HN}} made an end of {{PROO}} with a club.',
+            'Such behavior could not be tolerated: {{HN}} fell upon {{PN}}, bound {{PROO}} with ropes.',
+            '{{VN}} was struck down by the hand of {{HN}}.',
+            'Seeing that {{VN}} was perfectly enfeebled, {{HN}} snatched from {{PROO}} {{POSS}} '
+            + 'keen faulchion, and with a single blow struck off {{POSS}} head. Behind {{HPRNO}} '
+            + 'voices began to cry: "Strike again! strike again! or {{VPRO}} will come to life!" '
+            + '"No," replied {{HN}}, "a hero\'s hand does not strike twice, but '
+            + 'finishes its work with a single blow."',
+            '{{HN}} greeted {{PN}}, and caught hold of {{POSS}} right little finger. '
+            + '{{PN}} tried to shake {{HPN}} off, flying first '
+            + 'about the house and then out of it, but all in vain. At last {{PN}} '
+                + 'after soaring on high, struck the ground, and fell to pieces, becoming '
+                + 'a fine yellow sand.'
+        ];
+        var dispersal = [
+            (god.coinflip() ? 'Thanks to {{HN}}, ' : '') + '{{PN}} was completely burnt to cinders.',
+            '{{AS}}that {{was}} that.',
+            'Afterwards {{HN}} {{heaped}} up a pile of wood, {{set}} fire to it, {{burnt}} {{PN}} on the pyre, '
+                + 'and {{scattered}} {{POSS}} ashes to the wind.',
+            'The body {{was}} left in the possession of {{HN}}, who {{scraped}} together the pieces and {{burned}} them in the stove.',
+            '{{AS}}they placed {{PROO}} in a coffin, and carried to church, whereupon it burst into horrible flames, singeing the hands of those who dared carry it.',
+            '{{HN}} and cut {{PROO}} into small pieces, which were buried throughout the woods.',
+            '{{AS}}{{HN}} said, "Into the bottomless pit with you! Out of sight, accursed one!"'
+        ];
+
+        god.villain.health = 'dead';
+
+        var t = [];
+        t.push(god.capitalize(god.pick(end)));
+        t.push(god.capitalize(god.pick(dispersal)));
+
+        var descr = god.pick(person.description);
+
+        // if (god.coinflip()) {
+        if (true) {
+            var tmpl2 = [
+                'God <%= (coinflip() ? "evidently " : "")%>{{did}} it to <%= select("punish", "remonstrate", "educate", "rebuke") %> {{PN}} for {{POSS}}'
+                    + '<%= (coinflip() ? " great" : "")%> <%= nlp.adjective("' + descr + '").conjugate().noun %>.',
+                '{{BA}}{{PN}} sits to this day in the pit - in Tartarus.',
+                '{{BA}}{{PN}} ' + (god.coinflip() ? '<%= select("{{disappear}}", "{{vanish}}") %>, and ' : '' ) +'{{was}} never seen again.'
+            ];
+            t.push(god.pick(tmpl2));
+        };
+
+        return t.join(' ').replace(/{{PN}}/mg, function() { return eitherName(person); }).replace(/{{AS}}/mg, as)
+            .replace(/{{BA}}/mg, ba).replace(/{{POSS}}/mg, poss).replace(/{{PROO}}/mg, proo)
+            .replace(/{{HPN}}/mg, hpron).replace(/{{HPRNO}}/mg, hprono).replace(/{{VPRO}}/mg, vpro);
 
     };
 
