@@ -21,58 +21,23 @@ var gui = function() {
 var preset = function(presets) {
 
     // reset should not be global.
-    var propp = resetProppFunctions(false); // ARGH these are all now true!
+    var propp = storyGen.resetProppFunctions(false); // ARGH these are all now true!
 
-    for (var i = 0; i < presets.length; i++) {
-        propp[presets[i]].active = true;
+    for (var i = 0; i < presets.functions.length; i++) {
+        propp[presets.functions[i]].active = true;
     }
 
     return propp;
 };
 
-// make this part of propp.js
-// also... need a randomizer
-// although... that's not really a preset...
-var presets = {
 
-    cinderella: ['func1', 'func8', 'func8a', 'func14', 'func19', 'func23', 'func27', 'func31'],
-    hansel: ['func6', 'func7', 'func8', 'func8a', 'func16', 'func18', 'func20'],
-    swhite: ['func1', 'func5', 'func6', 'func7', 'func11', 'func21', 'func30', 'func31'],
-    lrrh: ['func4', 'func5', 'func6', 'func7', 'func8', 'func9', 'func10', 'func16', 'func18'],
-    juniper:  ['func6', 'func7', 'func8', 'func11', 'func12', 'func13', 'func14', 'func20', 'func30'],
-    barebones: ['func0', 'func8', 'func14', 'func16', 'func18', 'func30', 'func31']
+var pushPreset = function(setname) {
+    if (!storyGen.presets[setname]) { return; }
+
+    var story = preset(storyGen.presets[setname]);
+    pushSettingsToGui(story);
 
 };
-
-function cinderella() {
-    var story = preset(presets.cinderella);
-    pushSettingsToGui(story);
-}
-
-function hansel(){
-    var story = preset(presets.hansel);
-    pushSettingsToGui(story);
-}
-
-function swhite(){
-    var story = preset(presets.swhite);
-    pushSettingsToGui(story);
-}
-
-function lrrh(){
-    var story = preset(presets.lrrh);
-    pushSettingsToGui(story);
-}
-
-function juniper(){
-    var story = preset(presets.juniper);
-    pushSettingsToGui(story);
-}
-
-function barebones() {
-    var story = preset(presets.barebones);
-    pushSettingsToGui(story);
-}
 
 var pushSettingsToGui = function(proppFunctions) {
 
@@ -92,7 +57,7 @@ var getFunctionsFromGui = function() {
     // this is an external dependency to the GUI
     // to the extant that without that file, the GUI has no purpose
     // propp.js should be able to function w/o the GUI, however...
-    var funcs = resetProppFunctions();
+    var funcs = storyGen.resetProppFunctions();
     var f = [];
     for (var index in funcs) {
         funcs[index].active = window.document.myform[index].checked;
@@ -125,7 +90,7 @@ var getFunctionsFromGui = function() {
 
 var shoveToGui = function(tale) {
 
-    window.document.myform.output.value = tale.title + '\n\n' + tale.tale;
+    window.document.myform.output.value = tale.title.toUpperCase() + '\n\n' + tale.tale;
 
 };
 

@@ -1,5 +1,7 @@
 var nTemplates = function(story, world, storyGen) {
 
+    var tersely = true;
+
     var blankLine = '';
 
     story = story || [];
@@ -32,26 +34,87 @@ var nTemplates = function(story, world, storyGen) {
         '19'  : 'declaration of war'
     };
 
-    story.title = function(god, world) {
+    story.title = function(god) {
+
+        var subject = god.hero;
+        var villForm;
+        if (god.hero.healthLevel === world.healthLevel.dead && god.villain.healthLevel === world.healthLevel.alive) {
+            subject = god.villain;
+        } else if (god.villain.form !== 'human') {
+            villForm = god.villain.form;
+        }
 
         var tale = god.select('story', 'tale', 'narrative');
-        var hn = god.select(god.hero.name, god.hero.nickname);
+        var sn = god.select(subject.name, subject.nickname);
+        var pron = god.pronoun(subject);
+        var poss = god.possessive(subject);
 
         var templates = [
-            'The {{TL}} of {{HN}} and <%= hero.possessive %> adventures',
-            '{{HN}} of <%= hero.home.nation %>'
+            'The {{TL}} of {{SN}} and {{POSS}} adventures',
+            '{{SN}} of <%= hero.home.nation %>',
+            'A certain {{SN}} and what {{PRON}} did' + (god.coinflip() ? ' in <%= hero.home.nation %>' : ''),
+            (villForm ? 'The {{VF}} ' : '') + '{{VN}} and what happened to <%= pronounobject(villain) %>',
+            'The {{TL}} of {{HN}} and ' + (villForm ? 'the {{VF}} ' : '') + '{{VN}}'
         ];
 
         var t = god.pick(templates);
 
-        return t.replace(/{{HN}}/mg, hn).replace(/{{TL}}/mg, tale);
+        return t.replace(/{{TL}}/mg, tale).replace(/{{PRON}}/mg, pron).replace(/{{POSS}}/mg, poss).replace(/{{SN}}/mg, sn).replace(/{{VF}}/mg, villForm);
 
     };
 
+    story.introduceHero = function(god, terse) {
 
-    var journey = function(p1, destination) {
+        var near = god.select("in", "near", "close to", "not far from", "just on the verge of", "within a days walk of");
+        var nationType = god.select("country", "province", "kingdom", "nation", "city-state") ;
+        var res = '<%= hero.home.residence %>';
+        var vicin = '<%= hero.home.vicinity %>';
+        var hn = '<%= coinflip() ? hero.name : hero.nickname %>';
+        var mw = (god.hero.gender === world.gender.male ? 'man' : 'woman');
+
+        var templates = [
+            'in a certain {{RES}} lived {{HN}}. ',
+            'a certain {{MW}} was very <%= pick(hero.description) %>. ' + (god.coinflip() ? '<%= capitalize(possessive(hero)) %> name {{was}} {{HN}}.' : '{{HN}} <%= possessive(hero) %> name {{was}}.'),
+            'there was once an old {{RES}} that stood in the middle of a deep gloomy {{VCN}}, and in the {{RES}} lived {{HN}}.',
+            '{{HN}} {{lived}} in a {{RES}} {{NEAR}} {{VCN}} in the {{NT}} <%= hero.home.nation %>. ',
+            'in the distant {{NT}} of <%= hero.home.nation %>, {{HN}} {{lived}} in a {{RES}} {{NEAR}} {{VCN}}. ',
+            '{{NEAR}} {{VCN}} in the {{NT}} of <%= hero.home.nation %>, there {{was}} a {{RES}} where {{HN}} {{lived}}.'
+        ];
 
         var t = [];
+
+        if (terse) {
+            t.push(god.pick(templates).replace('{{NT}}', nationType).replace('{{NEAR}}', near));
+        } else {
+
+            t.push((god.coinflip() ? story.intro(god) + ' ' : '' ) + god.pick(templates).replace('{{NT}}', nationType).replace('{{NEAR}}', near));
+            // TODO: list regular name or nickname at random
+            t.push(blankLine, '<%= hero.name %> {{lived}} with <%= list(hero.family, "nickname") %>.');
+            if (god.hero.acquaintances.length > 0) {
+                if (god.hero.acquaintances.length > 1) {
+                    t.push(blankLine, '<%= list(hero.acquaintances, "nickname") %> {{were}} <%= select("friends of", "known to") %> <%= hero.name %>.');
+                } else {
+                    t.push(blankLine, '<%= list(hero.acquaintances, "nickname") %> {{was}} <%= select("a friend of", "known to") %> <%= hero.name %>.');
+                }
+            }
+        }
+
+        god.hero.introduced = true;
+
+        return t.join('\n').replace(/{{RES}}/gm, res).replace(/{{VCN}}/mg, vicin).replace(/{{HN}}/mg, hn).replace(/{{MW}}/mg, mw);
+
+};
+
+    // shouldn't this be back in the god() function?
+    story.createVictim = function(god) {
+
+        var victim = god.getCharacter(god.pick(god.hero.family.concat(god.hero.acquaintances)));
+        god.cache.victim = victim;
+        return victim;
+
+    };
+
+    story.journey = function(p1, destination) {
 
         // walk, run, ramble, travel
         // time-period
@@ -101,7 +164,19 @@ var nTemplates = function(story, world, storyGen) {
         // shuddered with fear, but stopped where she was, not knowing which
         // way to run.
 
-        return t.join('\n'); // or something like that. need to improve paragraphization
+        // Once upon a time there was a smith. "Well now," says he, "I've
+        // never set eyes on any harm. They say there's evil (likho)[225] in
+        // the world. I'll go and seek me out evil." So he went and had a
+        // goodish drink, and then started in search of evil.
+
+        var text = [];
+        var prn = god.pronoun(p1);
+
+        var templates = [
+            'So he went and had a goodish drink, and then started in search of evil.'
+        ];
+
+        return text.join('\n\n'); // or something like that. need to improve paragraphization
 
     };
 
@@ -192,7 +267,7 @@ var nTemplates = function(story, world, storyGen) {
             herogender: 'male',
             villaingender: 'male',
             peoplegender: 'male',
-            functions: world.resetProppFunctions(),
+            functions: storyGen().resetProppFunctions(),
             // funcs: ['func0', ['func8', 'casting into body of water']],
             funcs: [['func8', 'casting into body of water'], 'func30'],
             bossmode: true,
@@ -275,13 +350,16 @@ var nTemplates = function(story, world, storyGen) {
 
     story.punish = function(god, person) {
 
-        // TODO: needs to be PERSON, not villain.....
+        var descr = god.pick(person.description);
 
         var eitherName = function(p) {
-            return god.coinflip() ? p.nickname : p.name;
+            if (p.form && p.form != 'human') {
+                return god.select(p.nickname, p.name, 'the ' + descr + ' ' + p.form);
+            } else {
+                return god.coinflip() ? p.nickname : p.name;
+            }
         };
 
-        // var vn = '<%= coinflip() ? villain.nickname : villain.name %>';
         var hn = '<%= coinflip() ? hero.nickname : hero.name %>';
         var as = '<%= coinflip() ? "and " : coinflip() ? "so " : "" %>';
         var ba = '<%= (coinflip() ? "" : coinflip() ? "But " : "And ")%>';
@@ -291,14 +369,22 @@ var nTemplates = function(story, world, storyGen) {
         var hpron = god.pronoun(god.hero);
         var hprono = god.pronounobject(god.hero);
 
-        // punishment and conclusion
-        // Woe slipped into the wheel; the merchant caught up the oaken wedge,
-        // and drove it into the axle-box from the other side. Then he seized the
-        // wheel and flung it, with Woe in it, into the river. Woe {{was}} drowned,
-        // and the merchant began to live again as he had been wont to do of old.
+        // Following the advice of her daughters, three fair maidens whom he
+        // meets in her palace, Ivan does not attempt to touch the magic sword
+        // while she sleeps. But he awakes her gently, and offers her two golden
+        // apples on a silver dish. She lifts her head and opens her mouth,
+        // whereupon he seizes the sword and cuts her head off.
 
         // TODO: helpers - family, advisor, helper or whatnot
 
+// Listen, O Dog! thou wert a Dog (Sobaka), a clean beast; through
+// all Paradise the most holy didst thou roam. Henceforward shalt thou
+// be a Hound (Pes, or Pyos), an unclean beast. Into a dwelling it
+// shall be a sin to admit thee; into a church if thou dost run, the
+// church must be consecrated anew.
+
+        // TODO: some of these ending should not have a dispersal. or not a violent one.
+        // how to BEST separate....
         var end = [
             '{{AS}}{{PN}} {{was}} <%= punished() %> by {{HN}}.',
             '{{AS}}{{HN}} <%= punished() %> {{PN}}.',
@@ -316,17 +402,20 @@ var nTemplates = function(story, world, storyGen) {
             + '{{PN}} tried to shake {{HPN}} off, flying first '
             + 'about the house and then out of it, but all in vain. At last {{PN}} '
                 + 'after soaring on high, struck the ground, and fell to pieces, becoming '
-                + 'a fine yellow sand.'
+                + 'a fine yellow sand.',
+            '{{AS}}{{HN}} cut the feet off from {{PN}} and placed {{PROO}} on a stump by the roadside.'
         ];
+
         var dispersal = [
             (god.coinflip() ? 'Thanks to {{HN}}, ' : '') + '{{PN}} was completely burnt to cinders.',
             '{{AS}}that {{was}} that.',
             'Afterwards {{HN}} {{heaped}} up a pile of wood, {{set}} fire to it, {{burnt}} {{PN}} on the pyre, '
                 + 'and {{scattered}} {{POSS}} ashes to the wind.',
             'The body {{was}} left in the possession of {{HN}}, who {{scraped}} together the pieces and {{burned}} them in the stove.',
-            '{{AS}}they placed {{PROO}} in a coffin, and carried to church, whereupon it burst into horrible flames, singeing the hands of those who dared carry it.',
-            '{{HN}} and cut {{PROO}} into small pieces, which were buried throughout the woods.',
-            '{{AS}}{{HN}} said, "Into the bottomless pit with you! Out of sight, accursed one!"'
+            '{{AS}}they placed {{PROO}} in a coffin, and carried it to church, whereupon it burst into horrible flames, singeing the hands of those who dared carry it.',
+            // this doesn't work if already a fine yellow sand.....
+            '{{AS}}{{HN}} cut {{PROO}} into small pieces, which were buried throughout the woods.',
+            '{{BA}}{{HN}} said, "Into the bottomless pit with you! Out of sight, accursed one!"'
         ];
 
         god.villain.health = 'dead';
@@ -335,10 +424,7 @@ var nTemplates = function(story, world, storyGen) {
         t.push(god.capitalize(god.pick(end)));
         t.push(god.capitalize(god.pick(dispersal)));
 
-        var descr = god.pick(person.description);
-
-        // if (god.coinflip()) {
-        if (true) {
+        if (god.coinflip()) {
             var tmpl2 = [
                 'God <%= (coinflip() ? "evidently " : "")%>{{did}} it to <%= select("punish", "remonstrate", "educate", "rebuke") %> {{PN}} for {{POSS}}'
                     + '<%= (coinflip() ? " great" : "")%> <%= nlp.adjective("' + descr + '").conjugate().noun %>.',
@@ -361,7 +447,7 @@ var nTemplates = function(story, world, storyGen) {
         // can't use a complete sentence. DANG. because: capitalization
         // 'This is the way the world begins.',
         var intros = [
-            'Once upon a time,', 'Once there was, and there wasn\tt,',
+            'Once upon a time,', 'Once there was, and there wasn\'t,',
             'I\'ve heard it said that once',
             'A long time ago,', 'Some years before you were born,',
             'In the time when your parents\' parents were but small babies,',
@@ -391,7 +477,7 @@ var nTemplates = function(story, world, storyGen) {
     // since that only works on the first letter of the template-output (erroneously called 'sentence' in the code).
     // TODO: what about "lives alone." how would THAT be figured out???
     // aaaand: Milan are known to Natalie.
-    story['func0'].exec = function(god) {
+    story['func0'].exec = function(god, subFunc, terseness) {
 
         // do we need an "introduction" flag?
         // if the intro is skipped, how do we get this info across?
@@ -420,36 +506,9 @@ var nTemplates = function(story, world, storyGen) {
         // One of these lucky beings was neighbour Hans.
 
         // There was once an old castle, that stood in the middle of a deep gloomy wood, and in the castle lived an old fairy.
+        var t = story.introduceHero(god, terseness);
 
-        var near = god.select("in", "near", "close to", "not far from", "just on the verge of", "within a days walk of");
-        var nationType = god.select("country", "province", "kingdom", "nation", "city-state") ;
-        var res = '<%= hero.home.residence %>';
-        var vicin = '<%= hero.home.vicinity %>';
-        var hn = '<%= coinflip() ? hero.name : hero.nickname %>';
-        var mw = (god.hero.gender === world.gender.male ? 'man' : 'woman');
-
-        var templates = [
-            'in a certain {{RES}} lived {{HN}}. ',
-            'a certain {{MW}} was very <%= pick(hero.description) %>. ' + (god.coinflip() ? '<%= capitalize(possessive(hero)) %> name {{was}} {{HN}}.' : '{{HN}} <%= possessive(hero) %> name {{was}}.'),
-            'there was once an old {{RES}} that stood in the middle of a deep gloomy {{VCN}}, and in the {{RES}} lived {{HN}}.',
-            '{{HN}} {{lived}} in a {{RES}} {{NEAR}} {{VCN}} in the {{NT}} <%= hero.home.nation %>. ',
-            'in the distant {{NT}} of <%= hero.home.nation %>, {{HN}} {{lived}} in a {{RES}} {{NEAR}} {{VCN}}. ',
-            '{{NEAR}} {{VCN}} in the {{NT}} of <%= hero.home.nation %>, there {{was}} a {{RES}} where {{HN}} {{lived}}.'
-        ];
-
-        var t = [];
-        t.push((god.coinflip() ? story.intro(god) + ' ' : '' ) + god.pick(templates).replace('{{NT}}', nationType).replace('{{NEAR}}', near));
-        // TODO: list regular name or nickname at random
-        t.push(blankLine, '<%= hero.name %> {{lived}} with <%= list(hero.family, "nickname") %>.');
-        if (god.hero.acquaintances.length > 0) {
-            if (god.hero.acquaintances.length > 1) {
-                t.push(blankLine, '<%= list(hero.acquaintances, "nickname") %> {{were}} <%= select("friends of", "known to") %> <%= hero.name %>.');
-            } else {
-                t.push(blankLine, '<%= list(hero.acquaintances, "nickname") %> {{was}} <%= select("a friend of", "known to") %> <%= hero.name %>.');
-            }
-        }
-
-        return '{{**}}' + t.join('\n').replace(/{{RES}}/gm, res).replace(/{{VCN}}/mg, vicin).replace(/{{HN}}/mg, hn).replace(/{{MW}}/mg, mw);
+        return '{{**}}' + t;
 
     };
 
@@ -474,26 +533,31 @@ var nTemplates = function(story, world, storyGen) {
         // through the thick woods with his dog and his gun. One day he was going
         // through the forest; all of a sudden his dog began to bark, and the
         // hair of its back bristled up.
-        var vn = '<%= coinflip() ? victim.name : victim.nickname %>';
 
         var t = [];
+
+        if (!god.hero.introduced) { t.push(story.introduceHero(god, tersely)); }
+
+        if (!god.cache.victim) { story.createVictim(god); }
+
+
         var templates = [
-            '{{VN}} went missing.',
-            '{{VN}} unexpectedly {{died}}, leaving <%= hero.name %> devastated.'  + (god.coinflip() ? ' ' + story.deathResponse(god, god.victim) : ''),
-            'Sooner or later, {{VN}} {{died}}.' + (god.coinflip() ? ' ' + story.deathResponse(god, god.victim) : '')
+            '{{VICN}} went missing.',
+            '{{VICN}} unexpectedly {{died}}, leaving <%= hero.name %> devastated.'  + (god.coinflip() ? ' ' + story.deathResponse(god, god.cache.victim) : ''),
+            'Sooner or later, {{VICN}} {{died}}.' + (god.coinflip() ? ' ' + story.deathResponse(god, god.cache.victim) : '')
         ];
-        god.victim.health = world.healthLevel.dead;
+        god.cache.victim.health = world.healthLevel.dead;
 
         // there should be concern for the first, grief for the latter two
         // and abstention could simple be left for work. Sheesh!
 
         t.push(god.pick(templates));
 
-        if (god.hero != god.victim) {
+        if (god.hero != god.cache.victim) {
             t.push(blankLine, god.converse(god.hero).replace('!', '?'));
         }
 
-        return t.join('\n').replace(/{{VN}}/mg, vn);
+        return t.join('\n');
 
     };
     // Interdiction: hero is warned
@@ -528,6 +592,8 @@ var nTemplates = function(story, world, storyGen) {
         };
 
         var text = [];
+
+        if (!god.hero.introduced) { text.push(story.introduceHero(god, tersely)); }
 
         text.push('<%= hero.name %> met <%= advisor.nickname %>.');
         text.push(blankLine);
@@ -634,6 +700,8 @@ var nTemplates = function(story, world, storyGen) {
 
         if (!god.villain.introduced) { t.push(story.introduceVillain(god)); }
 
+        // WHOAH!!!! where'd the reonnaissance go ?!?!?!?
+
         return t.join('\n');
 
     };
@@ -641,6 +709,10 @@ var nTemplates = function(story, world, storyGen) {
 
     // Delivery: The villain gains information
     story['func5'].exec = function(god) {
+
+        var t = [];
+
+        if (!god.villain.introduced) { t.push(story.introduceVillain(god)); }
 
         var vn = '<%= select(villain.name, villain.nickname) %>';
 
@@ -650,15 +722,37 @@ var nTemplates = function(story, world, storyGen) {
             'While skulking about <%= hero.home.vicinity %>, {{VN}} {{overheard}} some gossip about <%= hero.name %>.'
         ];
 
-        return god.pick(tmpls).replace(/{{VN}}/mg, vn);
+        t.push(god.pick(tmpls).replace(/{{VN}}/mg, vn));
+
+        return t.join('\n\n');
 
     };
 
     // Trickery: Villain attempts to deceive victim.
-    story['func6'].templates.push('<%= villain.name %> {{attempted}} to deceive victim.');
+    story['func6'].exec = function(god) {
+
+        var t = [];
+
+        if (!god.villain.introduced) { t.push(story.introduceVillain(god)); }
+
+        t.push('{{VN}} {{attempted}} to deceive victim.');
+
+        return t.join('\n\n');
+
+    };
 
     // Complicity: Unwitting helping of the enemy
-    story['func7'].templates.push('<%= hero.name %> unwittingly {{helped}} <%= villain.name %>.');
+    story['func7'].exec = function(god) {
+
+        var text = [];
+        if (!god.villain.introduced) { text.push(story.introduceVillain(god)); }
+        if (!god.hero.introduced) { text.push(story.introduceHero(god, tersely)); }
+
+        text.push('{{HN}} unwittingly {{helped}} {{VN}}.');
+
+        return text.join('\n\n');
+
+    };
 
 
     // 2nd Sphere: The Body of the story
@@ -674,12 +768,18 @@ var nTemplates = function(story, world, storyGen) {
 
         // if not picked ahead of time, pick a sub-function at random
         subFunc = subFunc || god.randomProperty(func8);
-        var template = [];
-        var t = [];
+        var template = []; // text returned to story
+        var t = []; // common use in sub-funcs
 
         var vn = '<%= select(villain.name, villain.nickname) %>';
         var hn = '<%= select(hero.name, hero.nickname) %>';
 
+        if (!god.hero.introduced) { template.push(story.introduceHero(god, tersely)); }
+
+        // TODO: this is not always the case for villainy.
+        // sometimes... things just happen.
+        // but for coding purposes, FOR NOW, we shall assume
+        // bad things happen BECAUSE villain
         if (!god.villain.introduced) {
             template.push(story.introduceVillain(god));
         }
@@ -689,12 +789,13 @@ var nTemplates = function(story, world, storyGen) {
         // subFunc = 'casting into body of water';
         // subFunc =  'theft of daylight';
         // subFunc =  'threat of cannibalism';
+        // subFunc = 'kidnapping of person';
 
         // console.log(subFunc);
 
         switch(subFunc) {
         case 'kidnapping of person':
-            template.push('{{VN}} kidnapped <%= pick(select(hero.family, hero.acquaintances)).name %>.');
+            template.push('{{VN}} kidnapped <%= getCharacter(pick(select(hero.family, hero.acquaintances))).name %>.');
             break;
 
             // TODO: name not setup???
@@ -707,11 +808,12 @@ var nTemplates = function(story, world, storyGen) {
             break;
 
         case 'pillaging or ruining of crops':
-            template.push('The harvest {{was}} destroyed by {{VN}}. All in <%= hero.nation %> began to feel the pangs of hunger.');
+            template.push('The harvest {{was}} destroyed by {{VN}}. All in <%= hero.home.nation %> began to feel the pangs of hunger.');
             break;
 
         case 'theft of daylight':
             t = [
+                // TODO: all of these need to be CLEANED UP WITH APPROPRIATE REFERENCES
                 'Suddenly, it became as night. {{VN}} had stolen the daylight!',
                 'Suddenly, it became as night. {{VN}} had the sun, as easily as eating a corn-cake.',
                 'Suddenly the sky was covered by a black cloud; a terrible storm arose.',
@@ -722,9 +824,29 @@ var nTemplates = function(story, world, storyGen) {
                 'Sudden strange and unaccountable disorders and alterations took place in the air; the face of the sun was darkened, and the day turned into night, and that, too, no quiet, peaceable night, but with terrible thunderings, and boisterous winds from all quarters.',
                 // TODO: victim disappears...
                 'A violent thunderstorm suddenly arose and enveloped {{VN}} in so dense a cloud that he was quite invisible to the assembly. From that hour Romulus was no longer seen on earth. When the fears of the Roman youth were allayed by the return of bright, calm sunshine after such fearful weather, they saw that the royal seat was vacant.',
-                '{{VN}} has made night out of noonday, hiding the bright sunlight, and . . . fear has come upon mankind. After this, men can believe anything, expect anything. Don\t any of you be surprised in future if land beasts change places with dolphins and go to live in their salty pastures, and get to like the sounding waves of the sea more than the land, while the dolphins prefer the mountains.',
-                'For when the sun suddenly obscured and darkness reigned, and the COUNTRYNAME were overwhelmed with the greatest terror, {{HN}}, who was then supreme among his countrymen in influenle, eloquence, and wisdom, is said to have communicated to his fellow citizens the information he had received from ADVISOR, whose pupil he had been - that this phenomenon occurs at fixed periods and by inevitable law, whenever the moon passes entirely beneath the orb of the sun, and that therefore, though it does not happen at every new moon, it cannot happen except at certain periods of the new moon. When he had discussed the subject and given the explanation of the phenomenon, the people were freed of their fears',
-                'A cloud, however, overspread the sun and hid it from sight until the inhabitants abandoned their city; and thus it was taken.',
+                '{{VN}} has made night out of noonday, hiding the ',
+                + 'bright sunlight, and fear has come upon mankind. ',
+                + 'After this, men can believe anything, expect anything. ',
+                + 'Nobody would be surprised in the future if land beasts ',
+                + 'change places with dolphins to go to live in their ',
+                + 'salty pastures, and get to like the sounding waves of ',
+                + 'the sea more than the land, while the dolphins prefer ',
+                + 'the mountains.',
+                'For when the sun suddenly obscured and darkness '
+                + 'reigned, and the <%= hero.home.nation %> were overwhelmed with the '
+                + 'greatest terror, {{HN}}, who was then supreme among '
+                + '<%= possessive(hero) %> countrymen in influence, eloquence, and wisdom, is '
+                + 'said to have communicated to <%= possessive(hero) %> fellow citizens the '
+                + 'information he had received from <%= advisor.name %>, whose pupil '
+                + 'he had been - that this phenomenon occurs at fixed '
+                + 'periods and by inevitable law, whenever the moon '
+                + 'passes entirely beneath the orb of the sun, and that '
+                + 'therefore, though it does not happen at every new '
+                + 'moon, it cannot happen except at certain periods of '
+                + 'the new moon. When he had discussed the subject and '
+                + 'given the explanation of the phenomenon, the people '
+                + 'scoffed, and pointed out that a two-headed calf had been born in the neighboring village, the recent actions of {{VN}}',
+                'A cloud, however, overspread the sun and hid it from sight until the inhabitants abandoned their city; and thus it was taken by {{VN}}',
                 'The sun was suddenly darkened in mid sky.',
                 'The moon shuts off the beams of the sun as it passes across it, and darkens so much of the earth as the breadth of the blue-eyed moon amounts to.',
                 'The sun was darkened and there was darkness over the world, greater than any that had been known before. Night prevailed at the sixth hour of the day so that even the stars appeared',
@@ -825,7 +947,9 @@ var nTemplates = function(story, world, storyGen) {
             // hey..... this has to be a LIVING character.....
             //  aaaaand if no more people are left, create a new one from the local town. or something.
             // aaaaand, what if the hero is SOMEWHERE ELSE, now....
-            var murdervictim = god.getCharacter(god.pick(god.hero.family.concat(god.hero.acquaintances)));
+
+            if (!god.cache.victim) { story.createVictim(god); }
+            var murdervictim = god.cache.victim;
             var mvn = god.coinflip() ? murdervictim.name : murdervictim.nickname;
 
             // TODO: healthLevel is currently a global (only in browser env);
@@ -844,6 +968,8 @@ var nTemplates = function(story, world, storyGen) {
                 '{{VN}} {{{{KL}}}} {{MVN}}, {{SDN}}.',
                 '{{VN}}, {{SDN}}, {{{{KL}}}} {{MVN}}.'
             ];
+
+            // if character has not been introduced, identify: 'a relative of', a friend of' the hero
 
             template.push(god.pick(t).replace(/{{SDN}}/g, sudden).replace(/{{KL}}/g, kill).replace(/{{MVN}}/mg, mvn));
             template.push(story.deathResponse(god, murdervictim));
@@ -920,8 +1046,19 @@ var nTemplates = function(story, world, storyGen) {
 
     // Counteraction: hero chooses positive action
     // TODO: positiveaction()
-    story['func10'].templates.push('<%= hero.name %> chose positive action (just like in all those self-help books).');
+    story['func10'].exec = function(god) {
 
+        var templates = [
+            '{{HN}} chose positive action (just like in all those self-help books).',
+            'No longer willing to sit idly by, {{HN}} set off to do something about this outrage.'
+        ];
+
+        var t = [];
+        t.push(god.pick(templates));
+
+        return t.join('\n\n');
+
+};
     // Departure: hero leave on mission
     // TODO: journey() function
     // where is task created?

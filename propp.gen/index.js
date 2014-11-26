@@ -13,16 +13,23 @@ var oneStory = function() {
 
         var text = [];
 
+        // nope nope nope
+
+        var presets = world.util.randomProperty(storygen.presets);
+
+
         var setts = {
             herogender: 'random',
             villaingender: 'random',
             peoplegender: 'random',
-            functions: world.resetProppFunctions(),
-            // TODO: randomizer
-            funcs: ['func0', 'func2', 'func3', 'func8', 'func30', 'func31'],
+            functions: storygen.resetProppFunctions(),
+            // randomizer
+            funcs: presets.functions,
+            // funcs: ['func0', 'func2', 'func3', 'func8', 'func30', 'func31'],
             // funcs: ['func0', 'func2', 'func3', ['func8', 'commits murder'], 'func30', 'func31'],
             // funcs: [['func8', 'casting into body of water'], 'func30'],
-            bossmode: true,
+            // bossmode: true,
+            bossmode: presets.bossmode,
             verbtense: 'past'
         };
 
@@ -94,7 +101,7 @@ var novel = function() {
         // it's NOT BEING LOGGED BLARG
         if (tale && tale.title && tale.tale) {
 
-            var formatted = tale.title.toUpperCase() + '\n\n' + tale.tale;
+            var formatted = tale.title.toUpperCase() + '\n\n' + tale.tale + '\n\n';
 
             wc += wordcount(formatted);
 
@@ -111,6 +118,7 @@ var novel = function() {
 
 };
 
+// TODO: take in some param; if present, output a set n stories
 
 novel();
 

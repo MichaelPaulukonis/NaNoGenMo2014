@@ -104,73 +104,10 @@ world.absentationPerson = {
 
 world.blankLine = '';
 
-// TODO: this needs to be accessible somewhere else...
-// should this be reduced back down to a 0..31 array?
+world.util = {};
 
-var resetProppFunctions = function(onoff) {
-
-    // if not passed in, turn it on
-    // this is a legacy setting used (mainly?) by the GUI
-    if (onoff == null) { onoff = true; }
-
-    var propp = {
-
-        "func0": { active: onoff, templates: [] },
-        "func1": { active: onoff, templates: [] },
-        "func2": { active: onoff, templates: [] },
-        "func3": { active: onoff, templates: [] },
-        "func4": { active: onoff, templates: [] },
-        "func5": { active: onoff, templates: [] },
-        "func6": { active: onoff, templates: [] },
-        "func7": { active: onoff, templates: [] },
-        "func8": { active: onoff, templates: [] },
-        "func8a": { active: onoff, templates: [] },
-        "func9": { active: onoff, templates: [] },
-        "func10": { active: onoff, templates: [] },
-        "func11": { active: onoff, templates: [] },
-        "func12": { active: onoff, templates: [] },
-        "func13": { active: onoff, templates: [] },
-        "func14": { active: onoff, templates: [] },
-        "func15": { active: onoff, templates: [] },
-        "func16": { active: onoff, templates: [] },
-        "func17": { active: onoff, templates: [] },
-        "func18": { active: onoff, templates: [] },
-        "func19": { active: onoff, templates: [] },
-        "func20": { active: onoff, templates: [] },
-        "func21": { active: onoff, templates: [] },
-        "func22": { active: onoff, templates: [] },
-        "func23": { active: onoff, templates: [] },
-        "func24": { active: onoff, templates: [] },
-        "func25": { active: onoff, templates: [] },
-        "func26": { active: onoff, templates: [] },
-        "func27": { active: onoff, templates: [] },
-        "func28": { active: onoff, templates: [] },
-        "func29": { active: onoff, templates: [] },
-        "func30": { active: onoff, templates: [] },
-        "func31": { active: onoff, templates: [] }
-    };
-
-    return propp;
-};
-
-world.resetProppFunctions = resetProppFunctions;
-
-var storyGen = function(settings) {
-
-    // generates a random number
-    var random = function(limit){
-        var num = Math.floor(Math.random() * limit);
-        return num;
-    };
-
-    // original implementation can return 'id'
-    // var randomProperty = function (obj) {
-    //     var keys = Object.keys(obj);
-    //     return obj[keys[ keys.length * Math.random() << 0]];
-    // };
-
-    // http://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
-    var randomProperty = function(obj) {
+// http://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
+world.util.randomProperty = function(obj) {
         var result;
         var count = 0;
         for (var prop in obj)
@@ -180,6 +117,27 @@ var storyGen = function(settings) {
             }
         return result;
     };
+
+
+var storyGen = function(settings) {
+
+    // generates a random number
+    var random = function(limit){
+        var num = Math.floor(Math.random() * limit);
+        return num;
+    };
+
+    // // http://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
+    // var randomProperty = function(obj) {
+    //     var result;
+    //     var count = 0;
+    //     for (var prop in obj)
+    //         if (prop != 'id') {
+    //             if (Math.random() < 1/++count)
+    //                 result = obj[prop];
+    //         }
+    //     return result;
+    // };
 
     var pick = function(arr) {
         return arr[Math.floor(Math.random() * arr.length)];
@@ -257,8 +215,8 @@ var storyGen = function(settings) {
             // TODO: what happens when we've used up everything in the bank?
             // SOLUTION: don't worry about it: make the bank bigger than any of our templates
             // for now...
-            gndr = gndr || randomProperty(world.gender);
-            aspct = aspct || randomProperty(world.aspect);
+            gndr = gndr || world.util.randomProperty(world.gender);
+            aspct = aspct || world.util.randomProperty(world.aspect);
             var adjs = (aspct === world.aspect.good ? bank.adjectives.personal : bank.adjectives.negative);
             var descr = [pick(adjs), pick(adjs)];
             var name = pickRemove(bank.names[gndr]);
@@ -288,8 +246,8 @@ var storyGen = function(settings) {
             var members = count || random(12) + 1;
             var acqs = [];
             for (var i = 0; i < members; i++) {
-                var g = (!gndr || gndr === 'random' ? randomProperty(world.gender) : gndr);
-                aspct = aspct || randomProperty(world.aspect);
+                var g = (!gndr || gndr === 'random' ? world.util.randomProperty(world.gender) : gndr);
+                aspct = aspct || world.util.randomProperty(world.aspect);
                 acqs.push(createCharacter(g, aspct));
             }
             return acqs;
@@ -451,7 +409,7 @@ var storyGen = function(settings) {
         };
 
         var createFalsehero = function() {
-            var g = randomProperty(world.gender);
+            var g = world.util.randomProperty(world.gender);
             var c = createCharacter(g, world.aspect.bad);
             return c;
         };
@@ -657,9 +615,9 @@ var storyGen = function(settings) {
                 cache.characters = settings.characters || {}; // this holds all the people, elsewhere, use a uid to reference individuals
                 cache.places = {}; // holds uid of all places (in-progress)
 
-                if (!settings.herogender || settings.herogender === 'random') { settings.herogender = randomProperty(world.gender); }
-                if (!settings.villaingender || settings.villaingender === 'random') { settings.villaingender = randomProperty(world.gender); }
-                if (!settings.peoplegender || settings.peoplegender === 'random') { settings.peoplegender = randomProperty(world.gender); }
+                if (!settings.herogender || settings.herogender === 'random') { settings.herogender = world.util.randomProperty(world.gender); }
+                if (!settings.villaingender || settings.villaingender === 'random') { settings.villaingender = world.util.randomProperty(world.gender); }
+                if (!settings.peoplegender || settings.peoplegender === 'random') { settings.peoplegender = world.util.randomProperty(world.gender); }
 
                 if (settings.narrator) { cache.narrator = settings.narrator; }
 
@@ -726,12 +684,12 @@ var storyGen = function(settings) {
             select: select,
             coinflip: coinflip,
             capitalize: capitalize,
-            randomProperty: randomProperty,
+            randomProperty: world.util.randomProperty,
             dump: dump,
             interdictionType: world.interdictionType,
             location: place,
             wordbank: bank,
-            nlp: nlp,// this is also a global. But.... won't be in node
+            nlp: nlp,
             createVillain: createVillain,
             createHero: createHero,
             punished: function() { return pick(bank.punish); },
@@ -743,7 +701,6 @@ var storyGen = function(settings) {
 
     // populate template
     // which may contain multiple sentences.
-    // hrm. how about just doing functions, now...
     var sentence = function(func, helper, params) {
 
         var f = '';
@@ -756,9 +713,10 @@ var storyGen = function(settings) {
             } else {
                 f = func.templates[random(func.templates.length)];
             }
+
             // console.log(f);
 
-            var vicn = '<%= coinflip() ? victim.name : victim.nickname %>';
+            var vicn = '<%= coinflip() ? cache.victim.name : cache.victim.nickname %>';
             var villn = '<%= coinflip() ? villain.nickname : villain.name %>';
             var hn = '<%= coinflip() ? hero.nickname : hero.name %>';
 
@@ -816,7 +774,7 @@ var storyGen = function(settings) {
             }
 
             // exceptions
-            f = f.replace('wered', 'were').replace('weres', 'are');
+            f = f.replace(/wered/mg, 'were').replace(/weres/mg, 'are').replace(/strided/mg, 'strode');
 
             f = capitalize(f);
 
@@ -963,13 +921,97 @@ var storyGen = function(settings) {
         itemGenerator: god.itemGenerator, // TODO: is this even used?
         pick: pick,
         pickRemove: pickRemove,
-        randomProperty: randomProperty,
+        randomProperty: world.util.randomProperty,
         sentence: sentence,
         uid: uid,
         world: world,
         deepClone: _.deepClone
     };
 
+
+};
+
+// should this be reduced back down to a 0..31 array?
+storyGen.resetProppFunctions = function(onoff) {
+
+    // if not passed in, turn it on
+    // this is a legacy setting used (mainly?) by the GUI
+    if (onoff == null) { onoff = true; }
+
+    var propp = {
+
+        "func0": { active: onoff, templates: [] },
+        "func1": { active: onoff, templates: [] },
+        "func2": { active: onoff, templates: [] },
+        "func3": { active: onoff, templates: [] },
+        "func4": { active: onoff, templates: [] },
+        "func5": { active: onoff, templates: [] },
+        "func6": { active: onoff, templates: [] },
+        "func7": { active: onoff, templates: [] },
+        "func8": { active: onoff, templates: [] },
+        "func8a": { active: onoff, templates: [] },
+        "func9": { active: onoff, templates: [] },
+        "func10": { active: onoff, templates: [] },
+        "func11": { active: onoff, templates: [] },
+        "func12": { active: onoff, templates: [] },
+        "func13": { active: onoff, templates: [] },
+        "func14": { active: onoff, templates: [] },
+        "func15": { active: onoff, templates: [] },
+        "func16": { active: onoff, templates: [] },
+        "func17": { active: onoff, templates: [] },
+        "func18": { active: onoff, templates: [] },
+        "func19": { active: onoff, templates: [] },
+        "func20": { active: onoff, templates: [] },
+        "func21": { active: onoff, templates: [] },
+        "func22": { active: onoff, templates: [] },
+        "func23": { active: onoff, templates: [] },
+        "func24": { active: onoff, templates: [] },
+        "func25": { active: onoff, templates: [] },
+        "func26": { active: onoff, templates: [] },
+        "func27": { active: onoff, templates: [] },
+        "func28": { active: onoff, templates: [] },
+        "func29": { active: onoff, templates: [] },
+        "func30": { active: onoff, templates: [] },
+        "func31": { active: onoff, templates: [] }
+    };
+
+    return propp;
+};
+
+world.resetProppFunctions = storyGen.resetProppFunctions;
+
+// also... need a randomizer
+// although... that's not really a preset...
+storyGen.presets = {
+
+    cinderella: {
+        functions: ['func1', 'func8', 'func8a', 'func14', 'func19', 'func23', 'func27', 'func31'],
+        bossmode: false
+    },
+    hansel: {
+        functions:['func6', 'func7', 'func8', 'func8a', 'func16', 'func18', 'func20'],
+        bossmode: false
+    },
+    swhite: {
+        functions:['func1', 'func5', 'func6', 'func7', 'func11', 'func21', 'func30', 'func31'],
+        bossmode: false
+    },
+    lrrh: {
+        functions:['func4', 'func5', 'func6', 'func7', 'func8', 'func9', 'func10', 'func16', 'func18'],
+        bossmode: false
+    },
+    juniper:  {
+        functions:['func6', 'func7', 'func8', 'func11', 'func12', 'func13', 'func14', 'func20', 'func30'],
+        bossmode: false
+    },
+    barebones: {
+        functions:['func0', 'func8', 'func14', 'func16', 'func18', 'func30', 'func31'],
+        bossmode: true
+    },
+    justVillainy: {
+        functions: ['func8'],
+        bossmode: false
+    }
 
 };
 
