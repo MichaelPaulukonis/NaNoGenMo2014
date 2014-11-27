@@ -64,8 +64,8 @@ world.aspect = {
 
 world.gender = {
     female: 'female',
-    male: 'male',
-    neuter: 'neuter'
+    male: 'male'
+    // ,neuter: 'neuter'
 };
 
 world.healthLevel = {
@@ -219,7 +219,7 @@ var storyGen = function(settings) {
             aspct = aspct || world.util.randomProperty(world.aspect);
             var adjs = (aspct === world.aspect.good ? bank.adjectives.personal : bank.adjectives.negative);
             var descr = [pick(adjs), pick(adjs)];
-            var name = pickRemove(bank.names[gndr]);
+            var name = pickRemove(bank.names[gndr].concat(bank.names.neuter));
 
             // alt: two adjs in front, two-ads in back: "Big Bad Joan" or "Joan the Big and Bad"
             // WAY ALT: His Serene Highness Prince Robert Michael Nicolaus Georg Bassaraba von Brancovan von Badische, Marquis of Hermosilla, Count of Cabo St. Eugenio, Seventy-fourth Grand Master of the Knights of Malta,
@@ -707,13 +707,17 @@ var storyGen = function(settings) {
         var isFunc = (typeof func === 'function');
         if (func && func.active || func && isFunc) {
             if (isFunc) {
+                // outro and other special methods
                 f = func(helper);
             } else if (func.exec) {
+                // special exec method
                 f = func.exec(helper, params);
             } else {
+                // old-style array-of-templates-with-no-other-logic
                 f = func.templates[random(func.templates.length)];
             }
 
+            var prior = f;
             // console.log(f);
 
             var vicn = '<%= coinflip() ? cache.victim.name : cache.victim.nickname %>';
@@ -721,9 +725,15 @@ var storyGen = function(settings) {
             var hn = '<%= coinflip() ? hero.nickname : hero.name %>';
 
             f = f.replace(/{{VICN}}/mg, vicn).replace(/{{HN}}/mg, hn).replace(/{{VN}}/mg, villn);
+            var template = f;
 
             var t = _.template(f);
             f = t(helper);
+
+            if (f.indexOf('NaN') >= 0) {
+                console.log('prior: ' + prior + '\n\ntemplate: ' + template);
+            }
+
 
             // TODO: attempt to parse sentences, and apply past tense....
             // TROUBLE: this means we will also swap the tense of the embedded tales
@@ -849,6 +859,9 @@ var storyGen = function(settings) {
                 }
                 var s2 = this.sentence(story[f], this.universe, subFunc);
                 if (s2) { tale.push(s2); }
+
+                if (s2.indexOf('NaN') >=0 ) {console.log(f); }
+
                 if (this.universe.hero.health === world.healthLevel.dead) { break; }
                 if (settings.bossmode && this.universe.villain.health == 'dead' && restartVillainy >= 0) {
                     if (this.universe.coinflip(0.8)) {
@@ -985,15 +998,15 @@ world.resetProppFunctions = storyGen.resetProppFunctions;
 storyGen.presets = {
 
     cinderella: {
-        functions: ['func1', 'func8', 'func8a', 'func14', 'func19', 'func23', 'func27', 'func31'],
+        functions: ['func0', 'func1', 'func8', 'func8a', 'func14', 'func19', 'func23', 'func27', 'func31'],
         bossmode: false
     },
     hansel: {
-        functions:['func6', 'func7', 'func8', 'func8a', 'func16', 'func18', 'func20'],
+        functions:['func0', 'func6', 'func7', 'func8', 'func8a', 'func16', 'func18', 'func20'],
         bossmode: false
     },
     swhite: {
-        functions:['func1', 'func5', 'func6', 'func7', 'func11', 'func21', 'func30', 'func31'],
+        functions:['func0', 'func1', 'func5', 'func6', 'func7', 'func11', 'func21', 'func30', 'func31'],
         bossmode: false
     },
     lrrh: {
@@ -1008,11 +1021,14 @@ storyGen.presets = {
         functions:['func0', 'func8', 'func14', 'func16', 'func18', 'func30', 'func31'],
         bossmode: true
     },
-    justVillainy: {
-        functions: ['func8'],
+    mostlyVillainy: {
+        functions: ['func8', 'func18'],
         bossmode: false
-    }
-
+    },
+    shortWaterStory: {
+        functions: [['func8', 'casting into body of water'], 'func18'],
+        bossmode: true
+        }
 };
 
 

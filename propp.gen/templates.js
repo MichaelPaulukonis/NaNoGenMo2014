@@ -97,6 +97,12 @@ var nTemplates = function(story, world, storyGen) {
                     t.push(blankLine, '<%= list(hero.acquaintances, "nickname") %> {{was}} <%= select("a friend of", "known to") %> <%= hero.name %>.');
                 }
             }
+            for (var i = 0; i < god.hero.acquaintances.length; i++) {
+                god.getCharacter(god.hero.acquaintances).introduced = true;
+            }
+            for (var i = 0; i < god.hero.family.length; i++) {
+                god.getCharacter(god.hero.family).introduced = true;
+            }
         }
 
         god.hero.introduced = true;
@@ -114,7 +120,7 @@ var nTemplates = function(story, world, storyGen) {
 
     };
 
-    story.journey = function(p1, destination) {
+    story.journey = function(god, p1, destination) {
 
         // walk, run, ramble, travel
         // time-period
@@ -171,12 +177,22 @@ var nTemplates = function(story, world, storyGen) {
 
         var text = [];
         var prn = god.pronoun(p1);
+        var poss = god.possessive(p1);
+
+        if (god.coinflip()) {
+            text.push('So {{PRN}} went and had a goodish drink, and then started in search of {{DEST}}.');
+        }
 
         var templates = [
-            'So he went and had a goodish drink, and then started in search of evil.'
+            'So {{HN}} went on walking all night and all next day. Eventually {{PRN}} reached {{DEST}}.',
+            'Next day {{HN}} set off on {{POSS}} visit to the {{DEST}}. {{PRN}} walked and '
+                + 'walked, for three whole days did {{PRN}} walk, and then {{PRN}} reached {{DEST}}.',
+            'So {{HN}} went away, and walked and walked, till {{PRN}} came to the place.'
         ];
 
-        return text.join('\n\n'); // or something like that. need to improve paragraphization
+        text.push(god.pick(templates));
+
+        return text.join('\n\n').replace(/{{PRN}}/mg, prn).replace(/{{DEST}}/mg, destination);
 
     };
 
@@ -263,14 +279,18 @@ var nTemplates = function(story, world, storyGen) {
 
         var text = [];
 
+        var presets = god.coinflip() ? storyGen.presets.shortWaterStory : world.util.randomProperty(storyGen.presets);
+
         var setts = {
             herogender: 'male',
             villaingender: 'male',
             peoplegender: 'male',
-            functions: storyGen().resetProppFunctions(),
+            functions: storyGen.resetProppFunctions(),
             // funcs: ['func0', ['func8', 'casting into body of water']],
-            funcs: [['func8', 'casting into body of water'], 'func30'],
-            bossmode: true,
+            // funcs: [['func8', 'casting into body of water'], 'func18'],
+            // bossmode: true,
+            funcs: presets.functions,
+            bossmode: presets.bossmode,
             verbtense: 'present',
             narrator: storyGen().deepClone(narrator),
             // swap them on some key?
@@ -284,10 +304,13 @@ var nTemplates = function(story, world, storyGen) {
             characters: storyGen().deepClone(god.cache.characters) // needed for hero and villain
         };
 
+        setts.hero.introduced = false;
+        setts.villain.introduced = false;
+
         // OH FOR CRYING IN THE BEER
         // setts.functions['func0'].active = true;
-        setts.functions['func8'].active = true;
-        setts.functions['func30'].active = true;
+        // setts.functions['func8'].active = true;
+        // setts.functions['func30'].active = true;
 
         // TODO: need to re-use, or get access to everything
         // UGH UGH UGH
@@ -327,18 +350,25 @@ var nTemplates = function(story, world, storyGen) {
 
         // TODO: need to have verbs/object set apart, so we can resolve this....
         // TODO: need there to be a lack THING, then there can be additional things to say.
-        var lacks = ['{{needs}} a bride, a friend, or just somebody to talk to.',
-                     '{{needs}} a helper or magical agent.',
-                     '{{needs}} a wondrous object or two. Possibly three. No more than that. Unless they {{were}} collectible?',
-                     '{{needs}} a egg of death or love. Either would do.',
-                     '{{needs}} money or means of existence. Times {{were}} tough.',
-                     '{{had}} lacks in other forms. Tsk tsk. Those lacks.'
+        var lacks = ['{{needs}} a bride, a friend, or just somebody to talk to',
+                     '{{needs}} a helper or magical agent',
+                     ['{{needs}} a wondrous object or two',  'Possibly three. No more than that. Unless they {{were}} collectible'],
+                     ['{{needs}} a egg of death or love', 'Either would do'],
+                     ['{{needs}} money or means of existence', 'Times {{were}} tough'],
+                     ['{{had}} lacks in other forms', 'Tsk tsk. Those lacks']
                     ];
 
         var l = god.pick(lacks);
         var p = god.pick(god.hero.family); // argh, this ain't gonna work...
+        var t = l;
+        // if special array, capture first separately
+        if (typeof l === 'object' && l.length && l.length === 2) {
+            t = l[0] + '. ' + l[1];
+            l = l[0];
+        }
         var lack = {
             lack: l,
+            text: t,
             person: p
         };
 
@@ -824,13 +854,13 @@ var nTemplates = function(story, world, storyGen) {
                 'Sudden strange and unaccountable disorders and alterations took place in the air; the face of the sun was darkened, and the day turned into night, and that, too, no quiet, peaceable night, but with terrible thunderings, and boisterous winds from all quarters.',
                 // TODO: victim disappears...
                 'A violent thunderstorm suddenly arose and enveloped {{VN}} in so dense a cloud that he was quite invisible to the assembly. From that hour Romulus was no longer seen on earth. When the fears of the Roman youth were allayed by the return of bright, calm sunshine after such fearful weather, they saw that the royal seat was vacant.',
-                '{{VN}} has made night out of noonday, hiding the ',
-                + 'bright sunlight, and fear has come upon mankind. ',
-                + 'After this, men can believe anything, expect anything. ',
-                + 'Nobody would be surprised in the future if land beasts ',
-                + 'change places with dolphins to go to live in their ',
-                + 'salty pastures, and get to like the sounding waves of ',
-                + 'the sea more than the land, while the dolphins prefer ',
+                '{{VN}} has made night out of noonday, hiding the '
+                + 'bright sunlight, and fear has come upon mankind. '
+                + 'After this, men can believe anything, expect anything. '
+                + 'Nobody would be surprised in the future if land beasts '
+                + 'change places with dolphins to go to live in their '
+                + 'salty pastures, and get to like the sounding waves of '
+                + 'the sea more than the land, while the dolphins prefer '
                 + 'the mountains.',
                 'For when the sun suddenly obscured and darkness '
                 + 'reigned, and the <%= hero.home.nation %> were overwhelmed with the '
@@ -914,7 +944,14 @@ var nTemplates = function(story, world, storyGen) {
             god.hero.location = water;
             template.push('{{VN}} {{threw}} {{HN}} into <%= hero.location %>.');
 
-            if (god.coinflip() ) {
+            if (god.coinflip()) {
+                // hero gets out
+                var survivals = [
+                    'Fortunately <%= pronoun(hero) %> had taken swimming lessons from a mysterious stranger years before.'
+                    ];
+                template.push(god.pick(survivals));
+            } else {
+                // hero drowns
                 god.hero.health = world.healthLevel.dead;
                 var drowns = [
                     (god.coinflip() ? 'Too bad ' : '') + '<%= pronoun(hero) %> had never learned to swim.'
@@ -935,7 +972,7 @@ var nTemplates = function(story, world, storyGen) {
             // TODO: and the item cannot be used in the battle
             // TODO: _OR_ this is a substitution for a family member
             // I think that is too complicated for me to handle at this point...
-            template.push('A false substitution {{was}} perpretrated by {{VN}}.');
+            template.push('A false substitution {{was}} perpetrated by {{VN}}.');
             break;
 
         case 'issues order to kill [requires proof]':
@@ -1018,7 +1055,11 @@ var nTemplates = function(story, world, storyGen) {
         };
 
         // replacements here
-        return template.join('\n\n').replace(/{{VN}}/mg, vn).replace(/{{HN}}/mg, hn);
+        var text  = template.join('\n\n').replace(/{{VN}}/mg, vn).replace(/{{HN}}/mg, hn);
+
+        if (text.indexOf('NaN') >= 0) { console.log('subFunc: ' + subFunc); }
+
+        return text;
 
     };
 
@@ -1028,9 +1069,17 @@ var nTemplates = function(story, world, storyGen) {
     // or.... figure out a better way to accomplish this...
     story['func8a'].exec = function(god, subFunc) {
 
+        if (!god.cache.lack) { story.createLack(god); }
         var lack = story.createLack(god);
 
-        return god.getCharacter(lack.person).name + ' ' + lack.lack;
+        var person = god.getCharacter(god.cache.lack.person);
+        var name = (god.coinflip() ? person.nickname : person.name);
+        var friendof = (person.introduced ? '' : ', a friend of {{HN}},');
+        person.introduced = true;
+
+        var sent = '{{PN}}{{FO}} {{LACK}}.';
+
+        return sent.replace(/{{PN}}/mg, name).replace(/{{FO}}/mg, friendof).replace(/{{LACK}}/mg, lack.text);
 
     };
 
@@ -1041,7 +1090,14 @@ var nTemplates = function(story, world, storyGen) {
         // aaaaand, 8a is not required for 9. WTF?
         if (!god.cache.lack) { story.createLack(god); }
 
-        return '<%= hero.name %> {{discovered}} that ' + god.getCharacter(god.cache.lack.person).name + ' ' + god.cache.lack.lack;
+        var person = god.getCharacter(god.cache.lack.person);
+        var name = (god.coinflip() ? person.nickname : person.name);
+        var friendof = (person.introduced ? '' : ', a friend of {{HN}},');
+        person.introduced = true;
+
+        var sent = '{{HN}} {{discovered}} that {{PN}}{{FO}} ' + god.cache.lack.lack + '.';
+
+        return sent.replace(/{{PN}}/mg, name).replace(/{{FO}}/mg, friendof);
     };
 
     // Counteraction: hero chooses positive action
@@ -1088,8 +1144,11 @@ var nTemplates = function(story, world, storyGen) {
         var an = '<%= select(advisor.name, advisor.nickname) %>';
         var met = '<%= select("met", "encountered", "came across", "found", "was found by", "bumped into") %>';
 
+        // well this makes no sense!
+        // if NOT introduced, NOTHING!
         var templates = [
-            (god.advisor.introduced ? '{{HN}} {{MET}} {{AN}} again.\n\n'  : '') + '"Here," said {{AN}}, "you\'ll need this," and gave {{HN}} the {{IT}}.'
+            '{{HN}} {{MET}} {{AN}} ' + (!god.advisor.introduced ? 'again.'  : '')
+                + '\n\n"Here," said {{AN}}, "you\'ll need this," and gave {{HN}} the {{IT}}.'
         ];
 
         // TODO: make this into conversation with a goal?
@@ -1104,7 +1163,7 @@ var nTemplates = function(story, world, storyGen) {
 
         god.advisor.introduced = true;
 
-        var para = t.join('\n').replace(/{{HN}}/g, hn).replace(/{{AN}}/g, an).replace(/{{IT}}/g, item).replace(/{{MET}}/g, met);
+        var para = t.join('\n\n').replace(/{{HN}}/g, hn).replace(/{{AN}}/g, an).replace(/{{IT}}/g, item).replace(/{{MET}}/g, met);
 
         return para;
 
@@ -1195,7 +1254,21 @@ var nTemplates = function(story, world, storyGen) {
 
     // Return: hero sets out for home
     // TODO: how could I write something like hero.home.residence.possess and get "her home" or "his shed" ?
-    story['func20'].templates.push('<%= hero.name %> set out for <%= hero.home.residence %> in <%= hero.home.vicinity %>.');
+    story['func20'].exec = function(god) {
+
+        var text = [];
+
+        var tmpls = [
+            '{{HN}} set out for <%= possessive(hero) %> <%= hero.home.residence %>.'
+        ];
+
+        text.push(god.pick(tmpls));
+
+        text.push(story.journey(god, god.hero, god.hero.home.vicinity));
+
+        return text.join('\n\n');
+
+    };
 
     // Pursuit: hero is chased
     // TODO: character/thing that chases
