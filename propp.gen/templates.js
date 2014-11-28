@@ -36,9 +36,13 @@ var nTemplates = function(story, world, storyGen) {
 
     story.title = function(god) {
 
+        // TODO: so, the pre-created villain might have nothing to do with the story
+        // there can be lacks and resolutions that involve no villanous agent
+        // in these case, a villain-based title (and they have happened) is obscrue, if not abstruse
+
         var subject = god.hero;
         var villForm;
-        if (god.hero.healthLevel === world.healthLevel.dead && god.villain.healthLevel === world.healthLevel.alive) {
+        if (god.hero.health === world.healthLevel.dead && god.villain.health === world.healthLevel.alive) {
             subject = god.villain;
         } else if (god.villain.form !== 'human') {
             villForm = god.villain.form;
@@ -51,11 +55,17 @@ var nTemplates = function(story, world, storyGen) {
 
         var templates = [
             'The {{TL}} of {{SN}} and {{POSS}} adventures',
-            '{{SN}} of <%= hero.home.nation %>',
+            (god.coinflip() ? 'The Adventures of ' : '') + '{{SN}} of <%= hero.home.nation %>',
             'A certain {{SN}} and what {{PRON}} did' + (god.coinflip() ? ' in <%= hero.home.nation %>' : ''),
             (villForm ? 'The {{VF}} ' : '') + '{{VN}} and what happened to <%= pronounobject(villain) %>',
-            'The {{TL}} of {{HN}} and ' + (villForm ? 'the {{VF}} ' : '') + '{{VN}}'
+            'The {{TL}} of {{HN}} and ' + (villForm ? 'the {{VF}} ' : '') + '{{VN}}',
+            '{{HN}} and {{VN}}',
+            '{{VN}} and {{HN}}'
         ];
+
+        if (god.hero.magicalitemused) {
+            templates.push('{{HN}} and the ' + god.hero.possessions[god.hero.possessions.length-1]);
+        }
 
         var t = god.pick(templates);
 
@@ -825,20 +835,29 @@ var nTemplates = function(story, world, storyGen) {
 
         switch(subFunc) {
         case 'kidnapping of person':
-            template.push('{{VN}} kidnapped <%= getCharacter(pick(select(hero.family, hero.acquaintances))).name %>.');
+
+            // o, god!
+            var kp = god.getCharacter(god.pick(god.select(god.hero.family, god.hero.acquaintances)));
+            var name = (god.coinflip() ? kp.name : kp.nickname);
+
+            // 'cept they could also be a relative.
+            var friendof = (kp.introduced ? '' : ', a friend of {{HN}}');
+            kp.introduced = true;
+
+            template.push('{{VN}} kidnapped {{NAME}}{{FO}}.'.replace(/{{NAME}}/mg, name).replace(/{{FO}}/mg, friendof));
             break;
 
             // TODO: name not setup???
         case 'seizure of magical agent or helper':
-            template.push('{{VN}} <%= select("forcibly seized", "kidnapped", "made off with") %> <%= magicalhelper.name %>.');
+            template.push('{{VN}} <%= select("forcibly seized", "kidnapped", "{{makes}} off with") %> <%= magicalhelper.name %>.');
             break;
 
         case 'forcible seizure of magical helper':
-            template.push('{{VN}} <%= select("forcibly seized", "kidnapped", "makde off with") %> <%= magicalhelper.name %>.');
+            template.push('{{VN}} <%= select("forcibly seized", "kidnapped", "{{makes}} off with") %> <%= magicalhelper.name %>.');
             break;
 
         case 'pillaging or ruining of crops':
-            template.push('The harvest {{was}} destroyed by {{VN}}. All in <%= hero.home.nation %> began to feel the pangs of hunger.');
+            template.push('The harvest {{was}} destroyed by {{VN}}. All in <%= hero.home.nation %> {{begins}} to feel the pangs of hunger.');
             break;
 
         case 'theft of daylight':
@@ -963,7 +982,14 @@ var nTemplates = function(story, world, storyGen) {
             break;
 
         case 'casting of a spell, transformation':
-            template.push('There {{was}} a casting of a spell, a transformation. The effects {{were}} simply amazing. Words could not do them justice.');
+
+            t = [
+                'There {{was}} a casting of a spell, a transformation. The effects {{were}} simply amazing. Words could not do them justice.'
+
+            ];
+
+            template.push(god.pick(t));
+
             break;
 
         case 'false substitution':
@@ -992,6 +1018,10 @@ var nTemplates = function(story, world, storyGen) {
             // TODO: healthLevel is currently a global (only in browser env);
             murdervictim.health = world.healthLevel.dead;
 
+            // 'cept they could also be a relative.
+            friendof = (murdervictim.introduced ? '' : ', a friend of {{HN}}');
+            murdervictim.introduced = true;
+
             // She persuades the murderer to show her the body of her dead love, and weeps over it bitterly.
             // He is killed, however, by his elder brothers, who cut him into small pieces and scattered the fragments
             // The Princess died; they placed her in a coffin, and carried it to church
@@ -1001,14 +1031,14 @@ var nTemplates = function(story, world, storyGen) {
             var sudden = god.select('suddenly', 'without warning', 'for reasons unknown', 'just for spite', 'because anything {{was}} possible', 'without explanation', 'since <%= pronoun(villain) %> {{was}} unstoppable');
 
             t = [
-                '{{SDN}}, {{VN}} {{{{KL}}}} {{MVN}}.',
-                '{{VN}} {{{{KL}}}} {{MVN}}, {{SDN}}.',
-                '{{VN}}, {{SDN}}, {{{{KL}}}} {{MVN}}.'
+                '{{SDN}}, {{VN}} {{{{KL}}}} {{MVN}}{{FO}}.',
+                '{{VN}} {{{{KL}}}} {{MVN}}{{FO}}, {{SDN}}.',
+                '{{VN}}, {{SDN}}, {{{{KL}}}} {{MVN}}{{FO}}.'
             ];
 
             // if character has not been introduced, identify: 'a relative of', a friend of' the hero
-
-            template.push(god.pick(t).replace(/{{SDN}}/g, sudden).replace(/{{KL}}/g, kill).replace(/{{MVN}}/mg, mvn));
+            var killsent = god.pick(t).replace(/{{SDN}}/g, sudden).replace(/{{KL}}/g, kill).replace(/{{MVN}}/mg, mvn).replace(/{{FO}}/mg, friendof);
+            template.push(killsent);
             template.push(story.deathResponse(god, murdervictim));
 
             template.push(god.converse(god.villain));
@@ -1074,6 +1104,7 @@ var nTemplates = function(story, world, storyGen) {
 
         var person = god.getCharacter(god.cache.lack.person);
         var name = (god.coinflip() ? person.nickname : person.name);
+        // 'cept they could also be a relative.
         var friendof = (person.introduced ? '' : ', a friend of {{HN}},');
         person.introduced = true;
 
@@ -1137,26 +1168,20 @@ var nTemplates = function(story, world, storyGen) {
         god.hero.possessions.push(item);
 
         if (!god.advisor.introduced) {
-            t.push(god.converse(god.advisor, god.hero), blankLine);
+            t.push(god.converse(god.advisor, god.hero));
+        } else {
+            t.push('{{HN}} {{MET}} {{AN}} again.');
         }
 
         var hn = '<%= select(hero.name, hero.nickname) %>';
         var an = '<%= select(advisor.name, advisor.nickname) %>';
         var met = '<%= select("met", "encountered", "came across", "found", "was found by", "bumped into") %>';
 
-        // well this makes no sense!
-        // if NOT introduced, NOTHING!
-        var templates = [
-            '{{HN}} {{MET}} {{AN}} ' + (!god.advisor.introduced ? 'again.'  : '')
-                + '\n\n"Here," said {{AN}}, "you\'ll need this," and gave {{HN}} the {{IT}}.'
-        ];
-
         // TODO: make this into conversation with a goal?
-        t.push(god.pick(templates));
+        t.push('"Here," said {{AN}}, "you\'ll need this," and gave {{HN}} the {{IT}}.');
         t.push('"What\'s this?" asked {{HN}}.');
         // TODO: magical items will have propeties that can be enumerated, here....
         t.push('"What does it look like?" replied {{AN}}. "It\'s a special, magical {{IT}}."');
-        // TODO: greatfully, thankfully - which require
         if (god.coinflip()) {
             t.push('"Thanks!" said a <%= select("grateful", "thankful") %> {{HN}}'
                    + (god.coinflip() ? god.select(' gratefully', ' thankfully') : '') + '.'); }
@@ -1197,7 +1222,6 @@ var nTemplates = function(story, world, storyGen) {
     story['func17'].templates.push('<%= villain.name %>\'s head popped off, and {{was}} scavenged by <%= hero.name %>.');
 
     // Victory: Villain is defeated
-    // TODO: use the defeat/punishment structures built for #30
     story['func18'].exec = function(god) {
 
         var t = [];
@@ -1207,12 +1231,12 @@ var nTemplates = function(story, world, storyGen) {
         var mi = god.hero.possessions[god.hero.possessions.length-1];
         if (!mi) {
             mi = god.createMagicalitem();
-            // but we never get rid of the previous item.....
-            god.hero.possessions.push(mi);
 
+            god.hero.possessions.push(mi);
             t.push('{{HN}} remembered the {{MI}} <%= pronoun(hero) %> had been given before.');
 
         }
+        god.hero.magicalitemused = true;
 
         var template = [
             // 'Through deft use of the {{MI}}, <%= villain.name %> {{was}} defeated.',
@@ -1236,12 +1260,9 @@ var nTemplates = function(story, world, storyGen) {
 
         var t = [];
 
-        // '<%= hero.name %> {{discovered}} that ' + god.getCharacter(god.cache.lack.person).name + ' ' + god.cache.lack.lack;
-
-
         var lt = god.cache.lack.lack;
         // this is singularly un-interesting
-        var tmpls = ['The problems experienced by ' + god.getCharacter(god.cache.lack.person).name + ', who {{LT}},  {{are}} resolved by {{HN}}.'];
+        var tmpls = ['The problems experienced by ' + god.getCharacter(god.cache.lack.person).name + ', who {{LT}},  {{were}} resolved by {{HN}}.'];
 
         t.push(god.pick(tmpls));
 

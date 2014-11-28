@@ -505,12 +505,18 @@ var storyGen = function(settings) {
             var t = tone(p1, p2);
             var p1n = coinflip() ? p1.name : p1.nickname;
             var p2n = '';
-            // var says = '{{' + select('said', 'remarked', 'noted', 'mused', 'exclaimed', 'ejected', 'rumbled', 'muttered') + '}}';
             var says = '{{<%= select("said", "remarked", "noted", "mused", "exclaimed", "ejected", "rumbled", "muttered") %>}}';
             var reply = '{{<%= select("replied", "responded", "retorted", "volleyed", "returned", "muttered") %>}}';
 
+
             if (p1 && p2) {
                 p2n = coinflip() ? p2.name : p2.nickname;
+
+                // this should probably be handled by the calling code
+                // AS WHO KNOWS
+                // but for now.....
+                c.push('{{P1N}} {{bumped}} into {{P2N}}.');
+
                 // TODO: still pretty repetitive
                 // and the punctuation is funky
                 // not... interesting enough.
@@ -526,14 +532,16 @@ var storyGen = function(settings) {
                        + (coinflip() ? '' : ' "' + capitalize(pick(bank.interjections)) + punct() + '"'));
             }
 
+            // apply "TONE" to converstaion -- ie, are they on good terms with each other
+            // this is extremely preliminary, and is currently either only "good" or "bad"
             // not applicable to solo "conversations"
             // so far.
-            if (t) {
-                for (var i = 0; i < c.length; i++) {
-                    c[i] = c[i].replace('{{GG}}', pick(bank.greetings[t]));
-                }
-            }
-            var tmpl = c.join('\n').replace(/{{P1N}}/mg, p1n).replace(/{{P2N}}/mg, p2n).replace(/{{SAY}}/mg, says).replace(/{{RPLY}}/mg, reply);
+            if (t === 'bad') {
+                if (coinflip()) { c.push(world.blankLine, '"Don\'t go bragging like that!" says {{P2N}}'); }
+                            }
+            var tmpl = c.join('\n').replace(/{{P1N}}/mg, p1n).replace(/{{P2N}}/mg, p2n)
+                    .replace(/{{SAY}}/mg, says).replace(/{{RPLY}}/mg, reply)
+                    .replace(/{{GG}}/mg, function() { return pick(bank.greetings[t]); });
 
             return tmpl;
         };
@@ -784,7 +792,7 @@ var storyGen = function(settings) {
             }
 
             // exceptions
-            f = f.replace(/wered/mg, 'were').replace(/weres/mg, 'are').replace(/strided/mg, 'strode');
+            f = f.replace(/wered/mg, 'were').replace(/weres/mg, 'are').replace(/strided/mg, 'strode').replace(/wased/mg, 'was');
 
             f = capitalize(f);
 

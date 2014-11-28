@@ -22,15 +22,15 @@ var defaultbank = function(words) {
     // oh. an un-named place is first "a", then "the" ???
     // every place should have a name, though.
     // so, let's codify this.....
-    var location = ['Hobbiton', 'New Haven', 'East Lansing', 'Madchester', 'Oblivion', 'a valley', 'a small village', 'a lonely intersection'];
+    var location = ['Hobbiton', 'New Haven', 'East Lansing', 'Madchester', 'Oblivion', 'a valley', 'a small village', 'a lonely intersection', 'Volochok', 'Orekhovo-Zuyevo', 'Krasnogorsk', 'Leninsk-Kuznetsky', 'Vyshny Volochyok', 'Belorechensk', 'Dubna', 'Zheleznodorozhny' ];
 
     // this should more be country. 'Nation' is short-hand.
-    var nation = ['the Monastic State of the Teutonic Knights', 'Prussia', 'East Germany', 'Middle Earth', 'Orange County', 'Northern California', 'Talexico'];
+    var nation = ['the Monastic State of the Teutonic Knights', 'Prussia', 'East Germany', 'Middle Earth', 'Orange County', 'Northern California', 'Talexico', 'Russia', 'the Ukraine', 'Lithuania', 'Finland' ,'Siberia', 'Karachay-Cherkess Republic', 'Stavropol Krai', 'Chelyabinsk Oblast', 'Yamalo-Nenets Autonomous Okrug', 'Nizhny Novgorod Oblast' ];
 
     // not sure how to handle punctuation
     // put it in here?
     var greetings = {
-        good: ['Hello,', 'Hello there,', 'Hail and well met,', 'Greetings,', 'Ahoy!', 'Salutations!', 'Welcome,', 'Well, look who this is, it\s', 'Nice to meet you'],
+        good: ['Hello,', 'Hello there,', 'Hail and well met,', 'Greetings,', 'Ahoy!', 'Salutations!', 'Welcome,', 'Well, look who this is, it\'s', 'Nice to meet you', 'Gods be with you', 'God be with you'],
         bad: ['Oh.', 'Oh, it\'s you,', 'Oh, hello,', 'Oh, dear.', 'Ugh. It\s', 'Well, look who this is:', 'I\'ll see you in Hell,']
     };
 
