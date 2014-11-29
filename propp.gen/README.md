@@ -30,28 +30,31 @@ A perhaps better model is the [Proto-Proppian Generator](http://www.stonedragonp
 These are NOT in order; but are lightly clustered....
 
 - [x] get node.js headless mode working ("novel builder")
-- [ ] title-maker templates
+- [x] title-maker templates
   - [ ] store list of villains encountered to possibly aid with title
 - [x] novel-builder loop-through with word-count check
 - [x] novel-builder writes to a file
 - [ ] rules + randomizer - for embedded tales, headless running, &c
-- [ ] journeys
+- [ ] journeys [partial]
 - [ ] battle
 - [x] pass in word.js dependency to wordbank.test.js
-- [ ] more descriptors for characters - old|young|child, man|woman|person (villains and advisor/helpers can also be "things" like bear, dragon, cloud of flies)
+- [ ] more descriptors for characters - old|young|child, man|woman|person (villains and advisor/helpers can also be "things" like bear, dragon, cloud of flies) [villains as things partially implemented]
 - [ ] fix locations - including visited locations
-- [ ] villain can be a creature (bear, dragon, whatever, dark cloud, whatever)
+- [ ] villain can be a creature (bear, dragon, whatever, dark cloud, whatever) [partially implemented as description/title. nothing else impacted]
 - [ ] family - so hero can be child/sibling, parent, grand-parent, etc.
 - [ ] false hero
 - [ ] hero/villain can have aspect changed on startup (eg, good/bad swap)
-- [ ] move/duplicate? (that is, refactor) punishments to apply as well in victory sequence
+- [x] move/duplicate? (that is, refactor) punishments to apply as well in victory sequence
 - [ ] magicalitem template enhancement (currently static placeholder)
 - [ ] conversation enhancements
-- [ ] terse mode (simple intro, etc. for embedded tales, or otherwise)
+- [ ] terse mode (simple intro, etc. for embedded tales, or otherwise) [partial implementation for hero intro]
 - [ ] theme selector, so that sub-tales can pick a different set of templates and wordbanks
 - [ ] extra possibility: if hero dies, another family-member becomes the hero
 - [ ] novel-builder framing device? (Count N visiting a mansion and reading volumes in the library)
 - [ ] generate() stores all templates so that we could re-process them, like to switch tense, or something
+- [ ] web page "publicly" accessible
+ - [ ] web page has informational links active (and refs previous progenitors)
+
 
 ## Directions, and potential side-resources
 * [NaNoGenMo 2014 resource "issue"](https://github.com/dariusk/NaNoGenMo-2014/issues/1)
