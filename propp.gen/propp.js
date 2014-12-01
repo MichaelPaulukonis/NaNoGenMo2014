@@ -428,6 +428,7 @@ var storyGen = function(settings) {
 
         // hrm. we are now storing people as string-ids. OUCH
         var getName = function(thing, property) {
+            if (property && typeof property === 'function' ) { property = property(); }
             if (property && thing[property]) { return getCharacter(thing)[property]; }
             // if thing starts with "id_" then it is a character reference
             // or another sort of reference. hrm.
@@ -761,7 +762,7 @@ var storyGen = function(settings) {
                 var tensed = [];
 
                 for (var i = 0; i < sentences.length; i++) {
-                    console.log(sentences[i]);
+                    // console.log(sentences[i]);
                     if (this.settings.verbtense == 'past') {
                         tensed.push(capitalize(nlp.pos(sentences[i]).sentences[0].to_past().text()));
                     } else {
@@ -792,7 +793,7 @@ var storyGen = function(settings) {
             }
 
             // exceptions
-            f = f.replace(/wered/mg, 'were').replace(/weres/mg, 'are').replace(/strided/mg, 'strode').replace(/wased/mg, 'was');
+            f = f.replace(/wered/mg, 'were').replace(/weres/mg, 'are').replace(/strided/mg, 'strode').replace(/wased/mgi, 'WAS');
 
             f = capitalize(f);
 
@@ -865,6 +866,7 @@ var storyGen = function(settings) {
                     subFunc = f[1];
                     f = f[0];
                 }
+                // console.log(settings.funcs[i]);
                 var s2 = this.sentence(story[f], this.universe, subFunc);
                 if (s2) { tale.push(s2); }
 

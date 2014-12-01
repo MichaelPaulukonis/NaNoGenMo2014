@@ -30,7 +30,7 @@ var nTemplates = function(story, world, storyGen) {
         '16b' : 'threat of forced matrimony between relatives',
         '17'  : 'threat of cannibalism',
         '17b' : 'threat of cannibalism among relatives',
-        '18'  : 'tormenting at night (visitaion, vampirism)',
+        '18'  : 'tormenting at night (visitation, vampirism)',
         '19'  : 'declaration of war'
     };
 
@@ -65,6 +65,16 @@ var nTemplates = function(story, world, storyGen) {
 
         if (god.hero.magicalitemused) {
             templates.push('{{HN}} and the ' + god.hero.possessions[god.hero.possessions.length-1]);
+        }
+        if (god.cache.villains) {
+            var defeated = [ 'defeat', 'extirpation', 'removal', 'elimination', 'trouncing', 'vanquishing', 'scouring', 'overcoming', 'dismissal'];
+            var vills = '{{HN}} and the {{DFT}} of ' + god.list(god.cache.villains, function() { return (god.coinflip() ? 'name' : 'nickname');});
+            vills = vills.replace(/{{DFT}}/mg, god.pick(defeated));
+            // console.log(vills);
+            templates.push(vills, vills, vills);
+            // return vills.replace(/{{TL}}/mg, tale).replace(/{{PRON}}/mg, pron).replace(/{{POSS}}/mg, poss)
+            //     .replace(/{{SN}}/mg, sn).replace(/{{VF}}/mg, villForm)
+            //     .replace(/{{DFT}}/mg, god.pick(defeated));
         }
 
         var t = god.pick(templates);
@@ -202,7 +212,7 @@ var nTemplates = function(story, world, storyGen) {
 
         text.push(god.pick(templates));
 
-        return text.join('\n\n').replace(/{{PRN}}/mg, prn).replace(/{{DEST}}/mg, destination);
+        return text.join('\n\n').replace(/{{PRN}}/mg, prn).replace(/{{DEST}}/mg, destination).replace(/{{POSS}}/mg, poss);
 
     };
 
@@ -296,9 +306,6 @@ var nTemplates = function(story, world, storyGen) {
             villaingender: 'male',
             peoplegender: 'male',
             functions: storyGen.resetProppFunctions(),
-            // funcs: ['func0', ['func8', 'casting into body of water']],
-            // funcs: [['func8', 'casting into body of water'], 'func18'],
-            // bossmode: true,
             funcs: presets.functions,
             bossmode: presets.bossmode,
             verbtense: 'present',
@@ -316,11 +323,6 @@ var nTemplates = function(story, world, storyGen) {
 
         setts.hero.introduced = false;
         setts.villain.introduced = false;
-
-        // OH FOR CRYING IN THE BEER
-        // setts.functions['func0'].active = true;
-        // setts.functions['func8'].active = true;
-        // setts.functions['func30'].active = true;
 
         // TODO: need to re-use, or get access to everything
         // UGH UGH UGH
@@ -830,6 +832,7 @@ var nTemplates = function(story, world, storyGen) {
         // subFunc =  'theft of daylight';
         // subFunc =  'threat of cannibalism';
         // subFunc = 'kidnapping of person';
+        // subFunc = 'tormenting at night (visitation, vampirism)';
 
         // console.log(subFunc);
 
@@ -1074,8 +1077,10 @@ var nTemplates = function(story, world, storyGen) {
             template.push('Thanks to the ravages {{VN}}\'s predations had left on the land, there {{was}} the threat of cannibalism among the relatives of {{HN}}\'s family. <%= list(hero.family) %> eyed each other hungrily.');
             break;
 
-        case 'tormenting at night (visitaion, vampirism)':
-            template.push('{{HN}} {{was}} tormented at night by <%= getCharacter(pick(villain.family)).name %>.');
+        case 'tormenting at night (visitation, vampirism)':
+            // console.log(god.dump(god.villain.family));
+            var tormenter = (god.villain.family.length > 0 ? god.pick(god.villain.family) : god.villain);
+            template.push('{{HN}} {{was}} tormented at night by ' + tormenter.name  + '.');
             break;
 
         case 'declaration of war':
@@ -1250,6 +1255,9 @@ var nTemplates = function(story, world, storyGen) {
         // optionally, LEVELS?
         // or maybe not...... punishments in these stories are often beyond the pale.....
         t.push(blankLine, story.punish(god, god.villain));
+
+        god.cache.villains = god.cache.villains || [];
+        god.cache.villains.push(god.villain);
 
         return t.join('\n').replace(/{{MI}}/mg, mi).replace(/{{HN}}/mg, hn);
 
