@@ -238,6 +238,7 @@ var storyGen = function(settings) {
                      id: uid.toString(),
                      getCharacter: getCharacter,
                      object: pronounobject(gndr),
+                     pronoun: pronoun(gndr),
                      possessive: possessive(gndr)
                    };
         };
@@ -387,6 +388,7 @@ var storyGen = function(settings) {
         // and only creates minions if a number is passed in
         // and there is a fantastic form
         var createVillain = function(g, aspct, item, minionCount) {
+            if (!minionCount) minionCount = 1;
             var c = createCharacter(g, aspct);
             c.family = [];
             c.acquaintances = []; // leave blank
@@ -651,6 +653,10 @@ var storyGen = function(settings) {
                 // cache.victim = settings.victim || getCharacter(pick(cache.hero.family.concat(cache.hero)));
                 cache.ascension = pick(bank.ascension);
                 cache.marries = pick(bank.marries);
+                // if there's nobody in the family, there can't be a falsehero!
+                // also, does not have to be viallain family
+                // this is just "current implementation"
+                // could be hero's family, villain, or the villain
                 cache.falsehero = settings.falsehero || pick(cache.villain.family);
 
             } catch(ex) {
@@ -1028,7 +1034,7 @@ storyGen.presets = {
         bossmode: false
     },
     barebones: {
-        functions:['func0', 'func8', 'func14', 'func16', 'func18', 'func30', 'func31'],
+        functions:['func0', 'func8', 'func14', 'func16', 'func18', 'func31'],
         bossmode: true
     },
     mostlyVillainy: {
