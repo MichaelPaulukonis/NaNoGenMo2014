@@ -1021,11 +1021,11 @@ storyGen.presets = {
         functions:['func0', 'func6', 'func7', 'func8', 'func8a', 'func16', 'func18', 'func20'],
         bossmode: false
     },
-    swhite: {
+    snow_white: {
         functions:['func0', 'func1', 'func5', 'func6', 'func7', 'func11', 'func21', 'func30', 'func31'],
         bossmode: false
     },
-    lrrh: {
+    little_red_riding_hood: {
         functions:['func4', 'func5', 'func6', 'func7', 'func8', 'func9', 'func10', 'func16', 'func18'],
         bossmode: false
     },

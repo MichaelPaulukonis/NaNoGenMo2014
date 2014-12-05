@@ -24,7 +24,20 @@ var preset = function(presets) {
     var propp = storyGen.resetProppFunctions(false); // ARGH these are all now true!
 
     for (var i = 0; i < presets.functions.length; i++) {
-        propp[presets.functions[i]].active = true;
+
+        var func = presets.functions[i];
+        var subFunc;
+        if (typeof func === 'object') {
+            subFunc = func[1];
+            func = func[0];
+        }
+        // sadly, we are discarding the subfuntion in the gui
+        // so altough we can fine-grain a preset, we can't use it in the gui...
+        // we can't just say "use the preset if selected"
+        // becasue we wan't to play with the presets, adding and subtracting in the gui
+        // SO: need to store sub-funcs in the gui
+        // and why not make them selectable, then....
+        propp[func].active = true;
     }
 
     return propp;
@@ -148,6 +161,14 @@ $(document).ready(function() {
     var ps = storyGen.presets;
     $.each(ps, function(key) {
         inp.append($('<option />').val(key).text(key));
+    });
+
+    inp.change(function() {
+        var preset = $(this).val();
+        if (preset !== 'manual') {
+            pushPreset(preset);
+        }
+        // alert('selected!');
     });
 
 });
