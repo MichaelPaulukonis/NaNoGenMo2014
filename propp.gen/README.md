@@ -36,7 +36,7 @@ These are NOT in order; but are lightly clustered....
 - [x] novel-builder writes to a file
 - [ ] rules + randomizer - for embedded tales, headless running, &c
 - [ ] journeys [partial]
-- [ ] battle
+- [ ] battle [partial]
 - [x] pass in word.js dependency to wordbank.test.js
 - [ ] more descriptors for characters - old|young|child, man|woman|person (villains and advisor/helpers can also be "things" like bear, dragon, cloud of flies) [villains as things partially implemented]
 - [ ] fix locations - including visited locations
@@ -169,21 +169,21 @@ http://tvtropes.org/pmwiki/pmwiki.php/Main/ProppsFunctionsOfFolktales
 
 ## prior art for story generators
 *[ProjectPropp](http://projectpropp.yolasite.com/text-generator.php) - the js source is very procedural, but works.
-** [some notes](http://sandileonard.com/projects.php) on the above
+ * [some notes](http://sandileonard.com/projects.php) on the above
 
 *[FairyTale Plot Generator](http://www.springhole.net/writing_roleplaying_randomators/fairytaleplot.htm) - non-Propp. simple patchwork JS. Short output, nice variance.
-** [more (plot) generators](http://www.springhole.net/writing_roleplaying_randomators/plotgens.htm) from the same site
+ * [more (plot) generators](http://www.springhole.net/writing_roleplaying_randomators/plotgens.htm) from the same site
 
 * [Fairy Tale Generator](http://www.jacobpedia.com/nhhl/FairyTaleGenerator/index.htm) - work done behind the scenes in PHP, souce not available (?). Interesting output. Good length. Users can contribute some items, which has resulted in a certain amount of word-salad. Not an unpleasant effect. Structure seems to be intro, quest assignments [1..n], quests, conclusion.
 
 * [Funny Fairy Tale Generator](http://www.maiaappleby.com/funny-fairy-tale-generator/) - madlibs-style fill-in-blanks for an otherwise static output. Not a bad effect though, and the source indicates that the ur-text is roughly the Wizard of Oz.
 
 * [Story Generator](https://github.com/aherriot/story-generator)
-** some interesting infrastructure and good-looking web interface, but majority of content is lacking.
+ * some interesting infrastructure and good-looking web interface, but majority of content is lacking.
 
 * [Plot Narrator](https://github.com/kddekadenz/PlotNarrator/blob/master/unit1.pas) - it's in Pascal.
-** [notes](http://opengameart.org/content/plotnarrator)
-** [JavaScript port](https://github.com/anihex/SimpleStoryCreator) - no online version. Not as complicated as the proppian-gen I'm working with, but has some interesting ideas. With a larger word-bank might have enough variance?
+ * [notes](http://opengameart.org/content/plotnarrator)
+ * [JavaScript port](https://github.com/anihex/SimpleStoryCreator) - no online version. Not as complicated as the proppian-gen I'm working with, but has some interesting ideas. With a larger word-bank might have enough variance?
 
 
 ## Further Research
@@ -197,17 +197,24 @@ Of interest is [Meta-symbolic Simulation System (MESSY) user manual](http://page
 
 I have some notes at [WordSalad.Generators](http://www.xradiograph.com/WordSalad.Generators), but they are mostly links (academic below).
 
-http://www.newscientist.com/article/dn26377-told-by-a-robot-fiction-by-storytelling-computers.html?full=true#.VE-J98mRGkz
-[Story Generator Algorithms](http://www.lhn.uni-hamburg.de/article/story-generator-algorithms)
-http://aaaipress.org/ojs/indx.php/aimagazine/article/viewFile/2250/2101 - includes section "a brief history of story-telling systems"
-http://codercuckoo.wordpresscom/2013/07/26/final-project-story-generation/
-[Linear Logic Programming for Narrative Generation (pdf)](https://www.cs.cmu.edu/~cmartens/lpnmr13.pdf)
-http://dl.acm.org/citation.cfm?id=1087175
-https://research.cc.gatech.eu/eilab/mark-riedl
-https://research.cc.gatech.eu/inc/fabulist
-[Mark O. Riedl. Story Planning: Creativity Through Exploration, Retrieval, and Analogical Transformation. (pdf)](http://www.cc.gatech.edu/~riedl/pubs/mm.pdf)
-https://research.cc.gatech.edu/inc/category/project-types/fabulist
-[Storytelling with Adjustable Narrator Styles and Sentiments (pdf)](http://www.cc.gatech.edu/~riedl/pubs/icids14.pdf)
+* [Poetry Generators](http://www.narrabase.net/poetry_generators.html)
+
+* http://www.newscientist.com/article/dn26377-told-by-a-robot-fiction-by-storytelling-computers.html?full=true#.VE-J98mRGkz
+* [Story Generator Algorithms](http://www.lhn.uni-hamburg.de/article/story-generator-algorithms)
+* [Computation Approaches to Storytelling and Creativity](http://aaaipress.org/ojs/indx.php/aimagazine/article/viewFile/2250/2101) - includes section "a brief history of story-telling systems"
+* http://codercuckoo.wordpresscom/2013/07/26/final-project-story-generation/
+* [Linear Logic Programming for Narrative Generation (pdf)](https://www.cs.cmu.edu/~cmartens/lpnmr13.pdf)
+* http://dl.acm.org/citation.cfm?id=1087175
+* https://research.cc.gatech.eu/eilab/mark-riedl
+* https://research.cc.gatech.eu/inc/fabulist
+* [Mark O. Riedl. Story Planning: Creativity Through Exploration, Retrieval, and Analogical Transformation. (pdf)](http://www.cc.gatech.edu/~riedl/pubs/mm.pdf)
+ * https://research.cc.gatech.edu/inc/category/project-types/fabulist
+* [Storytelling with Adjustable Narrator Styles and Sentiments (pdf)](http://www.cc.gatech.edu/~riedl/pubs/icids14.pdf)
+* [Story Ploit Generation based on CBR](http://classes.soe.ucsc.edu/cmps148/Winter10/readings/StoryGenerationCBR.pdf)
+* [Creative Storytelling Based on Exploration and Transformation of Constraint Rules](http://nil.fdi.ucm.es/sites/default/files/ijwcc08cast.pdf)
+* [Computational Approaches to Creative Language](http://www.coli.uni-saarland.de/courses/cacl10/reading.html)
+* [Generating Narrative Variation in Interactive Fiction](http://nickm.com/if/Generating_Narrative_Variation_in_Interactive_Fiction.pdf)
+* [Story Generators: Models and Approaches for the Generation of Literary Artefacts](http://web.fdi.ucm.es/profesor/fpeinado/publications/2005-loenneker-story.pdf)
 
 
 ## Functions
