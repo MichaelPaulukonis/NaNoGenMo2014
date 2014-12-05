@@ -138,3 +138,16 @@ $('#selectall').click(function() {
         $(element).prop('checked', true);
     });
 });
+
+// TODO: use the preset when generating
+// no, when selected update the gui....
+// and then get rid of the other links
+$(document).ready(function() {
+
+    var inp = $('#presets');
+    var ps = storyGen.presets;
+    $.each(ps, function(key) {
+        inp.append($('<option />').val(key).text(key));
+    });
+
+});

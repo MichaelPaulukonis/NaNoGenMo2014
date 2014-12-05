@@ -246,6 +246,10 @@ var nTemplates = function(story, world, storyGen) {
         // limb, or because he produces an effect akin to freezing or
         // petrifaction.
 
+        // At midnight the demon-enchantress arrives, dancing and "blowing on a
+        // flute made of a dead man's bone." Fixing her eyes on one of the
+        // pilgrims, she mutters a spell, accompanied by a wild dance.
+
 
         // from springhole.arabian.nights.gen.htm
         // "With nothing else to do"
@@ -352,22 +356,7 @@ var nTemplates = function(story, world, storyGen) {
         var sg = new storyGen(setts);
         var tale = sg.generate(setts, god.theme);
 
-        // TODO: indent every line in the inner-story.
-        // SOMEHOW
-        // NOT GOOD ENOUGH - doesn't respect word-boundaries.
-        // need something more complicated
-        // respect word-boundaries (incl. punc)
-        // David lives with Nathan the Love-lorn, Sullen Ethan, Clean James, Joyous Tyl
-        // er, Interesting Christopher, Brandon the Steady, Prudent Samuel, Dylan the D
-        // elightful, and Dainty Benjamin.
-
-        // initial space should be deleted:
-        // Whether you believe it or not, this is what happened, for what I tell you is
-        //  true.
-        // tale = tale.replace(/(.{1,76})/mg, '$1\n');
-        // tale = tale.replace(/^/mg, '    ');
-        // text.push(world.blankLine, tale);
-
+        tale.universe = sg.universe;
         return tale;
 
     };
@@ -454,11 +443,11 @@ var nTemplates = function(story, world, storyGen) {
                 + 'voices began to cry: "Strike again! strike again! or {{VPRO}} will come to life!" '
                 + '"No," replied {{HN}}, "a hero\'s hand does not strike twice, but '
                 + 'finishes its work with a single blow."',
-            '{{HN}} greeted {{PN}}, and caught hold of {{POSS}} right little finger. '
-                + '{{PN}} tried to shake {{HPN}} off, flying first '
-                + 'about the house and then out of it, but all in vain. At last {{PN}} '
-                + 'after soaring on high, struck the ground, and fell to pieces, becoming '
-                + 'a fine yellow sand.',
+            // '{{HN}} greeted {{PN}}, and caught hold of {{POSS}} right little finger. '
+            //     + '{{PN}} tried to shake {{HPN}} off, flying first '
+            //     + 'about the house and then out of it, but all in vain. At last {{PN}} '
+            //     + 'after soaring on high, struck the ground, and fell to pieces, becoming '
+            //     + 'a fine yellow sand.',
             '{{AS}}{{HN}} cut the feet off from {{PN}} and placed {{PROO}} on a stump by the roadside.'
         ];
 
@@ -830,14 +819,6 @@ var nTemplates = function(story, world, storyGen) {
 
         if (!god.hero.introduced) { template.push(story.introduceHero(god, tersely)); }
 
-        // TODO: this is not always the case for villainy.
-        // sometimes... things just happen.
-        // but for coding purposes, FOR NOW, we shall assume
-        // bad things happen BECAUSE villain
-        // if (!god.villain.introduced) {
-        //     template.push(story.introduceVillain(god));
-        // }
-
         // subFunc = 'causes sudden disappearance'; // for testing
         // subFunc = 'commits murder';
         // subFunc = 'casting into body of water';
@@ -884,10 +865,25 @@ var nTemplates = function(story, world, storyGen) {
                 'The moon came across the sun, turning the landscape a dark, curdled, black-red.',
                 // http://hbar.phys.msu.su/gorm/atext/ginzele.htm
                 // TODO: clean this up a bit, still.....
-                'There {{is}} a shroud of darkness drawn over the everyone in the land from head to foot, their cheeks {{were}} wet with tears; the air {{was}} alive with wailing voices; the walls and roof-beams drip blood; the gate of the cloisters and the court beyond them are full of ghosts trooping down into the night of hell; the sun is blotted out of heaven, and a blighting gloom is over allthe land.',
-                'Sudden strange and unaccountable disorders and alterations took place in the air; the face of the sun was darkened, and the day turned into night, and that, too, no quiet, peaceable night, but with terrible thunderings, and boisterous winds from all quarters.',
+                'There {{is}} a shroud of darkness drawn over the '
+                    + 'everyone in the land from head to foot, their cheeks '
+                    + '{{were}} wet with tears; the air {{was}} alive with '
+                    + 'wailing voices; the walls and roof-beams drip blood; '
+                    + 'the gate of the cloisters and the court beyond them '
+                    + 'are full of ghosts trooping down into the night of '
+                    + 'hell; the sun is blotted out of heaven, and a '
+                    + 'blighting gloom is over all the land. {{VN}} has made <%= villain.object %>self known.',
+                'Sudden strange and unaccountable disorders and '
+                    + 'alterations took place in the air; the face of the sun '
+                    + 'was darkened, and the day turned into night, and that, '
+                    + 'too, no quiet, peaceable night, but with terrible '
+                    + 'thunderings, and boisterous winds from all quarters. {{VN}} has made <%= villain.object %>self known.',
                 // TODO: victim disappears...
-                'A violent thunderstorm suddenly arose and enveloped {{VN}} in so dense a cloud that he was quite invisible to the assembly. From that hour Romulus was no longer seen on earth. When the fears of the Roman youth were allayed by the return of bright, calm sunshine after such fearful weather, they saw that the royal seat was vacant.',
+                'A violent thunderstorm suddenly arose and enveloped {{VN}} in so dense '
+                    + 'a cloud that he was quite invisible to the assembly. From that hour '
+                    + 'Romulus was no longer seen on earth. When the fears of the Roman youth '
+                    + 'were allayed by the return of bright, calm sunshine after such fearful '
+                    + 'weather, they saw that the royal seat was vacant.',
                 '{{VN}} has made night out of noonday, hiding the '
                     + 'bright sunlight, and fear has come upon mankind. '
                     + 'After this, men can believe anything, expect anything. '
@@ -912,10 +908,28 @@ var nTemplates = function(story, world, storyGen) {
                     + 'scoffed, and pointed out that a two-headed calf had been born in the neighboring village, the recent actions of {{VN}}',
                 'A cloud, however, overspread the sun and hid it from sight until the inhabitants abandoned their city; and thus it was taken by {{VN}}',
                 'The sun was suddenly darkened in mid sky.',
-                'The moon shuts off the beams of the sun as it passes across it, and darkens so much of the earth as the breadth of the blue-eyed moon amounts to.',
-                'The sun was darkened and there was darkness over the world, greater than any that had been known before. Night prevailed at the sixth hour of the day so that even the stars appeared',
-                'There occurred too a thick succession of portents, which meant nothing. A woman gave birth to a snake, and another was killed by a thunderbolt in her husband\'s embrace. Then the sun was suddenly darkened and the fourteen districts of the city were struck by lightning. All this happened quite without any providential design; so much so, that for many subsequent years {{VN}} prolonged <% possessive(villain) %> reign and <% possessive(villain) %> crimes.',
-                'While {{VN}} was behaving in this way, evil omens occurred. A comet was seen, and the moon, contrary to precedent, appeared to suffer two eclipses, being obscured on the fourth and on the seventh day. Also people saw two suns at once, one in the west weak and pale, and one in the east brilliant and powerful.'
+                'The moon shuts off the beams of the sun as it passes '
+                    + 'across it, and darkens so much of the earth as the '
+                    + 'breadth of the blue-eyed moon amounts to.',
+                'The sun was darkened and there was darkness over the '
+                    + 'world, greater than any that had been known before. '
+                    + 'Night prevailed at the sixth hour of the day so that '
+                    + 'even the stars appeared',
+                'There occurred too a thick succession of portents, '
+                    + 'which meant nothing. A woman gave birth to a snake, '
+                    + 'and another was killed by a thunderbolt in her '
+                    + 'husband\'s embrace. Then the sun was suddenly darkened '
+                    + 'and the fourteen districts of the city were struck by '
+                    + 'lightning. All this happened quite without any '
+                    + 'providential design; so much so, that for many '
+                    + 'subsequent years {{VN}} prolonged '
+                    +'<%= villain.possessive %> reign and <%= villain.possessive %> crimes.',
+                'While {{VN}} was behaving in this way, evil omens '
+                    + 'occurred. A comet was seen, and the moon, contrary to '
+                    + 'precedent, appeared to suffer two eclipses, being '
+                    + 'obscured on the fourth and on the seventh day. Also '
+                    + 'people saw two suns at once, one in the west weak and '
+                    + 'pale, and one in the east brilliant and powerful.'
             ];
             template.push(god.pick(t));
             break;
@@ -967,6 +981,14 @@ var nTemplates = function(story, world, storyGen) {
             // He collects the children, but as they are "all ever so dirty" [Pg 24] he puts them into boiling water by way of cleansing them, and so washes them to death.[16]
 
             // She spoke, and splashed the holy water over him; in a [Pg 31] moment he turned into mere dust and ashes, which blew to the winds. Afterwards she sprinkled her husband and her boy with the water of life: straightway they revived. And from that time forward they knew neither sorrow nor separation, but they all lived together long and happily.
+
+            // In another story a king is out hunting and becomes thirsty. Seeing
+            // a spring near at hand, he bends down and is just going to lap up
+            // its water, when the Tsar-Medved, a King-Bear, seizes him by the
+            // beard. The king is unable to free himself from his grasp, and is
+            // obliged to promise as his ransom "that which he knows not of at
+            // home," which turns out to be a couple of children - a boy and a
+            // girl - who have been born during his absence.
 
             var water = god.select("a small stream", "a local lake", "the murky pond", "the well");
             god.hero.location = water;
@@ -1240,8 +1262,7 @@ var nTemplates = function(story, world, storyGen) {
         t.push('"Here," said {{AN}}, "you\'ll need this," and gave {{HN}} the {{IT}}.');
         t.push('"What\'s this?" asked {{HN}}.');
         // TODO: magical items will have propeties that can be enumerated, here....
-        t.push('"What does it look like?" replied {{AN}}. "It\'s a special, magical {{IT}}."');
-        // TODO: you can use this in your struggle with {{VN}}
+        t.push('"What does it look like?" replied {{AN}}. "It\'s a special, magical {{IT}}. Perhaps you can use it in your struggle with {{VN}}."');
         if (god.coinflip()) {
             t.push('"Thanks!" said a <%= select("grateful", "thankful") %> {{HN}}'
                    + (god.coinflip() ? god.select(' gratefully', ' thankfully') : '') + '.'); }
@@ -1261,7 +1282,16 @@ var nTemplates = function(story, world, storyGen) {
             t.push(tale.tale);
 
             t.push(world.blankLinke, '"And now," {{concluded}} {{AN}}, "my tale is done."');
+
+            if (tale.universe.hero.health === world.healthLevel.dead) {
+                t.push('{{HN}} {{was}} a bit taken aback by the tale.');
+            }
+
+
         }
+
+        // TODO: if tale.universe.hero.health === world.healthLevel.dead
+        // hero will respond uneasily
 
         var para = t.join('\n\n').replace(/{{HN}}/g, hn).replace(/{{AN}}/g, an).replace(/{{IT}}/g, item).replace(/{{MET}}/g, met);
 
@@ -1281,9 +1311,84 @@ var nTemplates = function(story, world, storyGen) {
         var t = [];
 
         // if not known to each other....
-        t.push(god.converse(god.villain, god.hero));
+        t.push(god.converse(god.villain, god.hero), blankLine);
 
-        t.push(blankLine, '<%= hero.name %> and <%= villain.name %> {{engage}} in battle.');
+        // In the evening the priest's son went to the church, and did
+        // everything just as the old woman had told him. Twelve o'clock
+        // struck, the coffin lid fell to the ground, the Princess jumped up
+        // and began tearing from side to side, and threatening the youth.
+        // Then she conjured up horrors, this time worse than before. It
+        // seemed to him as if a fire had broken out in the church; all the
+        // walls were wrapped in flames! But he held his ground and went on
+        // reading, never once looking behind him. Just before daybreak the
+        // Princess rushed to her coffin - then the fire seemed to go out
+        // immediately, and all the deviltry vanished!
+
+        // Presently the midnight hour sounded. The earth began to shake, and
+        // the Norka came rushing up, and burst right through the fence into
+        // the park, so huge was it. The Prince pulled himself together, leapt
+        // to his feet, crossed himself, and went straight at the beast. It
+        // fled back, and the Prince ran after it. But he soon saw that he
+        // couldn't catch it on foot, so he hastened to the stable, laid his
+        // hands on the best horse there, and set off in [Pg 87] pursuit.
+        // Presently he came up with the beast, and they began a fight. They
+        // fought and fought; the Prince gave the beast three wounds. At last
+        // they were both utterly exhausted, so they lay down to take a short
+        // rest. But the moment the Prince closed his eyes, up jumped the
+        // Beast and took to flight. The Prince's horse awoke him; up he
+        // jumped in a moment, and set off again in pursuit, caught up the
+        // Beast, and again began fighting with it. Again the Prince gave the
+        // Beast three wounds, and then he and the Beast lay down again to
+        // rest. Thereupon away fled the Beast as before. The Prince caught it
+        // up, and again gave it three wounds. But all of a sudden, just as
+        // the Prince began chasing it for the fourth time, the Beast fled to
+        // a great white stone, tilted it up, and escaped into the other
+        // world,[86] crying out to the Prince: "Then only will you overcome
+        // me, when you enter here."
+
+        // And they set to work fighting; the dust flew like anything. They'd
+        // have gone on fighting ever so much longer, only the cocks began to
+        // crow.
+
+        // "Why this. Provide yourself with a bridle, and take a thick aspen
+        // cudgel, and sit quietly in the izba - don't stir a step anywhere. During
+        // the night she will come running in, and if she manages to say before
+        // you can 'Stand still, my steed!' you will straightway turn into a
+        // horse. Then she will jump upon your back, and will make you gallop
+        // about until she has ridden you to death. But if you manage to say
+        // before she speaks, 'Tprru! stand still, jade!' she will be turned into
+        // a mare. Then you must bridle her and jump on her back. She will run
+        // away with you over hill and dale, but do you hold your own; hit her
+        // over the head with the aspen cudgel, and go on hitting her until you
+        // beat her to death."
+
+        // The Soldier hadn't expected such a job as this, but there was no help
+        // for it. So he followed his grandfather's advice, [Pg 281] provided
+        // himself with a bridle and an aspen cudgel, took his seat in a corner,
+        // and waited to see what would happen. At the midnight hour the passage
+        // door creaked and the sound of steps was heard; the witch was coming!
+        // The moment the door of the room opened, the Soldier immediately cried
+        // out -
+
+        // "Tprru! stand still, jade!"
+
+        // The witch turned into a mare, and he bridled her, led her into the
+        // yard, and jumped on her back. The mare carried him off over hills and
+        // dales and ravines, and did all she could to try and throw her rider.
+        // But no! the Soldier stuck on tight, and thumped her over the head like
+        // anything with the aspen cudgel, and went on treating her with a taste
+        // of the cudgel until he knocked her off her feet, and then pitched into
+        // her as she lay on the ground, gave her another half-dozen blows or so,
+        // and at last beat her to death.
+
+        // The Pest Maiden arrives, and thrusts her arm in at his window. The
+        // nobleman cuts it off, and so rids the village of its fatal visitor. In
+        // an Indian story,[363] a hero undertakes to watch beside the couch of a
+        // haunted princess. When all is still a Rakshasa appears on the
+        // threshold, opens the door, and thrusts into the room an arm - which the
+        // hero cuts off. The fiend disappears howling, and leaves his arm
+        // behind.
+
 
         // Surprisingly, especially for an H.P. Lovecraft story, "The
         // Dream Quest of Unknown Kadath" has this. The protagonist
@@ -1293,14 +1398,56 @@ var nTemplates = function(story, world, storyGen) {
         // defeat, making this probably the happiest ending to any
         // story in the Cthulu Mythos
 
-        var proppFunction16 = ["function 16: protagonist(s) and antagonist(s) join in direct combat = struggle (H)",
-                               "H1 - fight in an open battle",
-                               "H2 - contest, competition",
-                               "H3 - game of chance",
-                               "H4 - weighing with scales"];
+        // func14 (recepit of magical item) is a rule if 18 is active
+        var mi;
+        // if (!mi) {
+        //     mi = god.createMagicalitem();
+
+        //     god.hero.possessions.push(mi);
+        //     t.push('{{HN}} remembered the {{MI}} <%= pronoun(hero) %> had been given before.');
+
+        // }
+        // god.hero.magicalitemused = true;
 
 
-        return t.join('\n');
+        var templates = [
+            '{{HN}} greeted {{VN}}, and caught hold of <%= villain.possessive %> right little finger. '
+                + '{{VN}} tried to shake <%= hero.object %> off, flying first '
+                + 'about the house and then out of it, but all in vain. At last {{VN}} '
+                + 'after soaring on high, struck the ground, and fell to pieces, becoming '
+                + 'a fine yellow sand.',
+            '{{HN}} and {{VN}} {{engage}} in battle.',
+            '{{VN}} arrives and {{thrusted}} <%= villain.possessive %> arm in at the window. {{HN}} cut off the bony thing, '
+            + 'and {{VN}} {{disappeared}}, howling, leaving <%= villain.possessive %> arm behind.'
+
+        ];
+
+        if (god.hero.possessions && god.hero.possessions.length > 0) {
+            // TODO: only "remember" the mi if it will be used
+            // aaaaand, it should be used if it has been introduced
+            // BUT NOT IF NOT
+            mi = god.hero.possessions[god.hero.possessions.length-1];
+            templates.push(
+            '{{HN}} {{<%= select("deploy", "use", "manipulate") %>}} the {{MI}} to '
+                + '<%= select("defeat", "trounce", "vanquish", "annoy") %> {{VN}}.'
+            );
+        }
+
+        t.push(god.pick(templates));
+
+        god.hero.magicalitemused = true;
+        // hrm. item used s/b true ONLY IF THAT TEMPLATE IS PICKED. HRM.
+
+        var proppFunction16 = [
+            'function 16: protagonist(s) and antagonist(s) join in direct combat = struggle (H)',
+            'H1 - fight in an open battle',
+            'H2 - contest, competition',
+            'H3 - game of chance',
+            'H4 - weighing with scales'
+        ];
+
+
+        return t.join('\n').replace(/{{MI}}/mg, mi);
     };
 
     // Branding: hero is branded
@@ -1343,24 +1490,7 @@ var nTemplates = function(story, world, storyGen) {
 
         var t = [];
 
-        var hn = '<%= select(hero.name, hero.nickname) %>';
-        // func14 (recepit of magical item) is a rule if 18 is active
-        var mi = god.hero.possessions[god.hero.possessions.length-1];
-        if (!mi) {
-            mi = god.createMagicalitem();
 
-            god.hero.possessions.push(mi);
-            t.push('{{HN}} remembered the {{MI}} <%= pronoun(hero) %> had been given before.');
-
-        }
-        god.hero.magicalitemused = true;
-
-        var template = [
-            // 'Through deft use of the {{MI}}, <%= villain.name %> {{was}} defeated.',
-            '{{HN}} {{<%= select("deploy", "use", "manipulate") %>}} the {{MI}} to <%= select("defeat", "trounce", "vanquish", "annoy") %> <%= villain.name %>.'
-        ];
-
-        t.push(god.pick(template));
 
         // proof-of-concept YES, but doesn't use the magical item, above.
         // I guess that should be part of the punishment/defeat
@@ -1371,7 +1501,7 @@ var nTemplates = function(story, world, storyGen) {
         god.cache.villains = god.cache.villains || [];
         god.cache.villains.push(god.villain);
 
-        return t.join('\n').replace(/{{MI}}/mg, mi).replace(/{{HN}}/mg, hn);
+        return t.join('\n');
 
     };
 
@@ -1379,6 +1509,33 @@ var nTemplates = function(story, world, storyGen) {
     story['func19'].exec = function(god) {
 
         var t = [];
+
+        // TODO: whatever subfunc was used in villainy s/b stored, and "restored" to order, here
+        var func8 = {
+            '1'   : 'kidnapping of person',
+            '2'   : 'seizure of magical agent or helper',
+            '2b'  : 'forcible seizure of magical helper',
+            '3'   : 'pillaging or ruining of crops',
+            '4'   : 'theft of daylight',
+            '5'   : 'plundering in other forms',
+            '6'   : 'bodily injury, maiming, mutilation',
+            '7'   : 'causes sudden disappearance',
+            '7b'  : 'bride is forgotten',
+            '8'   : 'demand for delivery or enticement, abduction',
+            '9'   : 'expulsion',
+            '10'  : 'casting into body of water',
+            '11'  : 'casting of a spell, transformation',
+            '12'  : 'false substitution',
+            '13'  : 'issues order to kill [requires proof]',
+            '14'  : 'commits murder',
+            '15'  : 'imprisonment, detention',
+            '16'  : 'threat of forced matrimony',
+            '16b' : 'threat of forced matrimony between relatives',
+            '17'  : 'threat of cannibalism',
+            '17b' : 'threat of cannibalism among relatives',
+            '18'  : 'tormenting at night (visitation, vampirism)',
+            '19'  : 'declaration of war'
+        };
 
         if (!god.cache.lack) { story.createLack(god); }
         var lt = god.cache.lack.lack;
