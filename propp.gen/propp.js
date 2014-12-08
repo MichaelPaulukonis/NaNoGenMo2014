@@ -895,7 +895,7 @@ var storyGen = function(settings) {
 
             for (var i = 0; i < settings.funcs.length; i++) {
                 var f = settings.funcs[i];
-                var subFunc;
+                var subFunc = null;
                 if (typeof f === 'object') {
                     subFunc = f[1];
                     f = f[0];

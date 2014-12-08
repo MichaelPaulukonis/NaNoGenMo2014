@@ -1343,17 +1343,6 @@ var nTemplates = function(story, world, storyGen) {
         // if not known to each other....
         t.push(god.converse(god.villain, god.hero), blankLine);
 
-        // In the evening the priest's son went to the church, and did
-        // everything just as the old woman had told him. Twelve o'clock
-        // struck, the coffin lid fell to the ground, the Princess jumped up
-        // and began tearing from side to side, and threatening the youth.
-        // Then she conjured up horrors, this time worse than before. It
-        // seemed to him as if a fire had broken out in the church; all the
-        // walls were wrapped in flames! But he held his ground and went on
-        // reading, never once looking behind him. Just before daybreak the
-        // Princess rushed to her coffin - then the fire seemed to go out
-        // immediately, and all the deviltry vanished!
-
         // Presently the midnight hour sounded. The earth began to shake, and
         // the Norka came rushing up, and burst right through the fence into
         // the park, so huge was it. The Prince pulled himself together, leapt
@@ -1436,6 +1425,7 @@ var nTemplates = function(story, world, storyGen) {
         var vpron = god.villain.pronoun;
         var ho = god.hero.object;
         var hpron = god.hero.pronoun;
+        var hposs = god.hero.possessive;
 
         var templates = [
             // skip a further victory if body is destroyed
@@ -1449,7 +1439,16 @@ var nTemplates = function(story, world, storyGen) {
             + 'and {{VN}} {{disappeared}}, howling, leaving <%= villain.possessive %> arm behind.',
             'And they set to work fighting; the dust flew like anything. They\'d '
                 + 'have gone on fighting ever so much longer, only the cocks began to '
-                + 'crow.'
+                + 'crow.',
+            'In the evening {{HN}} went to the church. Twelve o\'clock '
+                + 'struck, the coffin lid fell to the ground, {{VN}} jumped up '
+                + 'and began tearing from side to side, and threatening {{HO}}. '
+                + 'Then {{VPRON}} conjured up horrors, this time worse than before. It '
+                + 'seemed to {{HO}} as if a fire had broken out in the church; all the '
+                + 'walls were wrapped in flames! But {{HPRON}} held {{HPOSS}} ground and went on '
+                + 'reading, never once looking behind {{VPRON}}. Just before daybreak '
+                + '{{VN}} rushed to {{VPOSS}} coffin - then the fire seemed to go out '
+                + 'immediately, and all the deviltry vanished!'
 
         ];
 
@@ -1462,7 +1461,7 @@ var nTemplates = function(story, world, storyGen) {
         if (villForm) {
             templates = [];
             templates.push(
-                // TODO: this is pretty static.
+                // TODO: these are pretty static.
                 '{{VN}} turned into a {{VF}}, and {{HN}} bridled {{VO}}, led {{VO}} into the '
                     + 'yard, and jumped on {{VPOSS}} back. The {{VF}} carried {{HO}} off over hills and '
                     + 'dales and ravines, and did all {{VPRON}} could to try and throw {{VPOSS}} rider. '
@@ -1470,7 +1469,26 @@ var nTemplates = function(story, world, storyGen) {
                     + 'anything with the aspen cudgel, and went on treating {{VO}} with a taste '
                     + 'of the cudgel until {{HPRON}} knocked {{VO}} off her feet, and then pitched into '
                     + '{{VO}} as {{VPRON}} lay on the ground, gave {{VO}} another half-dozen blows or so, '
-                    + 'and at last beat {{VN}} to death.'
+                    + 'and at last beat {{VN}} to death.',
+                'Presently the midnight hour sounded. The earth began to shake, and '
+                    + 'the {{VF}} came rushing up, and burst right through the fence into '
+                    + 'the park, so huge was it. {{HN}} pulled himself together, leapt '
+                    + 'to his feet, crossed himself, and went straight at the {{VF}}. It '
+                    + 'fled back, and {{HN}} ran after it. But he soon saw that {{HPRON}} '
+                    + 'couldn\'t catch it on foot, so he hastened to the stable, laid {{HPOSS}} '
+                    + 'hands on the best horse there, and set off in pursuit. '
+                    + 'Presently {{HPRON}} came up with the {{VF}}, and they began a fight. They '
+                    + 'fought and fought; {{HN}} gave the {{VF}} three wounds. At last '
+                    + 'they were both utterly exhausted, so they lay down to take a short '
+                    + 'rest. But the moment {{HN}} closed {{HPOSS}} eyes, up jumped the '
+                    + '{{VF}} and took to flight. {{HN}}\'s horse awoke {{HO}}; up {{HPRON}} '
+                    + 'jumped in a moment, and set off again in pursuit, caught up the '
+                    + '{{VF}}, and again began fighting with it. Again {{HN}} gave the '
+                    + '{{VF}} three wounds, and then {{HPRON}} and the {{VF}} lay down again to '
+                    + 'rest. Thereupon away fled the {{VF}} as before. {{HN}} caught it '
+                    + 'up, and again gave it three wounds. But all of a sudden, just as '
+                    + '{{HN}} began chasing it for the fourth time, the {{VF}} fell to the ground.'
+
             );
         }
 
@@ -1487,7 +1505,7 @@ var nTemplates = function(story, world, storyGen) {
         t.push(sel);
 
         return t.join('\n').replace(/{{MI}}/mg, mi).replace(/{{VF}}/mg, villForm).replace(/{{VO}}/mg, vo).replace(/{{VPOSS}}/mg, vposs).replace(/{{VPRON}}/mg, vpron)
-            .replace(/{{HO}}/mg, ho).replace(/{{HPRON}}/mg, hpron);
+            .replace(/{{HO}}/mg, ho).replace(/{{HPRON}}/mg, hpron).replace(/{{HPOSS}}/mg, hposs);
     };
 
     // Branding: hero is branded
@@ -1651,6 +1669,9 @@ var nTemplates = function(story, world, storyGen) {
         // if villain is dead, it would have to be the false hero
         // if the false hero is dead... WELL I DO NOT KNOW
         // TODO: person = falsefriend or villain (or henchperson?)
+
+        // TODO: in many cases, w/o a battle, the villain lives on, and an un-introduced falsehero is punished.
+        // WTF ?!?!?
         var person = (god.villain.health === world.healthLevel.living ? god.villain : god.falsehero);
 
         return story.punish(god, person);
