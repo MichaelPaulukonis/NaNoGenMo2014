@@ -17,10 +17,9 @@ var gui = function() {
 
 }();
 
-// TODO: we don't need a global anymore....
+
 var preset = function(presets) {
 
-    // reset should not be global.
     var propp = storyGen.resetProppFunctions(false); // ARGH these are all now true!
 
     for (var i = 0; i < presets.functions.length; i++) {
@@ -38,6 +37,8 @@ var preset = function(presets) {
         // SO: need to store sub-funcs in the gui
         // and why not make them selectable, then....
         propp[func].active = true;
+
+
     }
 
     return propp;
@@ -48,10 +49,12 @@ var pushPreset = function(setname) {
     if (!storyGen.presets[setname]) { return; }
 
     var story = preset(storyGen.presets[setname]);
-    pushSettingsToGui(story);
+    // pushSettingsToGui(story);
+    pushSettingsToGuiNew(storyGen.presets[setname]);
 
 };
 
+// old-fashioned method
 var pushSettingsToGui = function(proppFunctions) {
 
     for (var index in proppFunctions) {
@@ -63,6 +66,49 @@ var pushSettingsToGui = function(proppFunctions) {
 
 };
 
+
+// take in array of functions
+// if element is string, it is an active function
+// if element is array, it is a function with a sub-Function
+// further parameters not yet handled
+// radio button options (globals) not yet handled
+var pushSettingsToGuiNew = function(funcs) {
+
+    // TODO: clear the settings
+
+    for (var index in funcs.functions) {
+
+        var func = funcs.functions[index];
+        var subFunc;
+        if (typeof func === 'object') {
+            subFunc = func[1];
+            func = func[0];
+        }
+
+        window.document.myform[func].checked = true;
+
+        if (subFunc) {
+            var id;
+
+            switch (func) {
+            case 'func8':
+                id = 'func8subfunc';
+                break;
+
+            }
+
+            if (id) {
+                $('#' + id).val(subFunc);
+            }
+
+        }
+
+    }
+
+    window.document.myform.bossfight.checked = funcs.bossfight;
+
+
+};
 
 var getFunctionsFromGui = function() {
 
@@ -79,15 +125,28 @@ var getFunctionsFromGui = function() {
     var herog = $('input[name=herogender][type=radio]:checked').val();
     var villaing = $('input[name=villaingender][type=radio]:checked').val();
     var peopleg = $('input[name=peoplegender][type=radio]:checked').val();
-    var bossmode = window.document.myform.bossmode.checked;
+    var bossfight = window.document.myform.bossfight.checked;
 
     // TOO LATE - not in the array, which has to be in order. DANG.
     // funcs = storyGen.enforceRules(funcs);
     pushSettingsToGui(funcs);
 
     // this is awkward....
+    // and how do we handle sub-funcs???
     for (index in funcs) {
-        if (window.document.myform[index].checked) { f.push(index); }
+        if (index === 'func8') {
+            var subFunc = 'func8subfunc';
+            var sf = $('#' + subFunc).val();
+            var sfv;
+            if (sf.toLowerCase() !== 'random') {
+                sfv = sf;
+                f.push([index, sfv]);
+            } else {
+                f.push(index);
+            }
+        } else {
+            if (window.document.myform[index].checked) { f.push(index); }
+        }
     }
 
     return {
@@ -96,7 +155,7 @@ var getFunctionsFromGui = function() {
         peoplegender: peopleg,
         functions: funcs,   // object with [funcn].active
         funcs: f,           // array-based list
-        bossmode: bossmode
+        bossfight: bossfight
     };
 
 };

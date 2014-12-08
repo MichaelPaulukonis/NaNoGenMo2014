@@ -114,6 +114,17 @@ var nTemplates = function(story, world, storyGen) {
         var hn = '<%= coinflip() ? hero.name : hero.nickname %>';
         var mw = (god.hero.gender === world.gender.male ? 'man' : 'woman');
 
+// Some men are born to good luck: all they do or try to do comes
+// right - all that falls to them is so much gain - all their geese are
+// swans - all their cards are trumps - toss them which way you will, they
+// will always, like poor puss, alight upon their legs, and only move on
+// so much the faster. The world may very likely not always think of them
+// as they think of themselves, but what care they for the world? what
+// can it know about the matter? One of these lucky beings was neighbour
+// Hans.rr
+
+
+
         var templates = [
             'in a certain {{RES}} lived {{HN}}. ',
             'a certain {{MW}} was very <%= pick(hero.description) %>. ' + (god.coinflip() ? '<%= capitalize(possessive(hero)) %> name {{was}} {{HN}}.' : '{{HN}} <%= possessive(hero) %> name {{was}}.'),
@@ -325,7 +336,7 @@ var nTemplates = function(story, world, storyGen) {
             peoplegender: 'male',
             functions: storyGen.resetProppFunctions(),
             funcs: presets.functions,
-            bossmode: presets.bossmode,
+            bossfight: presets.bossfight,
             verbtense: 'present',
             narrator: storyGen().deepClone(narrator),
             // swap them on some key?
@@ -990,6 +1001,25 @@ var nTemplates = function(story, world, storyGen) {
             // home," which turns out to be a couple of children - a boy and a
             // girl - who have been born during his absence.
 
+
+// And as they came to the wood where the fox first met them, it was so
+// cool and pleasant that the two brothers said, "Let us sit down by the
+// side of the river, and rest a while, to eat and drink." So he said,
+// "Yes," and forgot the fox"s counsel, and sat down on the side of the
+// river; and while he suspected nothing, they came behind, and threw him
+// down the bank, and took the princess, the horse, and the bird, and
+// went home to the king their master, and said. "All this have we won by
+// our labour." Then there was great rejoicing made; but the horse would
+// not eat, the bird would not sing, and the princess wept. The youngest
+// son fell to the bottom of the river"s bed: luckily it was nearly dry,
+// but his bones were almost broken, and the bank was so steep that he
+// could find no way to get out. Then the old fox came once more, and
+// scolded him for not following his advice; otherwise no evil would have
+// befallen him: "Yet," said he, "I cannot leave you here, so lay hold of
+// my tail and hold fast." Then he pulled him out of the river, and said
+// to him, as he got upon the bank, "Your
+
+
             var water = god.select("a small stream", "a local lake", "the murky pond", "the well");
             god.hero.location = water;
             var poss = god.hero.possessive;
@@ -1346,10 +1376,7 @@ var nTemplates = function(story, world, storyGen) {
         // world,[86] crying out to the Prince: "Then only will you overcome
         // me, when you enter here."
 
-        // And they set to work fighting; the dust flew like anything. They'd
-        // have gone on fighting ever so much longer, only the cocks began to
-        // crow.
-
+        // TODO: would be nice to receive this advice, and THEN do something about it. hrm....
         // "Why this. Provide yourself with a bridle, and take a thick aspen
         // cudgel, and sit quietly in the izba - don't stir a step anywhere. During
         // the night she will come running in, and if she manages to say before
@@ -1372,24 +1399,6 @@ var nTemplates = function(story, world, storyGen) {
 
         // "Tprru! stand still, jade!"
 
-        // The witch turned into a mare, and he bridled her, led her into the
-        // yard, and jumped on her back. The mare carried him off over hills and
-        // dales and ravines, and did all she could to try and throw her rider.
-        // But no! the Soldier stuck on tight, and thumped her over the head like
-        // anything with the aspen cudgel, and went on treating her with a taste
-        // of the cudgel until he knocked her off her feet, and then pitched into
-        // her as she lay on the ground, gave her another half-dozen blows or so,
-        // and at last beat her to death.
-
-        // The Pest Maiden arrives, and thrusts her arm in at his window. The
-        // nobleman cuts it off, and so rids the village of its fatal visitor. In
-        // an Indian story,[363] a hero undertakes to watch beside the couch of a
-        // haunted princess. When all is still a Rakshasa appears on the
-        // threshold, opens the door, and thrusts into the room an arm - which the
-        // hero cuts off. The fiend disappears howling, and leaves his arm
-        // behind.
-
-
         // Surprisingly, especially for an H.P. Lovecraft story, "The
         // Dream Quest of Unknown Kadath" has this. The protagonist
         // dispels Nyarlathotep's deception and narrowly avoids his
@@ -1398,45 +1407,20 @@ var nTemplates = function(story, world, storyGen) {
         // defeat, making this probably the happiest ending to any
         // story in the Cthulu Mythos
 
-        // func14 (recepit of magical item) is a rule if 18 is active
-        var mi;
-        // if (!mi) {
-        //     mi = god.createMagicalitem();
+        // at last they hit upon a plan. The ass placed himself upright on his
+        // hind legs, with his forefeet resting against the window; the dog got
+        // upon his back; the cat scrambled up to the dog\'s shoulders, and the
+        // cock flew up and sat upon the cat\'s head. When all was ready a signal
+        // was given, and they began their music. The ass brayed, the dog barked,
+        // the cat mewed, and the cock screamed; and then they all broke through
+        // the window at once, and came tumbling into the room, amongst the
+        // broken glass, with a most hideous clatter! The robbers, who had been
+        // not a little frightened by the opening concert, had now no doubt that
+        // some frightful hobgoblin had broken in upon them, and scampered away
+        // as fast as they could.
 
-        //     god.hero.possessions.push(mi);
-        //     t.push('{{HN}} remembered the {{MI}} <%= pronoun(hero) %> had been given before.');
-
-        // }
-        // god.hero.magicalitemused = true;
-
-
-        var templates = [
-            '{{HN}} greeted {{VN}}, and caught hold of <%= villain.possessive %> right little finger. '
-                + '{{VN}} tried to shake <%= hero.object %> off, flying first '
-                + 'about the house and then out of it, but all in vain. At last {{VN}} '
-                + 'after soaring on high, struck the ground, and fell to pieces, becoming '
-                + 'a fine yellow sand.',
-            '{{HN}} and {{VN}} {{engage}} in battle.',
-            '{{VN}} arrives and {{thrusted}} <%= villain.possessive %> arm in at the window. {{HN}} cut off the bony thing, '
-            + 'and {{VN}} {{disappeared}}, howling, leaving <%= villain.possessive %> arm behind.'
-
-        ];
-
-        if (god.hero.possessions && god.hero.possessions.length > 0) {
-            // TODO: only "remember" the mi if it will be used
-            // aaaaand, it should be used if it has been introduced
-            // BUT NOT IF NOT
-            mi = god.hero.possessions[god.hero.possessions.length-1];
-            templates.push(
-            '{{HN}} {{<%= select("deploy", "use", "manipulate") %>}} the {{MI}} to '
-                + '<%= select("defeat", "trounce", "vanquish", "annoy") %> {{VN}}.'
-            );
-        }
-
-        t.push(god.pick(templates));
-
-        god.hero.magicalitemused = true;
-        // hrm. item used s/b true ONLY IF THAT TEMPLATE IS PICKED. HRM.
+        // TODO: it is entirely possible that the battle includes victory
+        // in which case, set a variable to allow victory to be skipped
 
         var proppFunction16 = [
             'function 16: protagonist(s) and antagonist(s) join in direct combat = struggle (H)',
@@ -1447,7 +1431,63 @@ var nTemplates = function(story, world, storyGen) {
         ];
 
 
-        return t.join('\n').replace(/{{MI}}/mg, mi);
+        var vo = god.villain.object;
+        var vposs = god.villain.possessive;
+        var vpron = god.villain.pronoun;
+        var ho = god.hero.object;
+        var hpron = god.hero.pronoun;
+
+        var templates = [
+            // skip a further victory if body is destroyed
+            '{{HN}} greeted {{VN}}, and caught hold of <%= villain.possessive %> right little finger. '
+                + '{{VN}} tried to shake <%= hero.object %> off, flying first '
+                + 'about the house and then out of it, but all in vain. At last {{VN}} '
+                + 'after soaring on high, struck the ground, and fell to pieces, becoming '
+                + 'a fine yellow sand.',
+            '{{HN}} and {{VN}} {{engage}} in battle.',
+            '{{VN}} arrives and {{thrusted}} <%= villain.possessive %> arm in at the window. {{HN}} cut off the bony thing, '
+            + 'and {{VN}} {{disappeared}}, howling, leaving <%= villain.possessive %> arm behind.',
+            'And they set to work fighting; the dust flew like anything. They\'d '
+                + 'have gone on fighting ever so much longer, only the cocks began to '
+                + 'crow.'
+
+        ];
+
+
+        // if villain has non-human form
+        var villForm;
+        if (god.villain.form !== 'human') {
+            villForm = god.villain.form;
+        }
+        if (villForm) {
+            templates = [];
+            templates.push(
+                // TODO: this is pretty static.
+                '{{VN}} turned into a {{VF}}, and {{HN}} bridled {{VO}}, led {{VO}} into the '
+                    + 'yard, and jumped on {{VPOSS}} back. The {{VF}} carried {{HO}} off over hills and '
+                    + 'dales and ravines, and did all {{VPRON}} could to try and throw {{VPOSS}} rider. '
+                    + 'But no! {{HN}} stuck on tight, and thumped {{VO}} over the head like '
+                    + 'anything with the aspen cudgel, and went on treating {{VO}} with a taste '
+                    + 'of the cudgel until {{HPRON}} knocked {{VO}} off her feet, and then pitched into '
+                    + '{{VO}} as {{VPRON}} lay on the ground, gave {{VO}} another half-dozen blows or so, '
+                    + 'and at last beat {{VN}} to death.'
+            );
+        }
+
+        var mi;
+        if (god.hero.possessions && god.hero.possessions.length > 0) {
+            mi = god.hero.possessions[god.hero.possessions.length-1];
+            var mit = '{{HN}} {{<%= select("deploy", "use", "manipulate") %>}} the {{MI}} to '
+                + '<%= select("defeat", "trounce", "vanquish", "annoy") %> {{VN}}.';
+            templates.push(mit);
+        }
+
+        var sel = god.pick(templates);
+        if (sel === mit) { god.hero.magicalitemused = true; }
+        t.push(sel);
+
+        return t.join('\n').replace(/{{MI}}/mg, mi).replace(/{{VF}}/mg, villForm).replace(/{{VO}}/mg, vo).replace(/{{VPOSS}}/mg, vposs).replace(/{{VPRON}}/mg, vpron)
+            .replace(/{{HO}}/mg, ho).replace(/{{HPRON}}/mg, hpron);
     };
 
     // Branding: hero is branded

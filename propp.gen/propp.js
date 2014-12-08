@@ -907,7 +907,7 @@ var storyGen = function(settings) {
                 if (s2.indexOf('NaN') >=0 ) {console.log(f); }
 
                 if (this.universe.hero.health === world.healthLevel.dead) { break; }
-                if (settings.bossmode && this.universe.villain.health == 'dead' && restartVillainy >= 0) {
+                if (settings.bossfight && this.universe.villain.health == 'dead' && restartVillainy >= 0) {
                     if (this.universe.coinflip(0.8)) {
                         // we run out of names, because new villains have both family and acquaintances
                         // AND USE THEM ALL UP
@@ -1043,35 +1043,35 @@ storyGen.presets = {
 
     cinderella: {
         functions: ['func0', 'func1', 'func8', 'func8a', 'func14', 'func19', 'func23', 'func27', 'func31'],
-        bossmode: false
+        bossfight: false
     },
     hansel: {
         functions:['func0', 'func6', 'func7', 'func8', 'func8a', 'func16', 'func18', 'func20'],
-        bossmode: false
+        bossfight: false
     },
     snow_white: {
         functions:['func0', 'func1', 'func5', 'func6', 'func7', 'func11', 'func21', 'func30', 'func31'],
-        bossmode: false
+        bossfight: false
     },
     little_red_riding_hood: {
         functions:['func4', 'func5', 'func6', 'func7', 'func8', 'func9', 'func10', 'func16', 'func18'],
-        bossmode: false
+        bossfight: false
     },
     juniper:  {
         functions:['func6', 'func7', 'func8', 'func11', 'func12', 'func13', 'func14', 'func20', 'func30'],
-        bossmode: false
+        bossfight: false
     },
     barebones: {
         functions:['func0', 'func8', 'func14', 'func16', 'func18', 'func31'],
-        bossmode: true
+        bossfight: true
     },
     mostlyVillainy: {
         functions: ['func8', 'func18'],
-        bossmode: false
+        bossfight: false
     },
     shortWaterStory: {
         functions: [['func8', 'casting into body of water'], 'func18'],
-        bossmode: true
+        bossfight: true
         }
 };
 

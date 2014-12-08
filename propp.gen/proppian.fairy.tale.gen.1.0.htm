@@ -75,6 +75,7 @@
 		<li><input name="func8" type="checkbox" checked='checked' /><a href="javascript:gui.popup('func8')">villainy</a></li>
                 <li>
                   <select name='func8subfunc' id='func8subfunc'>
+                    <option value='random'>Random</option>
                   </select>
                 </li>
 		<li><input name="func8a" type="checkbox" /><a href="javascript:gui.popup('func8a')">lack</a></li>
@@ -117,33 +118,48 @@
               <ul id='settings'>
                 <li>
                   Hero:
-		  <input name='herogender' id='genderfemale' type='radio' value='female' checked='checked'>female</input>
-                  <input name='herogender' id='gendermale'   type='radio' value='male'>male</input>
-                  <input name='herogender' id='genderneuter' type='radio' value='neuter'>neuter</input>
-                  <input name='herogender' id='genderrandom' type='radio' value=''>random</input>
+		  <input name='herogender' id='herogenderfemale' type='radio' value='female' checked='checked' />
+                  <label for='herogenderfemale'>female</label>
+                  <input name='herogender' id='herogendermale' type='radio' value='male' />
+                  <label for='herogendermale'>male</label>
+                  <input name='herogender' id='herogenderneuter' type='radio' value='neuter' />
+                  <label for='herogenderneuter'>neuter</label>
+                  <input name='herogender' id='herogenderrandom' type='radio' value='' />
+                  <label for='herogenderrandom'>random</label>
 		</li>
                 <li>
                   Villain:
-		  <input name='villaingender' id='villaingenderfemale' type='radio' value='female' checked='checked'>female</input>
-                  <input name='villaingender' id='villaingendermale' type='radio' value='male'>male</input>
-                  <input name='villaingender' id='villaingenderneuter' type='radio' value='neuter'>neuter</input>
-                  <input name='villaingender' id='villaingenderrandom' type='radio' value=''>random</input>
+		  <input name='villaingender' id='villaingenderfemale' type='radio' value='female' checked='checked' />
+                  <label for='villaingenderfemale'>female</label>
+                  <input name='villaingender' id='villaingendermale' type='radio' value='male' />
+                  <label for='villaingendermale'>male</label>
+                  <input name='villaingender' id='villaingenderneuter' type='radio' value='neuter' />
+                  <label for='villaingenderneuter'>neuter</label>
+                  <input name='villaingender' id='villaingenderrandom' type='radio' value='' />
+                  <label for='villaingenderrandom'>random</label>
 		</li>
                 <li>
                   Others:
-		  <input name='peoplegender' id='peoplegenderfemale' type='radio' value='female' checked='checked'>female</input>
-                  <input name='peoplegender' id='peoplegendermale'   type='radio' value='male'>male</input>
-                  <input name='peoplegender' id='peoplegenderneuter' type='radio' value='neuter'>neuter</input>
-                  <input name='peoplegender' id='peoplegenderrandom' type='radio' value=''>random</input>
+		  <input name='peoplegender' id='peoplegenderfemale' type='radio' value='female' checked='checked' />
+                  <label for='peoplegenderfemale'>female</label>
+                  <input name='peoplegender' id='peoplegendermale' type='radio' value='male' />
+                  <label for='peoplegendermale'>male</label>
+                  <input name='peoplegender' id='peoplegenderneuter' type='radio' value='neuter' />
+                  <label for='peoplegenderneuter'>neuter</label>
+                  <input name='peoplegender' id='peoplegenderrandom' type='radio' value='' />
+                  <label for='peoplegenderrandom'>random</label>
 		</li>
               </ul>
               <p>
                 Verb tense:
-                <input name='tense' id='tensepast' type='radio' value='past' checked='checked' />past
-                <input name='tense' id='tensepresent' type='radio' value='present'  />present
+                <input name='tense' id='tensepast' type='radio' value='past' checked='checked' />
+                <label for='tensepast'>past</label>
+                <input name='tense' id='tensepresent' type='radio' value='present' />
+                <label for='tensepresent'>present</label>
               </p>
               <p>
-                <input name="bossmode" type="checkbox" />Boss Mode
+                <input name="bossfight" id='bossfight' type="checkbox" />
+                <label for='bossfight'>Boss Fight</label>
               </p>
             </td>
           </tr>
@@ -170,6 +186,7 @@
   <!-- well, that was installed in the wrong location -->
   <script type="text/javascript" src="../node_modules/underscore/underscore.js"></script>
   <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
+  <!-- TODO: this should be local -->
   <script type="text/javascript" src="https://rawgit.com/spencermountain/nlp_compromise/master/client_side/nlp.min.js"> </script>
   <script type="text/javascript" src="sugar.min.js"></script>
   <script type="text/javascript" src="tokenizer.web.js"></script>
