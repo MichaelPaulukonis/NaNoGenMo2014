@@ -171,4 +171,11 @@ $(document).ready(function() {
         // alert('selected!');
     });
 
+    var s = $('#func8subfunc');
+    var sf = world.func8subfuncs;
+    $.each(world.func8subfuncs, function(key,value) {
+        s.append($('<option />').val(value).text(value));
+    });
+
+
 });

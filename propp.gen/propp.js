@@ -106,6 +106,34 @@ world.blankLine = '';
 
 world.util = {};
 
+world.func8subfuncs = {
+        '1'   : 'kidnapping of person',
+        '2'   : 'seizure of magical agent or helper',
+        '2b'  : 'forcible seizure of magical helper',
+        '3'   : 'pillaging or ruining of crops',
+        '4'   : 'theft of daylight',
+        '5'   : 'plundering in other forms',
+        '6'   : 'bodily injury, maiming, mutilation',
+        '7'   : 'causes sudden disappearance',
+        '7b'  : 'bride is forgotten',
+        '8'   : 'demand for delivery or enticement, abduction',
+        '9'   : 'expulsion',
+        '10'  : 'casting into body of water',
+        '11'  : 'casting of a spell, transformation',
+        '12'  : 'false substitution',
+        '13'  : 'issues order to kill [requires proof]',
+        '14'  : 'commits murder',
+        '15'  : 'imprisonment, detention',
+        '16'  : 'threat of forced matrimony',
+        '16b' : 'threat of forced matrimony between relatives',
+        '17'  : 'threat of cannibalism',
+        '17b' : 'threat of cannibalism among relatives',
+        '18'  : 'tormenting at night (visitation, vampirism)',
+        '19'  : 'declaration of war'
+    };
+
+
+
 // http://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
 world.util.randomProperty = function(obj) {
         var result;
