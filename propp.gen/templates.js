@@ -114,14 +114,14 @@ var nTemplates = function(story, world, storyGen) {
         var hn = '<%= coinflip() ? hero.name : hero.nickname %>';
         var mw = (god.hero.gender === world.gender.male ? 'man' : 'woman');
 
-// Some men are born to good luck: all they do or try to do comes
-// right - all that falls to them is so much gain - all their geese are
-// swans - all their cards are trumps - toss them which way you will, they
-// will always, like poor puss, alight upon their legs, and only move on
-// so much the faster. The world may very likely not always think of them
-// as they think of themselves, but what care they for the world? what
-// can it know about the matter? One of these lucky beings was neighbour
-// Hans.rr
+        // Some men are born to good luck: all they do or try to do comes
+        // right - all that falls to them is so much gain - all their geese are
+        // swans - all their cards are trumps - toss them which way you will, they
+        // will always, like poor puss, alight upon their legs, and only move on
+        // so much the faster. The world may very likely not always think of them
+        // as they think of themselves, but what care they for the world? what
+        // can it know about the matter? One of these lucky beings was neighbour
+        // Hans.rr
 
 
 
@@ -715,6 +715,12 @@ var nTemplates = function(story, world, storyGen) {
         // which means it needs to be in a function.....
         var interdiction = god.hero.interdiction;
 
+        if (!interdiction) {
+            console.log('INTERDICTION IS NOT DEFINED IN FUNC3; was func2 skipped???');
+            return ' ';
+        }
+
+
         switch (interdiction.type) {
         case world.interdictionType.movement:
 
@@ -749,6 +755,7 @@ var nTemplates = function(story, world, storyGen) {
 
 
     };
+
     // Reconnaissance: Villain seeks something
     story['func4'].exec = function(god) {
 
@@ -1002,22 +1009,22 @@ var nTemplates = function(story, world, storyGen) {
             // girl - who have been born during his absence.
 
 
-// And as they came to the wood where the fox first met them, it was so
-// cool and pleasant that the two brothers said, "Let us sit down by the
-// side of the river, and rest a while, to eat and drink." So he said,
-// "Yes," and forgot the fox"s counsel, and sat down on the side of the
-// river; and while he suspected nothing, they came behind, and threw him
-// down the bank, and took the princess, the horse, and the bird, and
-// went home to the king their master, and said. "All this have we won by
-// our labour." Then there was great rejoicing made; but the horse would
-// not eat, the bird would not sing, and the princess wept. The youngest
-// son fell to the bottom of the river"s bed: luckily it was nearly dry,
-// but his bones were almost broken, and the bank was so steep that he
-// could find no way to get out. Then the old fox came once more, and
-// scolded him for not following his advice; otherwise no evil would have
-// befallen him: "Yet," said he, "I cannot leave you here, so lay hold of
-// my tail and hold fast." Then he pulled him out of the river, and said
-// to him, as he got upon the bank, "Your
+            // And as they came to the wood where the fox first met them, it was so
+            // cool and pleasant that the two brothers said, "Let us sit down by the
+            // side of the river, and rest a while, to eat and drink." So he said,
+            // "Yes," and forgot the fox"s counsel, and sat down on the side of the
+            // river; and while he suspected nothing, they came behind, and threw him
+            // down the bank, and took the princess, the horse, and the bird, and
+            // went home to the king their master, and said. "All this have we won by
+            // our labour." Then there was great rejoicing made; but the horse would
+            // not eat, the bird would not sing, and the princess wept. The youngest
+            // son fell to the bottom of the river"s bed: luckily it was nearly dry,
+            // but his bones were almost broken, and the bank was so steep that he
+            // could find no way to get out. Then the old fox came once more, and
+            // scolded him for not following his advice; otherwise no evil would have
+            // befallen him: "Yet," said he, "I cannot leave you here, so lay hold of
+            // my tail and hold fast." Then he pulled him out of the river, and said
+            // to him, as he got upon the bank, "Your
 
 
             var water = god.select("a small stream", "a local lake", "the murky pond", "the well");
@@ -1264,13 +1271,72 @@ var nTemplates = function(story, world, storyGen) {
 
     // 3rd Sphere: The Donor Sequence
     // Testing: hero is challenged to prove heroic qualities
-    story['func12'].templates.push('<%= hero.name %> {{was}} challenged to prove heroic qualities.');
+    story['func12'].exec = function(god, subfunc) {
 
+        // "function 12: protagonist(s) tested, interogated, attacked, etc.
+        // which prepares way for receiving magical agent or helper = first
+        // function of donor (D)"
+
+        var templates = [
+            'D1 - donor tests protagonist(s)',
+            'D2 - donor greets and interrogates protagonist(s)',
+            'D3 - request of favor after death',
+            'D4 - entreaty of prisoner for freedom,  or *D4 - entreaty of prisoner for freedom, with preliminary imprisonment',
+            'D5 - request for mercy',
+            'D6 - request for division, or d6 - argument without express request for division',
+            'D7 - other requests, or *D7 - other requests, with preliminary helpless situation of person making request, or d7 - helpless situation of donor without stated request, possibility of rendering service',
+            'D8 - attempt to destroy',
+            'D9 - combat with hostile donor',
+            'D10 - offer of magical agent as an exchange'];
+
+        return '<%= hero.name %> {{was}} challenged to prove heroic qualities.';
+
+    };
     // Reaction: hero responds to test
-    story['func13'].templates.push('<%= hero.name %> {{responded}} to this test.');
+    story['func13'].exec = function(god, subFunc) {
+
+        // 'function 13: protagonist(s) reacts to actions of future donor =
+        // protagonist(s)'s reaction (E)'
+
+        var templates = [
+            'E1 - protagonist(s) withstands ordeal (or not)',
+            'E2 - protagonist(s) answers greeting (or not)',
+            'E3 - protagonist(s) renders service to dead person (or not)',
+            'E4 - protagonist(s) frees of captive',
+            'E5 - mercy to suppliant',
+            'E6 - protagonist(s)completes apportinment and reconciles disputants, or Evi - protagonist(s) deceives disputants',
+            'E7 - performance of some other service, fulfillment of request, pious deeds',
+            'E8 - attempt at destruction averted by turnabout',
+            'E9 - protagonist(s) vanquishes hostile donor (or not)',
+            'E10 - deception in an exchange, protagonist(s) employs magical agent on donor'];
+
+        return '<%= hero.name %> {{responded}} to this test.';
+
+    };
 
     //  Acquisition: hero gains magical item
     story['func14'].exec = function(god, item) {
+
+        // 'function 14: protagonist(s) acquires use of magical agent = acquisition of magical agent (F)',
+
+
+        var proppFunction14 = [
+            'F1 - agent is directly transferred, or f1 - gift is of a material '
+                + 'nature, or F- - agent is not transferred, or F= - protagonist(s)\'s '
+                + 'negative reaction provokes cruel retribution',
+            'F2 - agent is pointed out',
+            'F3 - agent is prepared',
+            'F4 - agent is sold and purchased, or F43 - agent is made on order',
+            'F5 - agent is found by chance',
+            'F6 - agent suddenly appears of its own accord, or Fvi - agent appears from out of earth',
+            'F7 - agent is drunk or eaten',
+            'F8 - agent is seized',
+            'F9 - agent offers its services, places itself at someone\'s '
+                + 'disposal, or f9 - agent indicates it will appear of its own accord '
+                + 'in some time of need, or F96 - meeting with magical helper(s) who '
+                + 'offers their services'
+        ];
+
 
         var t = [];
 
@@ -1331,7 +1397,22 @@ var nTemplates = function(story, world, storyGen) {
 
     // Guidance: hero reaches destination
     // TODO: destination is related to task
-    story['func15'].templates.push('<%= hero.name %> reached destination.');
+    story['func15'].exec = function(god, subFunc) {
+
+        // function 15: protagonist(s) transferred, delivered or led to vicinity of object of search = transference, guidance (G)
+
+        var templates = [
+            'G1 - protagonist(s) flies thru air',
+            'G2 - protagonist(s) travels on ground or water',
+            'G3 - protagonist(s) is led',
+            'G4 - route is shown to protagonist(s)',
+            'G5 - protagonist(s) makes use of stationary means of communication (stairs, bridge, passageway. etc.)',
+            'G6 - marked trail shows the way (blood, tracks, yarn, etc.)'
+        ];
+
+        return '<%= hero.name %> reached destination.';
+
+    };
 
     // Struggle: hero and villain do battle
     // TODO: battle() function
@@ -1436,7 +1517,7 @@ var nTemplates = function(story, world, storyGen) {
                 + 'a fine yellow sand.',
             '{{HN}} and {{VN}} {{engage}} in battle.',
             '{{VN}} arrives and {{thrusted}} <%= villain.possessive %> arm in at the window. {{HN}} cut off the bony thing, '
-            + 'and {{VN}} {{disappeared}}, howling, leaving <%= villain.possessive %> arm behind.',
+                + 'and {{VN}} {{disappeared}}, howling, leaving <%= villain.possessive %> arm behind.',
             'And they set to work fighting; the dust flew like anything. They\'d '
                 + 'have gone on fighting ever so much longer, only the cocks began to '
                 + 'crow.',
@@ -1496,7 +1577,7 @@ var nTemplates = function(story, world, storyGen) {
         if (god.hero.possessions && god.hero.possessions.length > 0) {
             mi = god.hero.possessions[god.hero.possessions.length-1];
             var mit = '{{HN}} {{<%= select("deploy", "use", "manipulate") %>}} the {{MI}} to '
-                + '<%= select("defeat", "trounce", "vanquish", "annoy") %> {{VN}}.';
+                    + '<%= select("defeat", "trounce", "vanquish", "annoy") %> {{VN}}.';
             templates.push(mit);
         }
 
@@ -1564,7 +1645,32 @@ var nTemplates = function(story, world, storyGen) {
     };
 
     // Resolution: Initial misfortune or lack is resolved
-    story['func19'].exec = function(god) {
+    // pass in a param object, by name?
+    story['func19'].exec = function(god, subFunc) {
+
+        // function 19: initial misfortune or lack is liquidated = liquidation (K)
+
+        var proppFunction19 = [
+            'K1 - direct acquistion thru application of force or cunning, or Ki - direct acquistion thru application of force or cunning, with one person compelling another',
+            'K2 - acquisition accomplished by several helpers at once',
+            'K3 - acquisition achieved with help of an enticement or decoy(s)',
+            'K4 - liquidation of misfortune as direct result of previous actions',
+            'K5 - object of search attained instantly thru use of magical agent',
+            'K6 - poverty done away with thru use of magical agent',
+            'K7 - object of search captured',
+            'K8 - breaking of spell on victim',
+            'K9 - resuscitation of slain, or Kix - resuscitation, with preliminary obtaining of water of life',
+            'K10 - release from captivity',
+            'KF1 - liquidation in form F: object of search is transferred',
+            'KF2 - liquidation in form F: object of search is pointed out',
+            'KF3 - liquidation in form F: object of search is prepared',
+            'KF4 - liquidation in form F: object of search is sold, purchased, or KF43 - liquidation in form F: object of search is made on order',
+            'KF5 - liquidation in form F: object of search is found',
+            'KF6 - liquidation in form F: object of search appears of its own accord, or KFvi - liquidation in form F: object of search appears from out of earth',
+            'KF7 - liquidation in form F: object of search is drunk or eaten',
+            'KF8 - liquidation in form F: object of search is seized',
+            'KF9 - liquidation in form F: object of search offers its services, places itself at someone\'s disposal, or KF96 - liquidation in form F: object of search are helpers who offers their services'
+        ];
 
         var t = [];
 
@@ -1631,11 +1737,46 @@ var nTemplates = function(story, world, storyGen) {
     // Pursuit: hero is chased
     // TODO: character/thing that chases
     // TODO: chase() function
-    story['func21'].templates.push('<%= hero.name %> {{was}} chased.');
+    story['func21'].exec = function(god, subFunc) {
+
+        // function 21: protagonist(s) pursued = pursuit (Pr)
+
+        var templates = [
+            'Pr1 - antagonist(s) flies thru air',
+            'Pr2 - antagonist(s) demands guilty person',
+            'Pr3 - antagonist(s) pursues, accompanied by series of transformations into animals',
+            'Pr4 - antagonist(s) pursues, with tranformations into enticing objects',
+            'Pr5 - antagonist(s) attempts to devour protagonist(s)',
+            'Pr6 - antagonist(s) attempts to destroy protagonist(s)',
+            'Pr7 - antagonist(s) attempts to gnaw thru tree with protagonist(s) up in it'
+        ];
+
+        return '<%= hero.name %> {{was}} chased.';
+
+    };
 
     // Rescue: pursuit ends
     // TODO: template to end the above
-    story['func22'].templates.push('the pursuit ended.');
+    story['func22'].exec = function(god, subFunc) {
+
+        // function 22: rescue of protagonist(s) from pursuit = rescue (Rs)
+
+        var proppFunction22 = [
+            'Rs1 - protagonist(s) carried thru air or runs quickly',
+            'Rs2 - protagonist(s) places obstacles in path of pursuers [with transformation]',
+            'Rs3 - fleeing, with transformation to escape recognition',
+            'Rs4 - fleeing with concealment of escapee',
+            'Rs5 - concealment of escapee by blacksmiths',
+            'Rs6 - escapee goes thru series of transformations into animals, plants & stones',
+            'Rs7 - warding off temptation of enticing object(s)',
+            'Rs8 - rescue or salvation from being devoured',
+            'Rs9 - rescue or salvation from being destroyed',
+            'Rs10 - leap into another tree'
+        ];
+
+        return 'the pursuit ended.';
+
+    };
 
     // Arrival: hero arrives unrecognized
     story['func23'].templates.push('<%= hero.name %> arrived in <%= hero.home.vicinity %> but {{was}} unrecognized.');
@@ -1644,26 +1785,118 @@ var nTemplates = function(story, world, storyGen) {
     story['func24'].templates.push('<%= falsehero.name %> made unfounded claims.');
 
     // Task: Difficult task proposed to the <%= hero.name %>
-    story['func25'].templates.push('<%= advisor.name %> charged <%= hero.name %> to <%= task %>.');
+    story['func25'].exec = function(god, subFunc) {
+
+        // function 25: difficult task proposed to protagonist(s) = difficult task (M)
+
+        var proppFunction25 = [
+            'M1 - ordeal by food and drink',
+            'M2 - ordeal by fire',
+            'M3 - riddle guessing',
+            'M4 - ordeal of choice',
+            'M5 - hide and seek',
+            'M6 - test of strength',
+            'M7 - test of adroitness',
+            'M8 - test of fortitude',
+            'M9 - test of endurance',
+            'M10 - tasks of supply, or Mx - tasks of manufacture',
+            'M11 - sorting tasks',
+            'M12 - other tasks'
+        ];
+
+        return '<%= advisor.name %> charged <%= hero.name %> to <%= task %>.';
+
+    };
 
     // Solution: Task is resolved
-    story['func26'].templates.push('<%= task %> {{was}} completed.');
-    story['func26'].templates.push('<%= task %> {{was}} completed by <%= hero.name %>.');
-    story['func26'].templates.push('<%= hero.name %> finishes off <%= task %>.');
+    story['func26'].exec = function(god, subFunc) {
+
+        // function 26: task resolved = solution (N)
+
+        var proppFunction26 = [
+            'N1 - food and drink consumed',
+            'N2 - fire survived',
+            'N3 - riddle guessed',
+            'N4 - correct choice selected',
+            'N5 - protagonist(s) not found',
+            'N6 - test of strength passed',
+            'N7 - test of adroitness passed',
+            'N8 - test of fortitude passed',
+            'N9 - test of endurance passed',
+            'N10 - object(s) supplied, or Nx - object(s) manufactured',
+            'N11 - sorting tasks completed',
+            'N12 - other tasks completed'
+        ];
+
+        var templates = [
+            '<%= task %> {{was}} completed.',
+            '<%= task %> {{was}} completed by <%= hero.name %>.',
+            '<%= hero.name %> finishes off <%= task %>.'
+        ];
+
+        return god.pick(templates);
+
+    };
 
     // Recognition: hero is recognised
-    story['func27'].templates.push('<%= hero.name %> {{was}} recognized.');
+    story['func27'].exec = function(god, subFunc) {
+
+        // function 27: protagonist(s) recognized = recognition (Q)
+
+        var proppFunction27 = [
+            'Q1 - recognition of protagonist(s) by mark on body',
+            'Q2 - recognition of protagonist(s) by token',
+            'Q3 - recognition of protagonist(s) by accomplishment of difficult task',
+            'Q4 - recognition of protagonist(s) by family member'
+        ];
+
+        return '<%= hero.name %> {{was}} recognized.';
+
+    };
 
     // Exposure: False hero is exposed
     // So he regained his wife and went home with her. But as for the false wife, he took a gun and shot her.
-    story['func28'].templates.push('<%= falsehero.name %> {{was}} exposed.');
+    story['func28'].exec = function(god, subFunc) {
+
+        // function 28: false protagonist(s) or antagonist(s) exposed = exposure (Ex)
+
+        var proppFunction28 = [
+            'Ex1 - exposure of false protagonist(s) or antagonist(s) by lack of mark on body',
+            'Ex2 - exposure of false protagonist(s) or antagonist(s) by lack of token',
+            'Ex3 - exposure of false protagonist(s) or antagonist(s) by failure to accomplish difficult task',
+            'Ex4 - exposure of false protagonist(s) or antagonist(s) thru song / lament'
+        ];
+
+        return '<%= falsehero.name %> {{was}} exposed.';
+
+    };
 
     // Transfiguration: hero is given a new appearance
     // TODO: character description, associated adjectives ???
-    story['func29'].templates.push('<%= hero.name %> {{was}} given a new appearance.');
+    story['func29'].exec = function(god, subFunc) {
+
+        // function 29: protagonist(s) given new appearance = transfiguration (T)
+
+        var proppFunction29 = [
+            'T1 - new physical appearance by magical action of helper',
+            'T2 - protagonist(s) builds palace',
+            'T3 - protagonist(s) puts on new garments',
+            'T4 - humorous and rationalized forms, new appearance achieved by deception'
+        ];
+
+        return '<%= hero.name %> {{was}} given a new appearance.';
+
+    };
 
     // Punishment: Villain is punished
-    story['func30'].exec = function(god) {
+    story['func30'].exec = function(god, subFunc) {
+
+        // function 30: false protagonist(s) or antagonist(s) punished = punishment (U)
+
+        var proppFunction30 = [
+            'U - punishment of false protagonist(s) or antagonist(s)',
+            'U- - false protagonist(s) or antagonist(s) pardoned'
+        ];
 
         // rules will tell us a bit about when this can be created or not
         // if villain is dead, it would have to be the false hero
@@ -1680,6 +1913,17 @@ var nTemplates = function(story, world, storyGen) {
 
     // Wedding: hero marries and ascends the throne
     story['func31'].exec = function(god, subFunc) {
+
+        // function 31: protagonist(s) marries and ascends throne = wedding (W)
+
+        var proppFunction31 = [
+            'W#* - protagonist(s) weds and ascends throne ',
+            'W# - protagonist(s) weds',
+            'W* - protagonist(s) ascends throne',
+            'w1 - protagonist(s) promised marriage',
+            'w2 - protagonist(s) resumes marriage',
+            'wo - protagonist(s) given monetary reward or other forms of material gain'
+        ];
 
         // marriage/ascension are arrays in the wordbank
         var templates = [
